@@ -43,7 +43,6 @@ export default {
 }
 </script>
 <style scoped>
-.homepage-hero-module,
 .video-container {
     position: relative;
     height: 100vh;

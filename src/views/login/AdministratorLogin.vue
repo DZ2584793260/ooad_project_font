@@ -42,6 +42,7 @@
 </template>
    
 <script>
+import axios from 'axios'
 export default {
   data() {
     var validateId = (rule, value, callback) => {
@@ -86,8 +87,27 @@ export default {
         //1.验证失败则结束
         if (!valid) { return; }
         else {
-          //进入管理员Home
-          this.$router.push({ path: "/administratorHome" });
+          this.$axios.get('http://10.16.38.64:8080/api/Administration/getAdministration', {
+            params: {               //将URL地址拼接参数的形式换成传入params对象的形式
+              account: this.id,
+              password: this.password
+            }
+          }).then(res => {
+            console.log(resp);
+            let data = resp.data;
+            if (data.code != 1) {
+              this.$message({
+                // message: data.msg,
+                // type: data.code == 1 ? 'success' : 'error'
+                message: "密码错误",
+                type: "error"
+              });
+            } else {
+              this.$router.push({ path: "/administratorHome" });
+            }
+          }).catch(err => {
+            console.log(err);
+          });
         }
       })
     }
@@ -136,5 +156,4 @@ h3 {
   color: #000;
   text-align: center;
 }
-
 </style>
