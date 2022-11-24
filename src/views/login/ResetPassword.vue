@@ -109,7 +109,22 @@ export default {
                 //1.验证失败则结束
                 if (!valid) { return; }
                 else {
-                    this.$router.push({ path: "/userLogin" });
+                    this.$api.loginApi.forgetPassword(this.loginForm.id,
+                        this.loginForm.password, this.loginForm.phone)
+                        .then(res => {
+                            console.log("success");
+                            console.log(res.data)
+                            if (res.status == 200) {
+                                this.$router.push({ path: "/userLogin" });
+                            } else {
+                                this.$message({
+                                    message: "账户已经存在，请直接登录",
+                                    type: "error"
+                                });
+                            }
+                        }).catch(err => {
+                            console.log(err);
+                        });
                 }
             })
         },

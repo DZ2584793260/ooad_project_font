@@ -1,60 +1,55 @@
 <template>
-    <div class="video-container">
-        <video autoplay loop muted class="fillWidth">
-            <source src="../assets/leave.mp4" type="video/mp4" />
-            <!-- 浏览器不支持 video 标签，建议升级浏览器。 -->
-        </video>
+    <div class="backgroundVideo">
+        <div class="videoContainer">
+            <video class="fullscreenVideo" id="bgVid" playsinline="" autoplay="" muted="" loop=""
+                v-on:canplay="canplay">
+                <source src="../assets/leave.mp4" type="video/mp4">
+            </video>
+        </div>
     </div>
-
 </template>
 
 <script>
 export default {
-    mounted() {
-        // 屏幕自适应
-        // 获取屏幕宽高，根据不同屏幕调整视频的宽高自适应大小
-        window.onresize = () => {
-            const windowWidth = document.body.clientWidth
-            const windowHeight = document.body.clientHeight
-            const windowAspectRatio = windowHeight / windowWidth
-            let videoWidth
-            let videoHeight
-            if (windowAspectRatio < 0.5625) {
-                videoWidth = windowWidth
-                videoHeight = videoWidth * 0.5625
-                this.fixStyle = {
-                    height: windowWidth * 0.5625 + 'px',
-                    width: windowWidth + 'px',
-                    'margin-bottom': (windowHeight - videoHeight) / 2 + 'px',
-                    'margin-left': 'initial'
-                }
-            } else {
-                videoHeight = windowHeight
-                videoWidth = videoHeight / 0.5625
-                this.fixStyle = {
-                    height: windowHeight + 'px',
-                    width: windowHeight / 0.5625 + 'px',
-                    'margin-left': (windowWidth - videoWidth) / 2 + 'px',
-                    'margin-bottom': 'initial'
-                }
-            }
+    methods: {
+        canplay() {
+            this.vedioCanPlay = true
         }
-    }
+    },
 }
 </script>
 <style scoped>
-.video-container {
-    position: relative;
-    height: 100vh;
-    overflow: hidden;
-}
-
-.video-container {
-    z-index: 0;
-    position: absolute;
-}
-
-.fillWidth {
+.videoContainer {
+    position: fixed;
     width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -100;
+}
+
+.videoContainer:before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: -1;
+    top: 0;
+    left: 0;
+}
+
+.fullscreenVideo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    -webkit-transition: 1s opacity;
+    transition: 1s opacity;
 }
 </style>

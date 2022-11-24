@@ -1,3 +1,5 @@
+//PUT请求：如果两个请求相同，后一个请求会把第一个请求覆盖掉。（所以PUT用来改资源）
+//POST请求：后一个请求不会把第一个请求覆盖掉。（所以Post用来增加源）
 import request from '../utils/request';
 
 export function administratorLogin(id, password) {
@@ -20,6 +22,8 @@ export function userSignIn(id, password) {
         }
     })
 }
+
+//跨域问题 500
 export function userSignUp(nickName, account, password, phoneNumber) {
     return request({
         method: 'POST',
@@ -32,6 +36,15 @@ export function userSignUp(nickName, account, password, phoneNumber) {
         }
     })
 }
-export function forgetPassword() {
-
+//404 需要传几个参数，如何实现？
+export function forgetPassword(account, password, phoneNumber) {
+    return request({
+        method: 'PUT',
+        url: '/api/user/modifyuser',
+        data: {
+            account: account,
+            password: password,
+            phoneNumber: phoneNumber
+        }
+    })
 }

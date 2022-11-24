@@ -1,7 +1,7 @@
 <template>
     <div class="userSignUp">
         <div id="picture">
-            
+
             <vue-particles color="#dedede" :particleOpacity="0.7" :particlesNumber="80" shapeType="circle"
                 :particleSize="4" linesColor="#dedede" :linesWidth="1" :lineLinked="true" :lineOpacity="0.4"
                 :linesDistance="150" :moveSpeed="3" :hoverEffect="true" hoverMode="grab" :clickEffect="true"
@@ -145,28 +145,40 @@ export default {
                 if (!valid) { return; }
                 else {
                     // this.$api.loginApi.userSignUp(this.loginForm.nickName, this.loginForm.id,
-                    // this.loginForm.password, this.loginForm.phone)
+                    // this.loginForm.password, this.loginForm.phone).
 
-                    // this.$axios.post("http://10.16.38.64:8080/api/user/adduser",
-                    //     "nickName=123&account=123456&password=123456&phoneNumber=123456&nickName=123&account=123456&password=123456&phoneNumber=123456", {
-                    //     headers: {
-                    //         'Content-Type': 'application/x-www-form-urlencoded'
-                    //     },
+                    // this.$axios.post("http://10.16.38.64:8080/api/user/adduser", {
+                    //     NickName: "asfarwr",
+                    //     Account: "asdawra",
+                    //     Password: "sadaewaeaw",
+                    //     PhoneNumber: "12345678900"
                     // }).
-                    then(res => {
-                        console.log("success");
-                        console.log(res.data)
-                        if (res.status == 200) {
-                            this.$router.push({ path: "/userLogin" });
-                        } else {
-                            this.$message({
-                                message: "账户已经存在，请直接登录",
-                                type: "error"
-                            });
-                        }
-                    }).catch(err => {
-                        console.log(err);
-                    });
+                    //     then(res => {
+                    //         console.log("success");
+                    //         console.log(res.data)
+                    //         if (res.status == 200) {
+                    //             this.$router.push({ path: "/userLogin" });
+                    //         } else {
+                    //             this.$message({
+                    //                 message: "账户已经存在，请直接登录",
+                    //                 type: "error"
+                    //             });
+                    //         }
+                    //     }).catch(err => {
+                    //         console.log(err);
+                    //     });
+                    const json = {
+                        nickName: this.loginForm.nickName,
+                        account: this.loginForm.id,
+                        password: this.loginForm.password,
+                        phoneNumber: this.loginForm.phone
+                    }
+                    this.$axios.post('http://10.16.38.64:8080/api/user/adduser', json).then(function (message) {
+                        console.log(message)
+                    }).catch((err) => {
+                        console.log(err)
+                    })
+
                 }
             })
         },
