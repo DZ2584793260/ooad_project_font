@@ -139,36 +139,34 @@ export default {
         resetLoginForm() {//重置用户名和密码方法
             this.$refs.loginFormRef.resetFields();
         },
-        // submitLoginForm() {
-        //     this.$refs.loginFormRef.validate(async valid => {
-        //         //1.验证失败则结束
-        //         if (!valid) return;
-        //         const { data: res } = await this.$http.post("login", this.loginForm);
-        //         //2.是否登入后台
-        //         if (res.flag == "ok") {
-        //             //3.登陆成功，跳转到首页
-        //             this.$message.success("操作成功");
-
-        //             //4.存储user信息
-        //             window.sessionStorage.setItem("user", res.user);
-        //             window.sessionStorage.setItem("userid", res.user.id);
-        //             //5.进入用户页
-        //             this.$router.push({ path: "/userHome" });
-        //         } else {
-        //             this.$message.error("操作失败");
-        //         }
-        //     })
-        // }
         submitLoginForm() {
             this.$refs.loginFormRef.validate(async valid => {
                 //1.验证失败则结束
                 if (!valid) { return; }
                 else {
-                    //存储user信息
-                    // window.sessionStorage.setItem("user", res.user);
-                    // window.sessionStorage.setItem("userid", res.user.id);
-                    //返回登录页进行登录
-                    this.$router.push({ path: "/userLogin" });
+                    // this.$api.loginApi.userSignUp(this.loginForm.nickName, this.loginForm.id,
+                    // this.loginForm.password, this.loginForm.phone)
+
+                    // this.$axios.post("http://10.16.38.64:8080/api/user/adduser",
+                    //     "nickName=123&account=123456&password=123456&phoneNumber=123456&nickName=123&account=123456&password=123456&phoneNumber=123456", {
+                    //     headers: {
+                    //         'Content-Type': 'application/x-www-form-urlencoded'
+                    //     },
+                    // }).
+                    then(res => {
+                        console.log("success");
+                        console.log(res.data)
+                        if (res.status == 200) {
+                            this.$router.push({ path: "/userLogin" });
+                        } else {
+                            this.$message({
+                                message: "账户已经存在，请直接登录",
+                                type: "error"
+                            });
+                        }
+                    }).catch(err => {
+                        console.log(err);
+                    });
                 }
             })
         },
@@ -233,5 +231,4 @@ h3 {
     padding: 15px;
     position: relative;
 }
-
 </style>

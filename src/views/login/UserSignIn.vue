@@ -7,7 +7,7 @@
                 :linesDistance="150" :moveSpeed="3" :hoverEffect="true" hoverMode="grab" :clickEffect="true"
                 clickMode="push">
             </vue-particles>
-            
+
             <div class="change">
                 <span class="already">New to Hotel?</span>
                 <router-link to="/userLogin/UserSignUp">
@@ -100,8 +100,22 @@ export default {
                 //1.验证失败则结束
                 if (!valid) { return; }
                 else {
-                    //进入UserHome
-                    this.$router.push({ path: "/userHome" });
+                    this.$api.loginApi.userSignIn(this.loginForm.id, this.loginForm.password)
+                        .then(res => {
+                            console.log(res)
+                            console.log("success");
+                            let data = res.data;
+                            if (data.length !== 1) {
+                                this.$message({
+                                    message: "密码错误,请重新输入密码",
+                                    type: "error"
+                                });
+                            } else {
+                                this.$router.push({ path: "/userHome" });
+                            }
+                        }).catch(err => {
+                            console.log(err);
+                        });
                 }
             })
         }

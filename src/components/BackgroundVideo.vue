@@ -1,6 +1,6 @@
 <template>
     <div class="video-container">
-        <video :style="fixStyle" autoplay loop muted class="fillWidth" :canplay="canplay">
+        <video autoplay loop muted class="fillWidth">
             <source src="../assets/leave.mp4" type="video/mp4" />
             <!-- 浏览器不支持 video 标签，建议升级浏览器。 -->
         </video>
