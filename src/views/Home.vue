@@ -1,9 +1,9 @@
 <template>
     <div id="home">
         <div class="home_background">
-            <vue-particles color="#409EFF" :particleOpacity="0.7" :particlesNumber="120" shapeType="star"
+            <vue-particles color="#409EFF" :particleOpacity="0.7" :particlesNumber="100" shapeType="star"
                 :particleSize="5" linesColor="#409EFF" :linesWidth="1" :lineLinked="true" :lineOpacity="0.4"
-                :linesDistance="150" :moveSpeed="3" :hoverEffect="true" hoverMode="grab" :clickEffect="true"
+                :linesDistance="150" :moveSpeed="4" :hoverEffect="true" hoverMode="grab" :clickEffect="true"
                 clickMode="bubble">
             </vue-particles>
             <Information></Information>
