@@ -95,7 +95,7 @@ export default {
           //     password: this.loginForm.password
           //   }
           // })
-          this.$api.loginApi.administratorLogin(this.loginForm.id,this.loginForm.password)
+          this.$api.loginApi.administratorLogin(this.loginForm.id, this.loginForm.password)
             .then(res => {
               console.log(res)
               console.log("success");
