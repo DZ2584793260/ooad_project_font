@@ -23,7 +23,6 @@ export function userSignIn(id, password) {
     })
 }
 
-//跨域问题 500
 export function userSignUp(nickName, account, password, phoneNumber) {
     return request({
         method: 'POST',
@@ -36,12 +35,24 @@ export function userSignUp(nickName, account, password, phoneNumber) {
         }
     })
 }
-//404 需要传几个参数，如何实现？
+
 export function forgetPassword(account, password, phoneNumber) {
     return request({
         method: 'PUT',
         url: '/api/user/modifyuser',
         data: {
+            account: account,
+            password: password,
+            phoneNumber: phoneNumber  //待使用
+        }
+    })
+}
+
+export function deleteUser(account, password, phoneNumber) {
+    return request({
+        method: 'DELETE',
+        url: '/api/user/deleteuser',
+        params: {
             account: account,
             password: password,
             phoneNumber: phoneNumber
