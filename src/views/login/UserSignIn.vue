@@ -21,7 +21,7 @@
                     <h1>欢迎登录</h1>
 
                     <el-form class="login_form" ref="loginFormRef" :model="loginForm" :rules="loginRules"
-                        :v-model="submitLoginForm">
+                        :v-model="submitLoginForm" @keyup.enter.native="submitLoginForm()">
 
                         <!-- 账号 -->
                         <el-form-item label="账号" prop="id" label-width="100px">

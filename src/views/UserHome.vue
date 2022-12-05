@@ -1,5 +1,169 @@
 <template>
   <div class="userHome">
-    <h1>This is an userHome page</h1>
+    <div class="homeHeader">
+      <el-form :model="queryForm" ref="queryForm" :inline="true">
+        <el-form-item label="城市" prop="citySelected">
+          <el-select class="selectCity" placeholder="请选择城市" v-model="queryForm.citySelected"
+            value="queryForm.citySelected">
+            <!-- <el-option v-for="item in tableData" :key="item.hotelName" :label="item.city" :value="item.city">
+              </el-option> -->
+            <el-option label="北京" value="北京" />
+            <el-option label="上海" value="上海" />
+            <el-option label="广州" value="广州" />
+            <el-option label="深圳" value="深圳" />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="关键词" prop="keyword">
+          <el-input class="inputBox" placeholder="酒店名/位置" v-model="queryForm.keyword" clearable>
+          </el-input>
+        </el-form-item>
+
+        <el-button type="primary" @click="conditionQuery">查询</el-button>
+      </el-form>
+    </div>
+
+    <div class="bookTable">
+      <el-table :data="tableData" border style="width: 100%"
+        :header-cell-style="{ background: '#00abbe', color: '#fff', 'text-align': 'center' }" highlight-current-row>
+
+        <el-table-column fixed prop="hotelName" label="名称">
+        </el-table-column>
+        <el-table-column prop="companyName" label="集团">
+        </el-table-column>
+        <el-table-column prop="city" label="城市">
+        </el-table-column>
+        <el-table-column prop="hotelAddress" label="地址">
+        </el-table-column>
+        <el-table-column prop="contactList" label="前台电话">
+        </el-table-column>
+        <el-table-column align="center" fixed="right" label="操作" width="100">
+          <template slot-scope="scope">
+            <el-button @click="handleClick(scope.row)" type="text" size="small">查看详情</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!--分页-->
+      <el-pagination v-model:page-size="pageSize" background @size-change="handleSizeChange"
+        @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[2, 4, 6, 8]"
+        layout="prev, pager, next, sizes, total, jumper" :total="total" />
+
+    </div>
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    handleClick(row) {
+      console.log(row);
+      // 去某个酒店,每个酒店地址不同
+      // this.$router.push({ path: "/" });！！！！！！！！！！！！！！！1
+    },
+    handleSizeChange(val) {
+      // 更改每页多少条数据
+      console.log(`每页 ${val} 条`);
+      this.pageSize = val;
+      this.handleCurrentChange(1);//默认更改每页多少条后重新加载第一页
+    },
+
+    handleCurrentChange() {
+      if (this.queryOrNot === false) {
+        this.getAllAPI(this.pageSize, this.currentPage)
+      } else {
+        // if (this.queryForm.citySelected == "" && this.queryForm.keyword != "") {
+        //   this.conditionQueryAPI(this.currentPage, "%", this.queryForm.keyword)
+        // } else if (this.queryForm.citySelected != "" && this.queryForm.keyword == "") {
+        //   this.conditionQueryAPI(this.currentPage, this.queryForm.citySelected, "%")
+        // } else {
+        //   this.conditionQueryAPI(this.currentPage, this.queryForm.citySelected, this.queryForm.keyword)
+        // }
+        this.conditionQueryAPI(this.currentPage, this.queryForm.citySelected, this.queryForm.keyword)
+      }
+    },
+
+    conditionQuery() {
+      this.queryOrNot = true;
+      // if (this.queryForm.citySelected == "" && this.queryForm.keyword == "") {
+      //   this.getAllAPI(this.pageSize, 1)
+      //   this.queryOrNot = false
+      // } else if (this.queryForm.citySelected == "" && this.queryForm.keyword != "") {
+      //   this.conditionQueryAPI(1, "%", this.queryForm.keyword)
+      // } else if (this.queryForm.citySelected != "" && this.queryForm.keyword == "") {
+      //   this.conditionQueryAPI(1, this.queryForm.citySelected, "%")
+      // } else {
+      //   this.conditionQueryAPI(1, this.queryForm.citySelected, this.queryForm.keyword)
+      // }
+      this.conditionQueryAPI(1, this.queryForm.citySelected, this.queryForm.keyword)
+      this.currentPage = 1
+    },
+
+    conditionQueryAPI(current, city, key) {
+      const _this = this
+      this.$api.userApi.getHotelConditionCount(city, key)
+        .then(res => {
+          _this.total = res.data
+          console.log(res.data)
+        }).catch(err => {
+          console.log(err);
+        });
+      this.$api.userApi.getHotelConditional(this.pageSize, current, city, key)
+        .then(res => {
+          _this.tableData = res.data
+          console.log(res.data)
+        }).catch(err => {
+          console.log(err);
+        });
+    },
+    getAllAPI(size, current) {
+      const _this = this
+      this.$api.userApi.getHotelAllCount()
+        .then(res => {
+          _this.total = res.data
+        }).catch(err => {
+          console.log(err);
+        });
+      this.$api.userApi.getHotelAll(size, current)
+        .then(res => {
+          _this.tableData = res.data
+        }).catch(err => {
+          console.log(err);
+        });
+    }
+  },
+
+  data() {
+    return {
+      queryForm: {
+        citySelected: "",
+        keyword: ""
+      },
+      currentPage: 1,
+      queryCurrentPage: 1,
+      total: 10,//数据一共多少
+      pageSize: 2,//每页显示的行数,默认为2
+      tableData: [],
+      queryOrNot: false,
+      // sortBy: "hotelName",暂时没用上
+    }
+  },
+  created() {
+    // 初始时表格展示的数据
+    this.getAllAPI(2, 1)
+  },
+}
+
+</script>
+<style scoped>
+.homeHeader {
+  text-align: right;
+  margin: 10px 25px;
+}
+
+.bookTable {
+  margin: auto;
+  margin-top: 30px;
+  width: 70%;
+}
+</style>
+

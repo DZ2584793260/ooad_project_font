@@ -20,10 +20,13 @@
 export default {
     name: "Information",
     data() {
-        var img = require("../assets/test.png");
+        var img1 = require("../assets/hotel1.jpeg");
+        var img2 = require("../assets/hotel2.jpeg");
+        var img3 = require("../assets/hotel3.jpeg");
+        var img4 = require("../assets/hotel4.jpeg");
         var duola = require("../assets/duola.png")
         return {
-            img_list_1: [img, img, img, img],
+            img_list_1: [img1, img2, img3, img4],
             img_list_2: [duola, duola, duola, duola],
             // 图片父容器高度
             bannerHeight: window.innerHeight,

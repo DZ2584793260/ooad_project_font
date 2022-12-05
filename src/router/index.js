@@ -8,7 +8,6 @@ import UserSignUp from '../views/login/UserSignUp.vue'
 import UserHome from '../views/UserHome.vue'
 import AdministratorHome from '../views/AdministratorHome.vue'
 import ResetPassword from '../views/login/ResetPassword.vue'
-import MapBook from '../views/MapBook.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -41,8 +40,17 @@ const routes = [
     component: UserSignUp
   },
   {
+    // 忘记密码
+    path: '/userLogin/resetPassword',
+    name: 'resetPassword',
+    component: ResetPassword
+  },
+  {
     path: '/userHome',
     name: 'userHome',
+    // meta: {
+    //   requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+    // },
     component: UserHome
   },
   {
@@ -50,18 +58,7 @@ const routes = [
     name: 'administratorHome',
     component: AdministratorHome
   },
-  {
-    // 忘记密码
-    path: '/userLogin/resetPassword',
-    name: 'resetPassword',
-    component: ResetPassword
-  },
-  {
-    // 注册
-    path: '/userHome/mapBook',
-    name: 'mapBook',
-    component: MapBook
-  },
+
 ]
 
 const router = new VueRouter({
@@ -69,5 +66,16 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+// router.beforeEach((from, to, next) => {
+//   // next 没有参数，正常跳转
+//   // next 传入false，无法跳转
+//   // next 传入新地址，跳转到新地址
+//   // if to.name!=='Login'
+//   const token = localStorage.getItem('token')
+//   if (to.meta.requireAuth && !token) { // 判断跳转的路由是否需要登录
+//     next({ name: 'userLogin' })
+//   } else { next() }
+// })
 
 export default router

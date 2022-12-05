@@ -22,7 +22,7 @@
                     <h1>欢迎注册</h1>
 
                     <el-form class="login_form" ref="loginFormRef" :model="loginForm" :rules="loginRules"
-                        :v-model="submitLoginForm">
+                        :v-model="submitLoginForm" @keyup.enter.native="submitLoginForm()">
 
                         <el-form-item label="昵称" prop="nickName" label-width="100px">
                             <el-input class="in" v-model="loginForm.nickName" prefix-icon="iconfont icon-nicheng"
