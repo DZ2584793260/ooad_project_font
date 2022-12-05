@@ -4,7 +4,7 @@
       <el-form :model="queryForm" ref="queryForm" :inline="true">
         <el-form-item label="城市" prop="citySelected">
           <el-select class="selectCity" placeholder="请选择城市" v-model="queryForm.citySelected"
-            value="queryForm.citySelected">
+            value="queryForm.citySelected" clearable>
             <!-- <el-option v-for="item in tableData" :key="item.hotelName" :label="item.city" :value="item.city">
               </el-option> -->
             <el-option label="北京" value="北京" />
@@ -71,30 +71,29 @@ export default {
       if (this.queryOrNot === false) {
         this.getAllAPI(this.pageSize, this.currentPage)
       } else {
-        // if (this.queryForm.citySelected == "" && this.queryForm.keyword != "") {
-        //   this.conditionQueryAPI(this.currentPage, "%", this.queryForm.keyword)
-        // } else if (this.queryForm.citySelected != "" && this.queryForm.keyword == "") {
-        //   this.conditionQueryAPI(this.currentPage, this.queryForm.citySelected, "%")
-        // } else {
-        //   this.conditionQueryAPI(this.currentPage, this.queryForm.citySelected, this.queryForm.keyword)
-        // }
-        this.conditionQueryAPI(this.currentPage, this.queryForm.citySelected, this.queryForm.keyword)
+        if (this.queryForm.citySelected == "" && this.queryForm.keyword != "") {
+          this.conditionQueryAPI(this.currentPage, "%", this.queryForm.keyword)
+        } else if (this.queryForm.citySelected != "" && this.queryForm.keyword == "") {
+          this.conditionQueryAPI(this.currentPage, this.queryForm.citySelected, "%")
+        } else {
+          this.conditionQueryAPI(this.currentPage, this.queryForm.citySelected, this.queryForm.keyword)
+        }
       }
     },
 
     conditionQuery() {
       this.queryOrNot = true;
-      // if (this.queryForm.citySelected == "" && this.queryForm.keyword == "") {
-      //   this.getAllAPI(this.pageSize, 1)
-      //   this.queryOrNot = false
-      // } else if (this.queryForm.citySelected == "" && this.queryForm.keyword != "") {
-      //   this.conditionQueryAPI(1, "%", this.queryForm.keyword)
-      // } else if (this.queryForm.citySelected != "" && this.queryForm.keyword == "") {
-      //   this.conditionQueryAPI(1, this.queryForm.citySelected, "%")
-      // } else {
-      //   this.conditionQueryAPI(1, this.queryForm.citySelected, this.queryForm.keyword)
-      // }
-      this.conditionQueryAPI(1, this.queryForm.citySelected, this.queryForm.keyword)
+      if (this.queryForm.citySelected == "" && this.queryForm.keyword == "") {
+        // this.getAllAPI(2, 1) //相当于重新刷新了
+        this.getAllAPI(this.pageSize, 1)
+        this.queryOrNot = false
+      } else if (this.queryForm.citySelected == "" && this.queryForm.keyword != "") {
+        this.conditionQueryAPI(1, "%", this.queryForm.keyword)
+      } else if (this.queryForm.citySelected != "" && this.queryForm.keyword == "") {
+        this.conditionQueryAPI(1, this.queryForm.citySelected, "%")
+      } else {
+        this.conditionQueryAPI(1, this.queryForm.citySelected, this.queryForm.keyword)
+      }
       this.currentPage = 1
     },
 
@@ -103,14 +102,13 @@ export default {
       this.$api.userApi.getHotelConditionCount(city, key)
         .then(res => {
           _this.total = res.data
-          console.log(res.data)
+
         }).catch(err => {
           console.log(err);
         });
       this.$api.userApi.getHotelConditional(this.pageSize, current, city, key)
         .then(res => {
           _this.tableData = res.data
-          console.log(res.data)
         }).catch(err => {
           console.log(err);
         });
