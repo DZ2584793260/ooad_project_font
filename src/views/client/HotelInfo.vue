@@ -1,5 +1,5 @@
 <template>
-  <div class="userHome">
+  <div class="HotelInfo">
     <div class="homeHeader">
       <el-form :model="queryForm" ref="queryForm" :inline="true">
         <el-form-item label="城市" prop="citySelected">
@@ -58,7 +58,7 @@ export default {
     handleClick(row) {
       console.log(row);
       // 去某个酒店,每个酒店地址不同
-      // this.$router.push({ path: "/" });！！！！！！！！！！！！！！！1
+      // this.$router.push({ path: "/client/tableBook", query: { hotelName: row.hotelName } });
     },
     handleSizeChange(val) {
       // 更改每页多少条数据
@@ -71,9 +71,9 @@ export default {
       if (this.queryOrNot === false) {
         this.getAllAPI(this.pageSize, this.currentPage)
       } else {
-        if (this.queryForm.citySelected == "" && this.queryForm.keyword != "") {
+        if (this.queryForm.citySelected === "" && this.queryForm.keyword !== "") {
           this.conditionQueryAPI(this.currentPage, "%", this.queryForm.keyword)
-        } else if (this.queryForm.citySelected != "" && this.queryForm.keyword == "") {
+        } else if (this.queryForm.citySelected !== "" && this.queryForm.keyword === "") {
           this.conditionQueryAPI(this.currentPage, this.queryForm.citySelected, "%")
         } else {
           this.conditionQueryAPI(this.currentPage, this.queryForm.citySelected, this.queryForm.keyword)
@@ -83,13 +83,13 @@ export default {
 
     conditionQuery() {
       this.queryOrNot = true;
-      if (this.queryForm.citySelected == "" && this.queryForm.keyword == "") {
+      if (this.queryForm.citySelected === "" && this.queryForm.keyword === "") {
         // this.getAllAPI(2, 1) //相当于重新刷新了
         this.getAllAPI(this.pageSize, 1)
         this.queryOrNot = false
-      } else if (this.queryForm.citySelected == "" && this.queryForm.keyword != "") {
+      } else if (this.queryForm.citySelected === "" && this.queryForm.keyword !== "") {
         this.conditionQueryAPI(1, "%", this.queryForm.keyword)
-      } else if (this.queryForm.citySelected != "" && this.queryForm.keyword == "") {
+      } else if (this.queryForm.citySelected !== "" && this.queryForm.keyword === "") {
         this.conditionQueryAPI(1, this.queryForm.citySelected, "%")
       } else {
         this.conditionQueryAPI(1, this.queryForm.citySelected, this.queryForm.keyword)
@@ -99,14 +99,14 @@ export default {
 
     conditionQueryAPI(current, city, key) {
       const _this = this
-      this.$api.userApi.getHotelConditionCount(city, key)
+      this.$api.clientApi.getHotelConditionCount(city, key)
         .then(res => {
           _this.total = res.data
 
         }).catch(err => {
           console.log(err);
         });
-      this.$api.userApi.getHotelConditional(this.pageSize, current, city, key)
+      this.$api.clientApi.getHotelConditional(this.pageSize, current, city, key)
         .then(res => {
           _this.tableData = res.data
         }).catch(err => {
@@ -115,15 +115,19 @@ export default {
     },
     getAllAPI(size, current) {
       const _this = this
-      this.$api.userApi.getHotelAllCount()
+      this.$api.clientApi.getHotelAllCount()
         .then(res => {
           _this.total = res.data
         }).catch(err => {
           console.log(err);
         });
-      this.$api.userApi.getHotelAll(size, current)
+      this.$api.clientApi.getHotelAll(size, current)
         .then(res => {
+          console.log(res)
           _this.tableData = res.data
+          for (let i = 0; i < _this.tableData.length; i++) {
+            _this.tableData[i].contactList = _this.tableData[i].contactList.join()
+          }
         }).catch(err => {
           console.log(err);
         });
@@ -140,9 +144,15 @@ export default {
       queryCurrentPage: 1,
       total: 10,//数据一共多少
       pageSize: 2,//每页显示的行数,默认为2
+      // tableData: [
+      //   hotelName = "",
+      //   companyName = "",
+      //   city = "",
+      //   hotelAddress = "",
+      //   contactList = ""
+      // ],
       tableData: [],
       queryOrNot: false,
-      // sortBy: "hotelName",暂时没用上
     }
   },
   created() {
@@ -164,4 +174,3 @@ export default {
   width: 70%;
 }
 </style>
-

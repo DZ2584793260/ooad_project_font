@@ -100,9 +100,9 @@ export default {
               console.log(res)
               console.log("success");
               let data = res.data;
-              if (data.length !== 1) {
+              if (data.code == 8000) {
                 this.$message({
-                  message: "密码错误,请重新输入密码",
+                  message: data.message,
                   type: "error"
                 });
               } else {

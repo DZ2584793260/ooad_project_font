@@ -124,7 +124,7 @@ a {
 
 /* 鼠标停留时的样式 */
 .left-ul li:hover {
-    background-color: rgb(154, 153, 155);
+    background-color: #8e8f90;
 }
 
 .active {

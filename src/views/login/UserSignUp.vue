@@ -148,13 +148,13 @@ export default {
                         this.loginForm.password, this.loginForm.phone).then(res => {
                             console.log("success");
                             console.log(res.data)
-                            if (res.status == 200) {
-                                this.$router.push({ path: "/userLogin" });
-                            } else {
+                            if (res.data.code == 7000) {
                                 this.$message({
-                                    message: "账户已经存在，请直接登录",
+                                    message: res.data.message,
                                     type: "error"
                                 });
+                            } else {
+                                this.$router.push({ path: "/userLogin" });
                             }
                         }).catch(err => {
                             console.log(err);
