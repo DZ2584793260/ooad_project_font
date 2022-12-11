@@ -67,9 +67,6 @@ const routes = [
       {
         path: '/client/hotelInfo',
         name: 'clientHotelInfo',
-        // meta: {
-        //   requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
-        // },
         component: clientHotelInfo
       },
       {
@@ -103,6 +100,10 @@ const routes = [
   {
     path: '/admin',
     name: 'adminNav',
+    //暂时设的是管理员端必须登录
+    // meta: {
+    //   requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+    // },
     component: adminNav,
     children: [
       {
@@ -137,5 +138,9 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
-
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem("token")
+  if (to.name === 'clientHotelInfo' && !token) next({ name: 'userLogin' })
+  else next()
+})
 export default router

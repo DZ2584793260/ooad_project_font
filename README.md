@@ -19,6 +19,13 @@ this.$router.push({ path: "/client/tableSelect", query: { hotelName: row.hotelNa
 另一个页面在methods中获得参数：var x=this.$route.query.hotelName;
 但是使用此种方式参数拼接在URL上，能被看见，不安全，不过目前好像没有涉及安全性，暂时可以使用此种方式
 
+# Token
+1. 一台电脑只能存关于一个网站的一个token，合理，维护一个登录状态
+2. 只要源是一样的，多个页面可以跨数据
+3. router中的index.js 中判断是否有token
+4. 验证token是否正确（后端）
+5. 在request.js中对所有的前端API都加个请求头
+
 
 
 

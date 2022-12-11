@@ -102,15 +102,15 @@ export default {
                 else {
                     this.$api.loginApi.userSignIn(this.loginForm.id, this.loginForm.password)
                         .then(res => {
-                            console.log(res)
-                            console.log("success");
-                            let data = res.data;
-                            if (data.code == 8000) {
+                            if (res.data.code == 8000) {
                                 this.$message({
-                                    message: data.message,
+                                    message: res.data.message,
                                     type: "error"
                                 });
                             } else {
+                                //保存token
+                                let accessToken = res.data.token;
+                                localStorage.setItem("token",accessToken)
                                 this.$router.push({ path: "/client/hotelInfo" });
                             }
                         }).catch(err => {
