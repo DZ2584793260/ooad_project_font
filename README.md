@@ -14,8 +14,11 @@
 4. apis中的loginApi放的是类似与方法的API接口，包含了所有登录需要的API，后面可以模仿里面的写。需要的话，要重新建一个.js文件，存放比如说userHome或者订单管理的API使结构更清晰。
 
 # 待改进或编写
-1. 管理员选择门店页面，选择房间页面。
-2. 营业额统计页面，某门店，年，月，日（advanced 绘制某年12个月的折线图，柱状图之类的）
-3. 用户进入以后可以直接查看所有门店，让用户在上面筛选的地方选择地区之类的查询
-This is my 小设想，有需要改进的地方，可以修正idea！！
+页面间的传参
+this.$router.push({ path: "/client/tableSelect", query: { hotelName: row.hotelName } });
+另一个页面在methods中获得参数：var x=this.$route.query.hotelName;
+但是使用此种方式参数拼接在URL上，能被看见，不安全，不过目前好像没有涉及安全性，暂时可以使用此种方式
+
+
+
 

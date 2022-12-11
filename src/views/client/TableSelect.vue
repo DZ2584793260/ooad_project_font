@@ -147,7 +147,7 @@ export default {
       queryForm: {
         maxCost: "",
         startTime: "",
-        endTime: ""
+        endTime: "",
       },
       currentPage: 1,
       queryCurrentPage: 1,
@@ -162,6 +162,9 @@ export default {
     // 初始时表格展示的数据
     this.getAllAPI(2, 1)
   },
+  //对于前端来说，钩子函数就是指再所有函数执行前，我先执行了的函数，即 钩住 我感兴趣的函数，只要它执行，我就先执行。
+  mounted(){
+  }
 }
 </script>
 

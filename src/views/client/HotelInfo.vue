@@ -58,7 +58,8 @@ export default {
     handleClick(row) {
       console.log(row);
       // 去某个酒店,每个酒店地址不同
-      // this.$router.push({ path: "/client/tableBook", query: { hotelName: row.hotelName } });
+      this.$router.push({ path: "/client/tableSelect", query: { hotelName: row.hotelName } });
+      // 另一个页面在methods中获得参数：var x=this.$route.query.hotelName;
     },
     handleSizeChange(val) {
       // 更改每页多少条数据

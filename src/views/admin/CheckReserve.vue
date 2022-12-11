@@ -7,12 +7,9 @@
 </template>
 
 <script>
-import navbar from "@/components/AdminNavbar.vue"
 export default {
     data() {
         return {
-
-
         }
     }
 }
