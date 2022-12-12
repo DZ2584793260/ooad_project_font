@@ -16,7 +16,7 @@
                         <ul class="left-ul">
 
                             <li title="">
-                                <router-link active-class="active" to="/userLogin"> 用户 </router-link>
+                                <router-link active-class="active" to="/client/hotelInfo"> 用户 </router-link>
                             </li>
                             <li title="">
                                 <router-link active-class="active" to="/administratorLogin"> 管理员 </router-link>

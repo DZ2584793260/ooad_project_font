@@ -147,7 +147,7 @@ const router = new VueRouter({
 })
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem("token")
-  if (to.name === 'clientHotelInfo' && !token) next({ name: 'userLogin' })
+  if (to.name === 'clientRoomReserve' && !token) next({ name: 'userLogin' })
   else next()
 })
 export default router

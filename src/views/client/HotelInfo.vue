@@ -109,10 +109,23 @@ export default {
         });
       this.$api.clientApi.getHotelConditional(this.pageSize, current, city, key)
         .then(res => {
+          // token !!!!
+          // if (res.data.code == 502) {
+          //   this.$message({
+          //     message: res.data.message,
+          //     type: "error"
+          //   });
+          //   this.$router.push({ path: "/userLogin" });
+          // } else {
+          //   _this.tableData = res.data
+          //   for (let i = 0; i < _this.tableData.length; i++) {
+          //     _this.tableData[i].contactList = _this.tableData[i].contactList.join()
+          //   }
+          // }
           _this.tableData = res.data
-          for (let i = 0; i < _this.tableData.length; i++) {
-            _this.tableData[i].contactList = _this.tableData[i].contactList.join()
-          }
+            for (let i = 0; i < _this.tableData.length; i++) {
+              _this.tableData[i].contactList = _this.tableData[i].contactList.join()
+            }
         }).catch(err => {
           console.log(err);
         });

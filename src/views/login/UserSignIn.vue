@@ -102,6 +102,7 @@ export default {
                 else {
                     this.$api.loginApi.userSignIn(this.loginForm.id, this.loginForm.password)
                         .then(res => {
+                            console.log(res)
                             if (res.data.code == 8000) {
                                 this.$message({
                                     message: res.data.message,

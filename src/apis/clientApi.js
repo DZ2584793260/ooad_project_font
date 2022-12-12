@@ -50,7 +50,7 @@ export function getRoomAll(pageSize, currentPage) {
 export function getRoomAllCount() {
     return request({
         method: 'GET',
-        // url: '/api/HotelInstance/getallcount',A
+        // url: '/api/HotelInstance/getallcount'
     })
 }
 export function getRoomConditional(pageSize, currentPage, maxCost, startTime, endTime) {
