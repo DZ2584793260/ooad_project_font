@@ -45,6 +45,7 @@
         @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[2, 4, 6, 8]"
         layout="prev, pager, next, sizes, total, jumper" :total="total" />
     </div>
+    
   </div>
 </template>
 

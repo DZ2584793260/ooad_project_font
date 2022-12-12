@@ -5,6 +5,9 @@ import router from './router'
 import store from './store'
 import './plugins/element.js'
 import VueParticles from 'vue-particles'
+//dialog可拖拽
+import './plugins/dialogDrag.js';
+
 import api from './apis'
 Vue.prototype.$api = api
 Vue.use(VueParticles)

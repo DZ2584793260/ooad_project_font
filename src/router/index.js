@@ -19,6 +19,7 @@ import adminGraph from '../views/admin/Graph.vue'
 import adminNav from '../components/AdminNavbar.vue'
 import adminCheckReserve from '../views/admin/CheckReserve.vue'
 import adminRoomEdit from '../views/admin/RoomEdit.vue'
+import adminRoomSelect from '../views/admin/RoomSelect.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -123,6 +124,12 @@ const routes = [
         path: '/admin/roomEdit',
         name: 'adminRoomEdit',
         component: adminRoomEdit
+      },
+      {
+        //
+        path: '/admin/roomSelect',
+        name: 'adminRoomSelect',
+        component: adminRoomSelect
       },
     ]
   },
