@@ -4,7 +4,7 @@
             <!-- 点击哆啦A梦头像可以返回首页 -->
             <router-link active-class="initial" to="/">
                 <div class="logo">
-                    <img src="../assets/duola.png" alt="">
+                    <img src="../assets/logo.png" alt="">
                 </div>
             </router-link>
         </div>

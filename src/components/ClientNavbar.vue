@@ -3,18 +3,15 @@
 		<el-menu :default-active="this.$route.path" router mode="horizontal" class="navbar" @open="handleOpen"
 			@close="handleClose" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
 			<div class="navbar-container">
-				<!-- <el-menu-item v-for="(item, i) in navList" :key="i" :index="item.name">
-					<template slot="title">
-						<span> {{ item.navItem }}</span>
-					</template>
-				</el-menu-item> -->
 				<el-menu-item index="/userLogin">酒店预定</el-menu-item>
-				<el-menu-item index="/userLogin">
+
+				<el-menu-item index="/userLogin" :disabled="disable">
 					<template slot="title">
 						<i class="el-icon-user"></i>
 						<span>登录/注册</span>
 					</template>
 				</el-menu-item>
+
 				<el-menu-item index="/client/personalOrder">
 					<template slot="title">
 						<i class="el-icon-phone-outline"></i>
@@ -32,17 +29,11 @@
 
 <script>
 export default {
-	// data() {
-	// 	return {
-	// 		navList: [
-	// 			//YUKI:write as path
-	// 			{ name: '/userLogin', navItem: '酒店预定' },
-	// 			{ name: '/userLogin', navItem: '登录/注册' },
-	// 			{ name: '/client/personalOrder', navItem: '在线客服' },
-	// 			{ name: '/client/personalOrder', navItem: '全部订单' },
-	// 		]
-	// 	}
-	// },
+	data() {
+		return {
+			disable: true,
+		}
+	},
 	methods: {
 		handleOpen(key, keyPath) {
 			console.log(key, keyPath);
@@ -50,7 +41,16 @@ export default {
 		handleClose(key, keyPath) {
 			console.log(key, keyPath);
 		}
+	},
+	mounted() {
+		//此处要判断token是否存在，存在则不展示 登录/注册 选项
+		localStorage.setItem("token","22222")
+		console.log(localStorage.getItem("token"))
+		if (localStorage.getItem("token")) {
+			this.disable = false
+		}
 	}
+
 }
 </script>
 

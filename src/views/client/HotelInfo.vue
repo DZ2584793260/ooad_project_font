@@ -110,6 +110,9 @@ export default {
       this.$api.clientApi.getHotelConditional(this.pageSize, current, city, key)
         .then(res => {
           _this.tableData = res.data
+          for (let i = 0; i < _this.tableData.length; i++) {
+            _this.tableData[i].contactList = _this.tableData[i].contactList.join()
+          }
         }).catch(err => {
           console.log(err);
         });
