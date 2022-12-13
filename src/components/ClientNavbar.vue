@@ -3,22 +3,32 @@
 		<el-menu :default-active="this.$route.path" router mode="horizontal" class="navbar" @open="handleOpen"
 			@close="handleClose" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
 			<div class="navbar-container">
-				<el-menu-item index="/userLogin">酒店预定</el-menu-item>
+				<el-menu-item index="/client/hotelInfo">酒店预定</el-menu-item>
 
-				<el-menu-item index="/userLogin" :disabled="disable">
-					<template slot="title">
-						<i class="el-icon-user"></i>
-						<span>登录/注册</span>
-					</template>
-				</el-menu-item>
+				<el-submenu index="2">
+					<template slot="title">订单</template>
+					<el-menu-item index="/client/personalOrder">全部</el-menu-item>
+					<el-menu-item index="/client/reserveOrder">未出行</el-menu-item>
+					<el-menu-item index="2-3">待评价</el-menu-item>
+				</el-submenu>
 
-				<el-menu-item index="/client/personalOrder">
+				<!-- 更改index即可更改跳转路由 -->
+				<el-menu-item index="1-1">
 					<template slot="title">
 						<i class="el-icon-phone-outline"></i>
 						<span>在线客服</span>
 					</template>
 				</el-menu-item>
-				<el-menu-item index="/client/personalOrder">全部订单</el-menu-item>
+				
+				<el-menu-item index="/userLogin" :disabled="isLogin">
+					<template slot="title">
+						<i class="el-icon-user"></i>
+						<span v-if="isLogin">
+							{{ $store.getters.getUser.nickname }}
+						</span>
+						<span v-else>登录/注册</span>
+					</template>
+				</el-menu-item>
 			</div>
 		</el-menu>
 		<router-view></router-view>
@@ -31,7 +41,8 @@
 export default {
 	data() {
 		return {
-			disable: true,
+			path: "/client/tableSelect",
+			isLogin: false,
 		}
 	},
 	methods: {
@@ -43,14 +54,15 @@ export default {
 		}
 	},
 	mounted() {
-		//此处要判断token是否存在，存在则不展示 登录/注册 选项
-		localStorage.setItem("token","22222")
+		//此处要判断token是否存在
 		console.log(localStorage.getItem("token"))
 		if (localStorage.getItem("token")) {
-			this.disable = false
+			this.isLogin = true
 		}
-	}
+	},
+	computed: {
 
+	}
 }
 </script>
 

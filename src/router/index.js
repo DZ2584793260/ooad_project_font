@@ -12,6 +12,7 @@ import clientMapSelect from '../views/client/MapSelect.vue'
 import clientRoomReserve from '../views/client/RoomReserve.vue'
 import clientTableSelect from '../views/client/TableSelect.vue'
 import clientPersonalOrder from '../views/client/PersonalOrder.vue'
+import clientReserveOrder from '../views/client/ReserveOrder.vue'
 import clientNav from '../components/ClientNavbar.vue'
 //YUKI: admin routes
 import adminHotelInfo from '../views/admin/HotelInfo.vue'///////////
@@ -93,6 +94,12 @@ const routes = [
         path: '/client/personalOrder',
         name: 'clientPersonalOrder',
         component: clientPersonalOrder
+      },
+      {
+        //
+        path: '/client/reserveOrder',
+        name: 'clientReserveOrder',
+        component: clientReserveOrder
       }
     ]
   },

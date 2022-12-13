@@ -110,8 +110,9 @@ export default {
                                 });
                             } else {
                                 //保存token
-                                let accessToken = res.data.token;
+                                let accessToken = res.data[0].token;
                                 localStorage.setItem("token",accessToken)
+                                this.$store.dispatch('asyncUpdateUser',{nickname:res.data[0].nickName})
                                 this.$router.push({ path: "/client/hotelInfo" });
                             }
                         }).catch(err => {

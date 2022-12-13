@@ -7,17 +7,9 @@
   <div class="personalOrder">
     <div class="orderQuery">
       <el-form :model="queryForm" ref="queryForm" :inline="true">
-        <el-form-item label="城市" prop="citySelected">
-          <el-select class="selectCity" placeholder="请选择城市" v-model="queryForm.citySelected"
-            value="queryForm.citySelected" clearable>
-            <el-option label="北京" value="北京" />
-            <el-option label="上海" value="上海" />
-            <el-option label="广州" value="广州" />
-            <el-option label="深圳" value="深圳" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="关键词" prop="keyword">
-          <el-input class="inputBox" placeholder="酒店名/位置" v-model="queryForm.keyword" clearable>
+
+        <el-form-item prop="uuid">
+          <el-input prefix-icon="el-icon-search" placeholder="订单号/门店/地址" v-model="queryForm.keyword" clearable>
           </el-input>
         </el-form-item>
         <el-button type="primary" @click="conditionQuery">查询</el-button>
@@ -27,11 +19,15 @@
     <div class="orderTable">
       <el-table :data="tableData" border style="width: 100%"
         :header-cell-style="{ background: '#00abbe', color: '#fff', 'text-align': 'center' }" highlight-current-row>
-        <el-table-column fixed prop="iD" label="订单号"></el-table-column>
-        <el-table-column prop="floor" label="门店"></el-table-column>
-        <el-table-column prop="address" label="地址"></el-table-column>
-        <el-table-column prop="roomType" label="房间类型"></el-table-column>
-        <el-table-column prop="price" label="价格"></el-table-column>
+        <el-table-column fixed prop="uuid" label="订单号"></el-table-column>
+        <el-table-column prop="hotel" label="门店"></el-table-column>
+        <el-table-column prop="hotelAddress" label="门店地址"></el-table-column>
+        <el-table-column prop="checkInTime" label="下单时间"></el-table-column>
+        <el-table-column prop="checkInTime" label="入住时间"></el-table-column>
+        <el-table-column prop="checkOutTime" label="退房时间"></el-table-column>
+        <el-table-column prop="roomType" label="房型"></el-table-column>
+        <el-table-column prop="roomNumber" label="房间数"></el-table-column>
+        <el-table-column prop="price" label="实际付款"></el-table-column>
         <el-table-column align="center" fixed="right" label="操作" width="100">
 
           <template slot-scope="scope">
@@ -92,8 +88,8 @@ export default {
       //数据
       tableData: [
         {
-          iD: "1",
-          floor: "3",
+          uuid: "1",
+          price: "3",
         },
       ],
     }
