@@ -9,7 +9,8 @@
 					<template slot="title">订单</template>
 					<el-menu-item index="/client/personalOrder">全部</el-menu-item>
 					<el-menu-item index="/client/reserveOrder">未出行</el-menu-item>
-					<el-menu-item index="2-3">待评价</el-menu-item>
+					<el-menu-item index="/client/uncommentOrder">待评价</el-menu-item>
+					<el-menu-item index="/client/finishOrder">已评价</el-menu-item>
 				</el-submenu>
 
 				<!-- 更改index即可更改跳转路由 -->
@@ -19,7 +20,7 @@
 						<span>在线客服</span>
 					</template>
 				</el-menu-item>
-				
+
 				<el-menu-item index="/userLogin" :disabled="isLogin">
 					<template slot="title">
 						<i class="el-icon-user"></i>

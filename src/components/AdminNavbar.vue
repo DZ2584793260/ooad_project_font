@@ -8,6 +8,13 @@
 						<span> {{ item.navItem }}</span>
 					</template>
 				</el-menu-item>
+				<el-submenu index="2">
+					<template slot="title">订单</template>
+					<el-menu-item index="/admin/allorder">全部</el-menu-item>
+					<el-menu-item index="/admin/unfinishOrder">未出行</el-menu-item>
+					<el-menu-item index="/admin/uncommentOrder">待评价</el-menu-item>
+					<el-menu-item index="/admin/finishOrder">已评价</el-menu-item>
+				</el-submenu>
 			</div>
 		</el-menu>
 		<router-view></router-view>
@@ -21,11 +28,11 @@ export default {
 		return {
 			navList: [
 				//YUKI:write as path
-				{ name: '/admin/graph', navItem: '房间管理' },
-				{ name: '/admin/graph', navItem: '员工管理' },
+				{ name: '/admin/hotelInfo', navItem: '房间管理' },
+				// { name: '/admin/graph', navItem: '员工管理' },
 				{ name: '/admin/graph', navItem: '订购量统计' },
 				{ name: '/admin/graph', navItem: '营业额分析' },
-				{ name: '/admin/checkReserve', navItem: '顾客预定信息查询' },
+				// { name: '/admin/checkReserve', navItem: '顾客预定信息查询' },
 			]
 		}
 	},

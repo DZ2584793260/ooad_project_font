@@ -13,12 +13,17 @@ import clientRoomReserve from '../views/client/RoomReserve.vue'
 import clientTableSelect from '../views/client/TableSelect.vue'
 import clientPersonalOrder from '../views/client/PersonalOrder.vue'
 import clientReserveOrder from '../views/client/ReserveOrder.vue'
+import clientUncommentOrder from '../views/client/UncommentOrder.vue'
+import clientFinishOrder from '../views/client/FinishOrder.vue'
 import clientNav from '../components/ClientNavbar.vue'
 //YUKI: admin routes
 import adminHotelInfo from '../views/admin/HotelInfo.vue'///////////
 import adminGraph from '../views/admin/Graph.vue'
 import adminNav from '../components/AdminNavbar.vue'
-import adminCheckReserve from '../views/admin/CheckReserve.vue'
+import adminAllOrder from '../views/admin/AllOrder.vue'
+import adminUncommentOrder from '../views/admin/UncommentOrder.vue'
+import adminUnfinishOrder from '../views/admin/UnfinishOrder.vue'
+import adminFinishOrder from '../views/admin/FinishOrder.vue'
 import adminRoomEdit from '../views/admin/RoomEdit.vue'
 import adminRoomSelect from '../views/admin/RoomSelect.vue'
 Vue.use(VueRouter)
@@ -100,6 +105,16 @@ const routes = [
         path: '/client/reserveOrder',
         name: 'clientReserveOrder',
         component: clientReserveOrder
+      },
+      {
+        path: '/client/uncommentOrder',
+        name: 'clientUncommentOrder',
+        component: clientUncommentOrder
+      },
+      {
+        path: '/client/finishOrder',
+        name: 'clientFinishOrder',
+        component: clientFinishOrder
       }
     ]
   },
@@ -122,9 +137,27 @@ const routes = [
       },
       {
         //
-        path: '/admin/checkReserve',
-        name: 'adminCheckReserve',
-        component: adminCheckReserve
+        path: '/admin/allOrder',
+        name: 'adminAllOrder',
+        component: adminAllOrder
+      },
+      {
+        path: '/admin/uncommentOrder',
+        name: 'adminUncommentOrder',
+        component: adminUncommentOrder
+
+      },
+      {
+        path: '/admin/unfinishOrder',
+        name: 'adminUnfinishOrder',
+        component: adminUnfinishOrder
+
+      },
+      {
+        path: '/admin/finishOrder',
+        name: 'adminFinishOrder',
+        component: adminFinishOrder
+
       },
       {
         //
@@ -138,13 +171,15 @@ const routes = [
         name: 'adminRoomSelect',
         component: adminRoomSelect
       },
+      {
+        path: '/admin/hotelInfo',
+        name: 'adminHotelInfo',
+        component: adminHotelInfo
+      },
+
     ]
   },
-  {
-    path: '/admin/hotelInfo',
-    name: 'adminHotelInfo',
-    component: adminHotelInfo
-  },
+
 ]
 
 const router = new VueRouter({

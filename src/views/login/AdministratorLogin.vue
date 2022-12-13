@@ -108,7 +108,7 @@ export default {
               } else {
                 let accessToken = res.data[0].token;
                 localStorage.setItem("token", accessToken)
-                this.$store.dispatch('asyncUpdateUser', {nickname: this.loginForm.id })
+                this.$store.dispatch('asyncUpdateUser', {id: this.loginForm.id })
                 this.$router.push({ path: "/admin/hotelInfo" });
               }
             }).catch(err => {

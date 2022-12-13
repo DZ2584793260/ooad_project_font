@@ -22,18 +22,21 @@
         <el-table-column fixed prop="uuid" label="订单号"></el-table-column>
         <el-table-column prop="hotel" label="门店"></el-table-column>
         <el-table-column prop="hotelAddress" label="门店地址"></el-table-column>
-        <el-table-column prop="checkInTime" label="下单时间"></el-table-column>
+        <el-table-column prop="bookTime" label="下单时间"></el-table-column>
         <el-table-column prop="checkInTime" label="入住时间"></el-table-column>
         <el-table-column prop="checkOutTime" label="退房时间"></el-table-column>
         <el-table-column prop="roomType" label="房型"></el-table-column>
-        <el-table-column prop="roomNumber" label="房间数"></el-table-column>
+        <el-table-column prop="roomID" label="房间号"></el-table-column>
         <el-table-column prop="price" label="实际付款"></el-table-column>
-        <el-table-column align="center" fixed="right" label="操作" width="100">
+        <el-table-column prop="price" label="订单状态"></el-table-column>
+        <!-- <el-table-column align="center" prop="operation" label="操作" width="200px">
+            <template slot-scope="scope">
+              <el-button type="primary" size="small" round @click="handleClick(scope.$index)">修改订单</el-button>
+              <el-button type="danger" size="small" round @click="handleDelete(scope.$index)">取消订单
+              </el-button>
+            </template>
+          </el-table-column> -->
 
-          <template slot-scope="scope">
-            <el-button @click="handleClick(scope.$index)" type="text" size="small">查看详情</el-button>
-          </template>
-        </el-table-column>
       </el-table>
       <!--分页-->
       <el-pagination v-model:page-size="pageSize" background @size-change="handleSizeChange"
@@ -43,18 +46,22 @@
 
     <div class="orderCheck">
       <el-dialog :visible.sync="dialogVisible" :title="dialogTitle" width="35%" close-on-press-escape v-dialogDrag>
+        <h3>请重新选择入住及退房时间</h3>
         <el-form :model="dialogForm" :rules="editFormRules" ref="dialogForm">
-          <el-form-item label="Course Name" prop="iD" label-width="120px">
-            <el-input v-model="dialogForm.course_name" placeholder="Please input the course name"></el-input>
+          <!--选择日期-->
+          <el-form-item label="入住时间" prop="checkInTime" label-width="120px">
+            <el-date-picker v-model="dialogForm.checkInTime" placeholder="Please select the date" format="yyyy/MM/dd"
+              value-format="yyyy/MM/dd" style="width: 100%" />
           </el-form-item>
-          <el-form-item label="Course Code" prop="floor" label-width="120px">
-            <el-input v-model="dialogForm.course_code" placeholder="Please input the course code"></el-input>
+          <el-form-item label="退房时间" prop="checkOutTime" label-width="120px">
+            <el-date-picker v-model="dialogForm.checkOutTime" placeholder="Please select the date" format="yyyy/MM/dd"
+              value-format="yyyy/MM/dd" style="width: 100%" />
           </el-form-item>
         </el-form>
 
         <div style="text-align:right">
-          <el-button type="primary" v-on:click="dialogSave()">保存</el-button>
-          <el-button @click="dialogCancel()">取消</el-button>
+          <el-button type="primary" v-on:click="dialogSave()">确定</el-button>
+          <el-button @click="dialogCancel()">退出</el-button>
         </div>
       </el-dialog>
     </div>
@@ -79,11 +86,15 @@ export default {
       queryOrNot: false,
       //对话框
       dialogVisible: false,//订单详细信息窗口
-      dialogForm: [],//对话框中的form 新增和编辑
+      dialogForm: [{
+        uuid: "1",
+        price: "333",
+      },
+      ],//对话框中的form 新增和编辑
       dialogTitle: "",
       editFormRules: {
-        // course_name: [{ required: true, message: 'Please input the course_name', trigger: 'change' }],
-        // course_code: [{ required: true, message: 'Please input the course_code', trigger: 'change' }],
+        checkInTime: [{ required: true, message: '请选择入住时间', trigger: 'change' }],
+        checkOutTime: [{ required: true, message: '请选择退房时间', trigger: 'change' }],
       },
       //数据
       tableData: [
@@ -102,7 +113,7 @@ export default {
       //保存编辑
     },
     handleClick(row_index) {
-      this.dialogTitle = "订单：" + this.tableData[row_index].iD;
+      this.dialogTitle = "订单：" + this.tableData[row_index].uuid;
       this.dialogVisible = true;
     },
     handleSizeChange(val) {
@@ -162,13 +173,10 @@ export default {
         }).catch(err => {
           console.log(err);
         });
-      this.$api.clientApi.getHotelAll(size, current)
+      this.$api.clientApi.getOrderByUserAccount(size, current, $store.getters.getUser.id)
         .then(res => {
           console.log(res)
           _this.tableData = res.data
-          for (let i = 0; i < _this.tableData.length; i++) {
-            _this.tableData[i].contactList = _this.tableData[i].contactList.join()
-          }
         }).catch(err => {
           console.log(err);
         });
@@ -193,5 +201,8 @@ export default {
   text-align: right;
   margin: 10px 25px;
 
+}
+h3{
+  margin-left: 30px;
 }
 </style>

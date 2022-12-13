@@ -1,7 +1,6 @@
-<!-- 修改未完成订单可以取消或者可以修改修改时间（仅支持某门店同种房型）-->
-<!-- 取消订单 -->
+<!-- 去评价 -->
 <template>
-    <div class="reserveOrder">
+    <div class="uncommentOrder">
       <div class="orderQuery">
         <el-form :model="queryForm" ref="queryForm" :inline="true">
   
@@ -28,9 +27,7 @@
           <el-table-column prop="price" label="订单状态"></el-table-column>
           <el-table-column align="center" prop="operation" label="操作" width="200px">
               <template slot-scope="scope">
-                <el-button type="primary" size="small" round @click="handleClick(scope.$index)">修改订单</el-button>
-                <el-button type="danger" size="small" round @click="handleDelete(scope.$index)">取消订单
-                </el-button>
+                <el-button type="text" size="small" @click="handleClick(scope.$index)">去评价</el-button>
               </template>
             </el-table-column>
   

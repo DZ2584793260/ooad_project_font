@@ -1,7 +1,8 @@
 const user = {
     state: null != sessionStorage.getItem('state') ? JSON.parse(sessionStorage.getItem('state')) : {//公共state对象，存储所有组件状态
         user: {
-            nickname: ''
+            nickname: '',
+            id:'',
         }
     },
     getters: {//唯一取值的方法，计算属性
