@@ -29,7 +29,7 @@ export default {
 			navList: [
 				//YUKI:write as path
 				{ name: '/admin/hotelInfo', navItem: '房间管理' },
-				// { name: '/admin/graph', navItem: '员工管理' },
+				{ name: '/admin/graph', navItem: '员工管理' },
 				{ name: '/admin/graph', navItem: '订购量统计' },
 				{ name: '/admin/graph', navItem: '营业额分析' },
 				// { name: '/admin/checkReserve', navItem: '顾客预定信息查询' },

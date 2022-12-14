@@ -7,7 +7,9 @@
                 <img :src="item" alt />
             </el-carousel-item>
         </el-carousel>
-
+        <h1>关于酒店</h1>
+        <VideoPlayerVue></VideoPlayerVue>
+        <h1>房间案例</h1>
         <el-carousel class="card_picture" :interval="4000" type="card" height="400px">
             <el-carousel-item v-for="item in img_list_2" :key="item">
                 <img :src="item" alt />
@@ -17,8 +19,12 @@
 
 </template>
 <script>
+import VideoPlayerVue from './VideoPlayer.vue';
 export default {
     name: "Information",
+    components: {
+        VideoPlayerVue
+    },
     data() {
         var img1 = require("../assets/hotel1.jpeg");
         var img2 = require("../assets/hotel2.jpeg");
@@ -26,7 +32,7 @@ export default {
         var img4 = require("../assets/hotel4.jpeg");
         var duola = require("../assets/duola.png")
         return {
-            img_list_1: [img1, img2, img3, img4],
+            img_list_1: [img2, img1, img3, img4],
             img_list_2: [duola, duola, duola, duola],
             // 图片父容器高度
             bannerHeight: window.innerHeight,
@@ -62,6 +68,11 @@ img {
     width: 70%;
     margin: auto;
     position: relative;
+}
+
+h1 {
+    color: #fff;
+    text-align: center;
 }
 </style>
     

@@ -6,6 +6,7 @@
 # 使用的插件
 1. vue ui 中安装elementui，axios
 2. npm install vue-particles --save-dev （各种登录页面的粒子特效）
+3. cnpm install --save vue-video-player
 
 # 前后端交互Api
 1. 前端接口已经进行了封装
