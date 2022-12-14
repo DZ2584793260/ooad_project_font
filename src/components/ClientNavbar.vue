@@ -13,12 +13,12 @@
 					<el-menu-item index="/client/finishOrder">已评价</el-menu-item>
 				</el-submenu>
 
-				<!-- 更改index即可更改跳转路由 -->
-				<el-menu-item index="1-1">
-					<template slot="title">
+				<el-menu-item index="" key="https://work.weixin.qq.com/kfid/kfc551ffde78e37070b">
+					<a href='https://work.weixin.qq.com/kfid/kfc551ffde78e37070b' target='_blank'
+						style="text-decoration: none;">
 						<i class="el-icon-phone-outline"></i>
-						<span>在线客服</span>
-					</template>
+						<span class="online" style="color:white">在线客服</span>
+					</a>
 				</el-menu-item>
 
 				<el-menu-item index="/userLogin" :disabled="isLogin">
@@ -82,6 +82,10 @@ export default {
 .navbar-container {
 	display: flex;
 	justify-content: flex-end;
+}
+
+.online {
+	font-size: 14px;
 }
 </style>
 
