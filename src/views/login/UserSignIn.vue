@@ -112,6 +112,7 @@ export default {
                                 //保存token
                                 let accessToken = res.data[0].token;
                                 localStorage.setItem("token", accessToken)
+                                // sessionStorage.setItem('state', JSON.stringify(this.$store.state.user))
                                 this.$store.dispatch('asyncUpdateUser', { nickname: res.data[0].nickName, id: res.data[0].account })
                                 this.$router.push({ path: "/client/hotelInfo" });
                             }

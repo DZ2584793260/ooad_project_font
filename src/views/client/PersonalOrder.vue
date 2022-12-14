@@ -20,50 +20,21 @@
       <el-table :data="tableData" border style="width: 100%"
         :header-cell-style="{ background: '#00abbe', color: '#fff', 'text-align': 'center' }" highlight-current-row>
         <el-table-column fixed prop="uuid" label="订单号"></el-table-column>
-        <el-table-column prop="hotel" label="门店"></el-table-column>
+        <el-table-column prop="hotelName" label="门店"></el-table-column>
         <el-table-column prop="hotelAddress" label="门店地址"></el-table-column>
-        <el-table-column prop="bookTime" label="下单时间"></el-table-column>
-        <el-table-column prop="checkInTime" label="入住时间"></el-table-column>
-        <el-table-column prop="checkOutTime" label="退房时间"></el-table-column>
+        <el-table-column prop="produceTime" label="下单时间"></el-table-column>
+        <el-table-column prop="reserveCheckInTime" label="入住时间"></el-table-column>
+        <el-table-column prop="reserveCheckOutTime" label="退房时间"></el-table-column>
         <el-table-column prop="roomType" label="房型"></el-table-column>
-        <el-table-column prop="roomID" label="房间号"></el-table-column>
+        <el-table-column prop="guestRoomID" label="房间号"></el-table-column>
         <el-table-column prop="price" label="实际付款"></el-table-column>
         <el-table-column prop="price" label="订单状态"></el-table-column>
-        <!-- <el-table-column align="center" prop="operation" label="操作" width="200px">
-            <template slot-scope="scope">
-              <el-button type="primary" size="small" round @click="handleClick(scope.$index)">修改订单</el-button>
-              <el-button type="danger" size="small" round @click="handleDelete(scope.$index)">取消订单
-              </el-button>
-            </template>
-          </el-table-column> -->
 
       </el-table>
       <!--分页-->
       <el-pagination v-model:page-size="pageSize" background @size-change="handleSizeChange"
         @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[2, 4, 6, 8]"
         layout="prev, pager, next, sizes, total, jumper" :total="total" />
-    </div>
-
-    <div class="orderCheck">
-      <el-dialog :visible.sync="dialogVisible" :title="dialogTitle" width="35%" close-on-press-escape v-dialogDrag>
-        <h3>请重新选择入住及退房时间</h3>
-        <el-form :model="dialogForm" :rules="editFormRules" ref="dialogForm">
-          <!--选择日期-->
-          <el-form-item label="入住时间" prop="checkInTime" label-width="120px">
-            <el-date-picker v-model="dialogForm.checkInTime" placeholder="Please select the date" format="yyyy/MM/dd"
-              value-format="yyyy/MM/dd" style="width: 100%" />
-          </el-form-item>
-          <el-form-item label="退房时间" prop="checkOutTime" label-width="120px">
-            <el-date-picker v-model="dialogForm.checkOutTime" placeholder="Please select the date" format="yyyy/MM/dd"
-              value-format="yyyy/MM/dd" style="width: 100%" />
-          </el-form-item>
-        </el-form>
-
-        <div style="text-align:right">
-          <el-button type="primary" v-on:click="dialogSave()">确定</el-button>
-          <el-button @click="dialogCancel()">退出</el-button>
-        </div>
-      </el-dialog>
     </div>
   </div>
 </template>
@@ -72,30 +43,16 @@
 export default {
   data() {
     return {
+      account: this.$store.getters.getUser.id,
       //分页
       currentPage: 1,
-      queryCurrentPage: 1,
       total: 10,//数据一共多少
       pageSize: 2,//每页显示的行数,默认为2
       //查询
       queryForm: {
-        citySelected: "",
-        keyword: ""
+        uuid: ""
       },
-      queryCurrentPage: 1,
       queryOrNot: false,
-      //对话框
-      dialogVisible: false,//订单详细信息窗口
-      dialogForm: [{
-        uuid: "1",
-        price: "333",
-      },
-      ],//对话框中的form 新增和编辑
-      dialogTitle: "",
-      editFormRules: {
-        checkInTime: [{ required: true, message: '请选择入住时间', trigger: 'change' }],
-        checkOutTime: [{ required: true, message: '请选择退房时间', trigger: 'change' }],
-      },
       //数据
       tableData: [
         {
@@ -106,16 +63,6 @@ export default {
     }
   },
   methods: {
-    dialogCancel() {
-      this.dialogVisible = false;//对话框不显示
-    },
-    dialogSave() {
-      //保存编辑
-    },
-    handleClick(row_index) {
-      this.dialogTitle = "订单：" + this.tableData[row_index].uuid;
-      this.dialogVisible = true;
-    },
     handleSizeChange(val) {
       this.pageSize = val;
       this.handleCurrentChange(1);//默认更改每页多少条后重新加载第一页
@@ -124,41 +71,31 @@ export default {
     handleCurrentChange() {
       if (this.queryOrNot === false) {
         this.getAllAPI(this.pageSize, this.currentPage)
-      } else {
-        if (this.queryForm.citySelected === "" && this.queryForm.keyword !== "") {
-          this.conditionQueryAPI(this.currentPage, "%", this.queryForm.keyword)
-        } else if (this.queryForm.citySelected !== "" && this.queryForm.keyword === "") {
-          this.conditionQueryAPI(this.currentPage, this.queryForm.citySelected, "%")
-        } else {
-          this.conditionQueryAPI(this.currentPage, this.queryForm.citySelected, this.queryForm.keyword)
-        }
+      } else if (this.queryForm.keyword === "") {
+        this.conditionQueryAPI(this.currentPage, "%")
       }
     },
 
     conditionQuery() {
       this.queryOrNot = true;
-      if (this.queryForm.citySelected === "" && this.queryForm.keyword === "") {
-        this.getAllAPI(this.pageSize, 1)
+      if (this.queryForm.keyword === "") {
+        this.getAllAPI(this.pageSize, 1,)
         this.queryOrNot = false
-      } else if (this.queryForm.citySelected === "" && this.queryForm.keyword !== "") {
-        this.conditionQueryAPI(1, "%", this.queryForm.keyword)
-      } else if (this.queryForm.citySelected !== "" && this.queryForm.keyword === "") {
-        this.conditionQueryAPI(1, this.queryForm.citySelected, "%")
       } else {
-        this.conditionQueryAPI(1, this.queryForm.citySelected, this.queryForm.keyword)
+        this.conditionQueryAPI(1, this.queryForm.keyword)
       }
       this.currentPage = 1
     },
 
-    conditionQueryAPI(current, city, key) {
+    conditionQueryAPI(current, key) {
       const _this = this
-      this.$api.clientApi.getHotelConditionCount(city, key)
+      this.$api.clientApi.getHotelConditionCount(this.account, key)
         .then(res => {
           _this.total = res.data
         }).catch(err => {
           console.log(err);
         });
-      this.$api.clientApi.getHotelConditional(this.pageSize, current, city, key)
+      this.$api.clientApi.getHotelConditional(this.pageSize, current, this.account, key)
         .then(res => {
           _this.tableData = res.data
         }).catch(err => {
@@ -167,15 +104,14 @@ export default {
     },
     getAllAPI(size, current) {
       const _this = this
-      this.$api.clientApi.getHotelAllCount()
+      this.$api.orderApi.getOrderByUserAccountCount(this.account)
         .then(res => {
           _this.total = res.data
         }).catch(err => {
           console.log(err);
         });
-      this.$api.clientApi.getOrderByUserAccount(size, current, $store.getters.getUser.id)
+      this.$api.orderApi.getOrderByUserAccount(size, current, this.account)
         .then(res => {
-          console.log(res)
           _this.tableData = res.data
         }).catch(err => {
           console.log(err);
@@ -185,12 +121,12 @@ export default {
   },
   created() {
     // 初始时表格展示的数据
-    // this.getAllAPI(2, 1)
+    this.getAllAPI(2, 1)
   },
 }
 </script>
 
-<style>
+<style scoped>
 .orderTable {
   margin: auto;
   margin-top: 30px;
@@ -201,8 +137,5 @@ export default {
   text-align: right;
   margin: 10px 25px;
 
-}
-h3{
-  margin-left: 30px;
 }
 </style>

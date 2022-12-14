@@ -5,19 +5,20 @@ import request from '../utils/request';
 export function getOrderByUserAccount(pageSize, currentPage, account) {
     return request({
         method: 'GET',
-        url: '/api/administration/getadministration',
+        url: '/api/Order/GetOrdersByUserAccount',
         params: {
-            account: id,
-            password: password
+            pageSize: pageSize,
+            currentPage: currentPage,
+            account: account
         }
     })
 }
 export function getOrderByUserAccountCount(account) {
     return request({
         method: 'GET',
-        url: '/api/HotelInstance/getallcount',
+        url: '/api/Order/GetOrdersnumByUserAccount',
         params: {
-
+            account: account
         }
     })
 }

@@ -158,7 +158,6 @@ export default {
         keyword: ""
       },
       currentPage: 1,
-      queryCurrentPage: 1,
       total: 10,//数据一共多少
       pageSize: 2,//每页显示的行数,默认为2
       // tableData: [

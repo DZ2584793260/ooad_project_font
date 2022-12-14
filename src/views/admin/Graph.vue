@@ -10,9 +10,6 @@
 <script>
 import echarts from 'echarts'   //npm install echarts@4.9.0
 export default {
-    methods: {
-
-    },
     data() {
         return {
 
@@ -128,6 +125,9 @@ export default {
     },
     mounted() {
         this.mycharts()
+        window.addEventListener("resize", function () {
+            myChart.resize()  // myChart 是实例对象
+        })
     },
     methods: {
         mycharts() {
