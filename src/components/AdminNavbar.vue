@@ -15,6 +15,13 @@
 					<el-menu-item index="/admin/uncommentOrder">待评价</el-menu-item>
 					<el-menu-item index="/admin/finishOrder">已评价</el-menu-item>
 				</el-submenu>
+				<el-menu-item index="/admin" :disabled="isLogin">
+					<template slot="title">
+						<i class="el-icon-bell"></i>
+						<span>消息通知</span>
+					</template>
+				</el-menu-item>
+
 			</div>
 		</el-menu>
 		<router-view></router-view>

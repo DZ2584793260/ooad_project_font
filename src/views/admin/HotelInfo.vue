@@ -150,7 +150,7 @@ export default {
       queryOrNot: false,
     }
   },
-  created() {
+  mounted() {
     // 初始时表格展示的数据
     this.getAllAPI(2, 1)
   },
