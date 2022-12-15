@@ -20,7 +20,12 @@
 						<span class="online" style="color:white">在线客服</span>
 					</a>
 				</el-menu-item>
-
+				<el-menu-item index="/client/messageNotification" :disabled="isLogin">
+					<template slot="title">
+						<i class="el-icon-bell"></i>
+						<span>消息</span>
+					</template>
+				</el-menu-item>
 				<el-menu-item index="/userLogin" :disabled="isLogin">
 					<template slot="title">
 						<i class="el-icon-user"></i>

@@ -16,6 +16,7 @@ import clientReserveOrder from '../views/client/ReserveOrder.vue'
 import clientUncommentOrder from '../views/client/UncommentOrder.vue'
 import clientFinishOrder from '../views/client/FinishOrder.vue'
 import clientNav from '../components/ClientNavbar.vue'
+import clientMessageNotification from '../views/client/MessageNotification.vue'
 //YUKI: admin routes
 import adminHotelInfo from '../views/admin/HotelInfo.vue'///////////
 import adminGraph from '../views/admin/Graph.vue'
@@ -115,6 +116,11 @@ const routes = [
         path: '/client/finishOrder',
         name: 'clientFinishOrder',
         component: clientFinishOrder
+      },
+      {
+        path: '/client/messageNotification',
+        name: 'clientMessageNotification',
+        component: clientMessageNotification
       }
     ]
   },

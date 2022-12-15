@@ -1,15 +1,13 @@
-<!-- 查看，查询，编辑，删除订单 -->
-<!-- 表格中加个起止时间 -->
-<!-- 弹出框显示表格中所有内容 -->
-<!-- 弹出框中要显示订单状态，已完成，未完成 未完成订单可以取消或者可以修改修改时间（仅支持某门店同种房型）-->
-<!-- 弹出框中显示预定人及预定账户 -->
 <template>
   <div class="personalOrder">
     <div class="orderQuery">
       <el-form :model="queryForm" ref="queryForm" :inline="true">
-
         <el-form-item prop="uuid">
-          <el-input prefix-icon="el-icon-search" placeholder="订单号/门店/地址" v-model="queryForm.keyword" clearable>
+          <el-input prefix-icon="el-icon-search" placeholder="订单号" v-model="queryForm.uuid" clearable>
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="keyword">
+          <el-input prefix-icon="el-icon-search" placeholder="门店/地址" v-model="queryForm.keyword" clearable>
           </el-input>
         </el-form-item>
         <el-button type="primary" @click="conditionQuery">查询</el-button>
@@ -28,7 +26,7 @@
         <el-table-column prop="roomType" label="房型"></el-table-column>
         <el-table-column prop="guestRoomID" label="房间号"></el-table-column>
         <el-table-column prop="price" label="实际付款"></el-table-column>
-        <el-table-column prop="price" label="订单状态"></el-table-column>
+        <el-table-column prop="state" label="订单状态"></el-table-column>
 
       </el-table>
       <!--分页-->
@@ -50,16 +48,11 @@ export default {
       pageSize: 2,//每页显示的行数,默认为2
       //查询
       queryForm: {
-        uuid: ""
+        uuid: "",
+        keyword: ""
       },
       queryOrNot: false,
-      //数据
-      tableData: [
-        {
-          uuid: "1",
-          price: "3",
-        },
-      ],
+      tableData: [],
     }
   },
   methods: {
@@ -71,37 +64,55 @@ export default {
     handleCurrentChange() {
       if (this.queryOrNot === false) {
         this.getAllAPI(this.pageSize, this.currentPage)
-      } else if (this.queryForm.keyword === "") {
-        this.conditionQueryAPI(this.currentPage, "%")
+      } else {
+        if (this.queryForm.uuid === "" && this.queryForm.keyword !== "") {
+          this.conditionQueryAPI(this.currentPage, "%", this.queryForm.keyword)
+        } else if (this.queryForm.uuid !== "" && this.queryForm.keyword === "") {
+          this.conditionQueryAPI(this.currentPage, this.queryForm.uuid, "%")
+        } else {
+          this.conditionQueryAPI(this.currentPage, this.queryForm.uuid, this.queryForm.keyword)
+        }
       }
     },
 
     conditionQuery() {
       this.queryOrNot = true;
-      if (this.queryForm.keyword === "") {
-        this.getAllAPI(this.pageSize, 1,)
+      if (this.queryForm.uuid === "" && this.queryForm.keyword === "") {
+        this.getAllAPI(this.pageSize, 1)
         this.queryOrNot = false
+      } else if (this.queryForm.uuid === "" && this.queryForm.keyword !== "") {
+        this.conditionQueryAPI(1, "%", this.queryForm.keyword)
+      } else if (this.queryForm.uuid !== "" && this.queryForm.keyword === "") {
+        this.conditionQueryAPI(1, this.queryForm.uuid, "%")
       } else {
-        this.conditionQueryAPI(1, this.queryForm.keyword)
+        this.conditionQueryAPI(1, this.queryForm.uuid, this.queryForm.keyword)
       }
       this.currentPage = 1
     },
 
-    conditionQueryAPI(current, key) {
+    conditionQueryAPI(current, uuid, key) {
       const _this = this
-      this.$api.clientApi.getHotelConditionCount(this.account, key)
+      this.$api.orderApi.getOrderConditionCount(this.account, uuid, key)
         .then(res => {
-          _this.total = res.data
-        }).catch(err => {
-          console.log(err);
-        });
-      this.$api.clientApi.getHotelConditional(this.pageSize, current, this.account, key)
-        .then(res => {
-          _this.tableData = res.data
+          if (res.data.code == 9000) {
+            this.$message({
+              message: res.data.message,
+              type: "error"
+            });
+          } else {
+            _this.total = res.data
+            _this.$api.orderApi.getOrderConditional(_this.pageSize, current, _this.account, uuid, key)
+              .then(res => {
+                _this.tableData = res.data
+              }).catch(err => {
+                console.log(err);
+              });
+          }
         }).catch(err => {
           console.log(err);
         });
     },
+
     getAllAPI(size, current) {
       const _this = this
       this.$api.orderApi.getOrderByUserAccountCount(this.account)
@@ -136,6 +147,5 @@ export default {
 .orderQuery {
   text-align: right;
   margin: 10px 25px;
-
 }
 </style>
