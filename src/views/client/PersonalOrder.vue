@@ -92,16 +92,18 @@ export default {
 
     conditionQueryAPI(current, uuid, key) {
       const _this = this
-      this.$api.orderApi.getOrderConditionCount(this.account, uuid, key)
+      this.$api.orderApi.getOrderConditionCount(this.account, uuid, key, "100")
         .then(res => {
           if (res.data.code == 9000) {
             this.$message({
               message: res.data.message,
               type: "error"
             });
+          } else if (res.data == 0) {
+            _this.tableData = []
           } else {
             _this.total = res.data
-            _this.$api.orderApi.getOrderConditional(_this.pageSize, current, _this.account, uuid, key)
+            _this.$api.orderApi.getOrderConditional(_this.pageSize, current, _this.account, uuid, key, "100")
               .then(res => {
                 _this.tableData = res.data
               }).catch(err => {

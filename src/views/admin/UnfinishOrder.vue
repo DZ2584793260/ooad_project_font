@@ -1,1 +1,218 @@
 <!-- 未出行的订单 -->
+<!-- 修改未完成订单可以取消或者可以修改修改时间（仅支持某门店同种房型）-->
+<!-- 取消订单 -->
+<!-- 再细想一下设计 -->
+<template>
+    <div class="reserveOrder">
+        <div class="orderQuery">
+            <el-form :model="queryForm" ref="queryForm" :inline="true">
+                <el-form-item prop="uuid">
+                    <el-input prefix-icon="el-icon-search" placeholder="订单号" v-model="queryForm.uuid" clearable>
+                    </el-input>
+                </el-form-item>
+                <el-form-item prop="keyword">
+                    <el-input prefix-icon="el-icon-search" placeholder="门店/地址" v-model="queryForm.keyword" clearable>
+                    </el-input>
+                </el-form-item>
+                <el-button type="primary" @click="conditionQuery">查询</el-button>
+            </el-form>
+        </div>
+
+        <div class="orderTable">
+            <el-table :data="tableData" border style="width: 100%"
+                :header-cell-style="{ background: '#00abbe', color: '#fff', 'text-align': 'center' }"
+                highlight-current-row>
+                <el-table-column fixed prop="uuid" label="订单号"></el-table-column>
+                <el-table-column prop="hotelName" label="门店"></el-table-column>
+                <el-table-column prop="hotelAddress" label="门店地址"></el-table-column>
+                <el-table-column prop="produceTime" label="下单时间"></el-table-column>
+                <el-table-column prop="reserveCheckInTime" label="入住时间"></el-table-column>
+                <el-table-column prop="reserveCheckOutTime" label="退房时间"></el-table-column>
+                <el-table-column prop="roomType" label="房型"></el-table-column>
+                <el-table-column prop="guestRoomID" label="房间号"></el-table-column>
+                <el-table-column prop="price" label="实际付款"></el-table-column>
+                <el-table-column prop="state" label="订单状态"></el-table-column>
+                <el-table-column align="center" prop="operation" label="操作" width="200px">
+                    <template slot-scope="scope">
+                        <el-button type="primary" size="small" round @click="handleClick(scope.$index)">修改订单</el-button>
+                        <el-button type="danger" size="small" round @click="handleDelete(scope.$index)">取消订单
+                        </el-button>
+                    </template>
+                </el-table-column>
+
+            </el-table>
+            <!--分页-->
+            <el-pagination v-model:page-size="pageSize" background @size-change="handleSizeChange"
+                @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[2, 4, 6, 8]"
+                layout="prev, pager, next, sizes, total, jumper" :total="total" />
+        </div>
+
+        <div class="orderModify">
+            <el-dialog :visible.sync="dialogVisible" :title="dialogTitle" width="35%" close-on-press-escape
+                v-dialogDrag>
+                <h3>请重新选择入住及退房时间</h3>
+                <el-form :model="dialogForm" :rules="editFormRules" ref="dialogForm">
+                    <!--选择日期-->
+                    <el-form-item label="入住时间" prop="checkInTime" label-width="120px">
+                        <el-date-picker v-model="dialogForm.checkInTime" placeholder="Please select the date"
+                            format="yyyy/MM/dd" value-format="yyyy/MM/dd" style="width: 100%" />
+                    </el-form-item>
+                    <el-form-item label="退房时间" prop="checkOutTime" label-width="120px">
+                        <el-date-picker v-model="dialogForm.checkOutTime" placeholder="Please select the date"
+                            format="yyyy/MM/dd" value-format="yyyy/MM/dd" style="width: 100%" />
+                    </el-form-item>
+                </el-form>
+
+                <div style="text-align:right">
+                    <el-button type="primary" v-on:click="dialogSave()">确定</el-button>
+                    <el-button @click="dialogCancel()">退出</el-button>
+                </div>
+            </el-dialog>
+        </div>
+    </div>
+</template>
+    
+<script>
+export default {
+    data() {
+        return {
+            //分页
+            currentPage: 1,
+            total: 10,//数据一共多少
+            pageSize: 2,//每页显示的行数,默认为2
+            //查询
+            queryForm: {
+                uuid: "",
+                keyword: ""
+            },
+            queryOrNot: false,
+            //对话框
+            dialogVisible: false,//订单详细信息窗口
+            dialogForm: [{
+                checkInTime: "",
+                checkOutTime: "",
+            }
+            ],//对话框中的form 新增和编辑
+            dialogTitle: "",
+            editFormRules: {
+                checkInTime: [{ required: true, message: '请选择入住时间', trigger: 'change' }],
+                checkOutTime: [{ required: true, message: '请选择退房时间', trigger: 'change' }],
+            },
+            //数据
+            tableData: [],
+        }
+    },
+    methods: {
+        dialogCancel() {
+            this.dialogVisible = false;//对话框不显示
+        },
+        dialogSave() {
+            //////////////////////////////
+        },
+        handleClick(row_index) {
+            this.dialogTitle = "订单：" + this.tableData[row_index].uuid;
+            this.dialogVisible = true;
+        },
+        handleDelete(row_index) {
+            //////////////////////////////////
+        },
+        handleSizeChange(val) {
+            this.pageSize = val;
+            this.handleCurrentChange(1);//默认更改每页多少条后重新加载第一页
+        },
+
+        handleCurrentChange() {
+            if (this.queryOrNot === false) {
+                this.getAllAPI(this.pageSize, this.currentPage)
+            } else {
+                if (this.queryForm.uuid === "" && this.queryForm.keyword !== "") {
+                    this.conditionQueryAPI(this.currentPage, "%", this.queryForm.keyword)
+                } else if (this.queryForm.uuid !== "" && this.queryForm.keyword === "") {
+                    this.conditionQueryAPI(this.currentPage, this.queryForm.uuid, "%")
+                } else {
+                    this.conditionQueryAPI(this.currentPage, this.queryForm.uuid, this.queryForm.keyword)
+                }
+            }
+        },
+
+        conditionQuery() {
+            this.queryOrNot = true;
+            if (this.queryForm.uuid === "" && this.queryForm.keyword === "") {
+                this.getAllAPI(this.pageSize, 1)
+                this.queryOrNot = false
+            } else if (this.queryForm.uuid === "" && this.queryForm.keyword !== "") {
+                this.conditionQueryAPI(1, "%", this.queryForm.keyword)
+            } else if (this.queryForm.uuid !== "" && this.queryForm.keyword === "") {
+                this.conditionQueryAPI(1, this.queryForm.uuid, "%")
+            } else {
+                this.conditionQueryAPI(1, this.queryForm.uuid, this.queryForm.keyword)
+            }
+            this.currentPage = 1
+        },
+
+        conditionQueryAPI(current, uuid, key) {
+            const _this = this
+            this.$api.orderApi.getOrderConditionCount(uuid, key, "200")
+                .then(res => {
+                    if (res.data.code == 9000) {
+                        this.$message({
+                            message: res.data.message,
+                            type: "error"
+                        });
+                    } else if (res.data == 0) {
+                        _this.tableData = []
+                    } else {
+                        _this.total = res.data
+                        _this.$api.orderApi.getOrderConditional(_this.pageSize, current, uuid, key, "200")
+                            .then(res => {
+                                _this.tableData = res.data
+                            }).catch(err => {
+                                console.log(err);
+                            });
+                    }
+                }).catch(err => {
+                    console.log(err);
+                });
+        },
+
+        getAllAPI(size, current) {
+            const _this = this
+            this.$api.orderApi.GetAllUnfinishedOrdersNum()
+                .then(res => {
+                    _this.total = res.data
+                }).catch(err => {
+                    console.log(err);
+                });
+            this.$api.orderApi.GetAllUnfinishedOrders(size, current)
+                .then(res => {
+                    _this.tableData = res.data
+                }).catch(err => {
+                    console.log(err);
+                });
+        },
+
+    },
+    mounted() {
+        // 初始时表格展示的数据
+        this.getAllAPI(2, 1)
+    },
+}
+</script>
+    
+<style>
+.orderTable {
+    margin: auto;
+    margin-top: 30px;
+    width: 70%;
+}
+
+.orderQuery {
+    text-align: right;
+    margin: 10px 25px;
+
+}
+
+h3 {
+    margin-left: 30px;
+}
+</style>

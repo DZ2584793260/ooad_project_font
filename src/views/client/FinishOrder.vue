@@ -1,6 +1,6 @@
-<!-- 查看评价 -->
+<!-- 去评价 -->
 <template>
-  <div class="finishOrder">
+  <div class="uncommentOrder">
     <div class="orderQuery">
       <el-form :model="queryForm" ref="queryForm" :inline="true">
         <el-form-item prop="uuid">
@@ -28,12 +28,11 @@
         <el-table-column prop="guestRoomID" label="房间号"></el-table-column>
         <el-table-column prop="price" label="实际付款"></el-table-column>
         <el-table-column prop="state" label="订单状态"></el-table-column>
-        <el-table-column align="center" prop="operation" label="操作" width="120px">
+        <el-table-column align="center" prop="operation" label="操作" width="200px">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="handleClick(scope.$index)">查看评价</el-button>
           </template>
         </el-table-column>
-
       </el-table>
       <!--分页-->
       <el-pagination v-model:page-size="pageSize" background @size-change="handleSizeChange"
@@ -41,9 +40,11 @@
         layout="prev, pager, next, sizes, total, jumper" :total="total" />
     </div>
 
-    <div class="orderCheck">
+    <div class="seeComment">
       <el-dialog :visible.sync="dialogVisible" :title="dialogTitle" width="35%" close-on-press-escape v-dialogDrag>
+        <!-- 查看评价 -->
         <div style="text-align:right">
+          <el-button type="primary" v-on:click="dialogSave()">确定</el-button>
           <el-button @click="dialogCancel()">退出</el-button>
         </div>
       </el-dialog>
@@ -68,12 +69,12 @@ export default {
       queryOrNot: false,
       //对话框
       dialogVisible: false,//订单详细信息窗口
-      // dialogForm: [{
-      //   uuid: "1",
-      //   price: "333",
-      // },
-      // ],//对话框中的form 新增和编辑
       dialogTitle: "",
+      dialogForm: [{
+        // grade: "",
+        // wordComment: "",
+      },
+      ],//对话框中的form 新增和编辑
       //数据
       tableData: [
         {
@@ -86,6 +87,9 @@ export default {
   methods: {
     dialogCancel() {
       this.dialogVisible = false;//对话框不显示
+    },
+    dialogSave() {
+      //保存编辑！！！！！！！
     },
     handleClick(row_index) {
       this.dialogTitle = "订单：" + this.tableData[row_index].uuid;
@@ -127,15 +131,24 @@ export default {
 
     conditionQueryAPI(current, uuid, key) {
       const _this = this
-      this.$api.orderApi.getOrderConditionCount(this.account, uuid, key)
+      this.$api.orderApi.getOrderConditionCount(this.account, uuid, key, "400")
         .then(res => {
-          _this.total = res.data
-        }).catch(err => {
-          console.log(err);
-        });
-      this.$api.orderApi.getOrderConditional(this.pageSize, current, this.account, uuid, key)
-        .then(res => {
-          _this.tableData = res.data
+          if (res.data.code == 9000) {
+            this.$message({
+              message: res.data.message,
+              type: "error"
+            });
+          } else if (res.data == 0) {
+            _this.tableData = []
+          } else {
+            _this.total = res.data
+            _this.$api.orderApi.getOrderConditional(_this.pageSize, current, _this.account, uuid, key, "400")
+              .then(res => {
+                _this.tableData = res.data
+              }).catch(err => {
+                console.log(err);
+              });
+          }
         }).catch(err => {
           console.log(err);
         });

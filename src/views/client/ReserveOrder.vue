@@ -44,7 +44,7 @@
         layout="prev, pager, next, sizes, total, jumper" :total="total" />
     </div>
 
-    <div class="orderCheck">
+    <div class="orderModify">
       <el-dialog :visible.sync="dialogVisible" :title="dialogTitle" width="35%" close-on-press-escape v-dialogDrag>
         <h3>请重新选择入住及退房时间</h3>
         <el-form :model="dialogForm" :rules="editFormRules" ref="dialogForm">
@@ -149,15 +149,24 @@ export default {
 
     conditionQueryAPI(current, uuid, key) {
       const _this = this
-      this.$api.orderApi.getOrderConditionCount(this.account, uuid, key)
+      this.$api.orderApi.getOrderConditionCount(this.account, uuid, key, "200")
         .then(res => {
-          _this.total = res.data
-        }).catch(err => {
-          console.log(err);
-        });
-      this.$api.orderApi.getOrderConditional(this.pageSize, current, this.account, uuid, key)
-        .then(res => {
-          _this.tableData = res.data
+          if (res.data.code == 9000) {
+            this.$message({
+              message: res.data.message,
+              type: "error"
+            });
+          } else if (res.data == 0) {
+            _this.tableData = []
+          } else {
+            _this.total = res.data
+            _this.$api.orderApi.getOrderConditional(_this.pageSize, current, _this.account, uuid, key, "200")
+              .then(res => {
+                _this.tableData = res.data
+              }).catch(err => {
+                console.log(err);
+              });
+          }
         }).catch(err => {
           console.log(err);
         });

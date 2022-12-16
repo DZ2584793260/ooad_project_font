@@ -40,7 +40,7 @@
         layout="prev, pager, next, sizes, total, jumper" :total="total" />
     </div>
 
-    <div class="orderCheck">
+    <div class="comment">
       <el-dialog :visible.sync="dialogVisible" :title="dialogTitle" width="35%" close-on-press-escape v-dialogDrag>
         <h3>请进行评价</h3>
         <el-timeline :model="dialogForm" :rules="editFormRules" ref="dialogForm">
@@ -58,13 +58,13 @@
             </el-card>
           </el-timeline-item>
 
-          <el-timeline-item timestamp="请添加图片" placement="top">
+          <!-- <el-timeline-item timestamp="请添加图片" placement="top">
             <el-upload class="upload-picture" action="https://jsonplaceholder.typicode.com/posts/"
               :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" list-type="picture">
               <el-button size="small" type="primary">点击上传</el-button>
               <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
             </el-upload>
-          </el-timeline-item>
+          </el-timeline-item> -->
 
         </el-timeline>
 
@@ -166,15 +166,24 @@ export default {
 
     conditionQueryAPI(current, uuid, key) {
       const _this = this
-      this.$api.orderApi.getOrderConditionCount(this.account, uuid, key)
+      this.$api.orderApi.getOrderConditionCount(this.account, uuid, key, "300")
         .then(res => {
-          _this.total = res.data
-        }).catch(err => {
-          console.log(err);
-        });
-      this.$api.orderApi.getOrderConditional(this.pageSize, current, this.account, uuid, key)
-        .then(res => {
-          _this.tableData = res.data
+          if (res.data.code == 9000) {
+            this.$message({
+              message: res.data.message,
+              type: "error"
+            });
+          } else if (res.data == 0) {
+            _this.tableData = []
+          } else {
+            _this.total = res.data
+            _this.$api.orderApi.getOrderConditional(_this.pageSize, current, _this.account, uuid, key, "300")
+              .then(res => {
+                _this.tableData = res.data
+              }).catch(err => {
+                console.log(err);
+              });
+          }
         }).catch(err => {
           console.log(err);
         });
