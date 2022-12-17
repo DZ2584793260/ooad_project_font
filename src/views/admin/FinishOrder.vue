@@ -78,12 +78,7 @@ export default {
             },
             ],//对话框中的form 新增和编辑
             //数据
-            tableData: [
-                {
-                    uuid: "1",
-                    price: "3",
-                },
-            ],
+            tableData: [],
         }
     },
     methods: {

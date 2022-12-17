@@ -41,6 +41,16 @@
                 @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[2, 4, 6, 8]"
                 layout="prev, pager, next, sizes, total, jumper" :total="total" />
         </div>
+
+        <div class="deleteOrder">
+            <el-dialog :visible.sync="dialogVisible" width="35%" close-on-press-escape v-dialogDrag>
+                <span>确定删除？</span>
+                <div style="text-align:right">
+                    <el-button type="primary" v-on:click="dialogSave()">确定</el-button>
+                    <el-button @click="dialogCancel()">退出</el-button>
+                </div>
+            </el-dialog>
+        </div>
     </div>
 </template>
     
@@ -61,11 +71,31 @@ export default {
             //对话框
             //数据
             tableData: [],
+            dialogVisible: false,
+            row_index: 0,
         }
     },
     methods: {
+        dialogCancel() {
+            this.dialogVisible = false;//对话框不显示
+        },
+        dialogSave() {
+            const _this = this
+            this.$api.orderApi.DeleteOrderByUUID(this.tableData[this.row_index].uuid)
+                .then(res => {
+                    this.$message({
+                        message: "删除成功",
+                        type: "success"
+                    });
+                    _this.getAllAPI(this.pageSize, 1)
+                }).catch(err => {
+                    console.log(err);
+                });
+            this.dialogVisible = false;
+        },
         handleDelete(row_index) {
-            //////////////////////////////////
+            this.dialogVisible = true;
+            this.row_index = row_index
         },
         handleSizeChange(val) {
             this.pageSize = val;

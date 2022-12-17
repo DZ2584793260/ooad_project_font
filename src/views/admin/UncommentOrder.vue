@@ -54,12 +54,7 @@ export default {
             queryOrNot: false,
             //对话框
             //数据
-            tableData: [
-                {
-                    uuid: "1",
-                    price: "3",
-                },
-            ],
+            tableData: [],
         }
     },
     methods: {

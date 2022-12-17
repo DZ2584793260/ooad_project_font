@@ -105,12 +105,7 @@ export default {
         grade: [{ required: true, message: '请选择评分', trigger: 'change' }],
       },
       //数据
-      tableData: [
-        {
-          uuid: "1",
-          price: "3",
-        },
-      ],
+      tableData: [],
     }
   },
   methods: {

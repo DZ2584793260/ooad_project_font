@@ -65,6 +65,16 @@
         </div>
       </el-dialog>
     </div>
+
+    <div class="deleteOrder">
+      <el-dialog :visible.sync="dialogVisibleDelete" width="35%" close-on-press-escape v-dialogDrag>
+        <span>确定删除？</span>
+        <div style="text-align:right">
+          <el-button type="primary" v-on:click="confirmDelete()">确定</el-button>
+          <el-button @click="unDelete()">退出</el-button>
+        </div>
+      </el-dialog>
+    </div>
   </div>
 </template>
   
@@ -97,6 +107,8 @@ export default {
       },
       //数据
       tableData: [],
+      dialogVisibleDelete: false,
+      row_index: 0,
     }
   },
   methods: {
@@ -110,9 +122,29 @@ export default {
       this.dialogTitle = "订单：" + this.tableData[row_index].uuid;
       this.dialogVisible = true;
     },
-    handleDelete(row_index) {
-      //////////////////////////////////
+    //---------------删除订单
+    unDelete() {
+      this.dialogVisibleDelete = false;//对话框不显示
     },
+    confirmDelete() {
+      const _this = this
+      this.$api.orderApi.DeleteUnfinishedOrderByUUID(this.tableData[this.row_index].uuid)
+        .then(res => {
+          this.$message({
+            message: "删除成功",
+            type: "success"
+          });
+          _this.getAllAPI(this.pageSize, 1)
+        }).catch(err => {
+          console.log(err);
+        });
+      this.dialogVisibleDelete = false;
+    },
+    handleDelete(row_index) {
+      this.dialogVisibleDelete = true;
+      this.row_index = row_index
+    },
+    //---------------------
     handleSizeChange(val) {
       this.pageSize = val;
       this.handleCurrentChange(1);//默认更改每页多少条后重新加载第一页

@@ -2,6 +2,17 @@
 //POST请求：后一个请求不会把第一个请求覆盖掉。（所以Post用来增加源）
 import request from '../utils/request';
 //用户
+//删除
+export function DeleteUnfinishedOrderByUUID(orderId) {
+    return request({
+        method: 'DELETE',
+        url: '/api/Order/DeleteUnfinishedOrderByUUID',
+        params: {
+            uuid: orderId,
+        }
+    })
+}
+
 //查询
 export function GetOrdersNumByConditionWithAccount(account, orderId, keyword, type) {
     return request({
@@ -125,7 +136,16 @@ export function GetEvaluatedOrdersByUserAccount(pageSize, currentPage, account) 
 }
 
 //管理员
-
+//删除
+export function DeleteOrderByUUID(orderId) {
+    return request({
+        method: 'DELETE',
+        url: '/api/administration/DeleteOrderByUUID',
+        params: {
+            uuid: orderId,
+        }
+    })
+}
 //查询 各个页面需要修改
 export function GetOrdersNumByConditionWithoutAccount(orderId, keyword, type) {
     return request({
