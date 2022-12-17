@@ -3,10 +3,10 @@
 import request from '../utils/request';
 //用户
 //查询
-export function getOrderConditionCount(account, orderId, keyword, type) {
+export function GetOrdersNumByConditionWithAccount(account, orderId, keyword, type) {
     return request({
         method: 'GET',
-        url: '/api/Order/GetOrdersNumByCondition',
+        url: '/api/Order/GetOrdersNumByConditionWithAccount',
         params: {
             account: account,
             uuid: orderId,
@@ -16,10 +16,10 @@ export function getOrderConditionCount(account, orderId, keyword, type) {
     })
 }
 
-export function getOrderConditional(pageSize, currentPage, account, orderId, keyword, type) {
+export function GetOrdersByConditionWithAccount(pageSize, currentPage, account, orderId, keyword, type) {
     return request({
         method: 'GET',
-        url: '/api/Order/GetOrdersByCondition',
+        url: '/api/Order/GetOrdersByConditionWithAccount',
         params: {
             pagesize: pageSize,
             currentpage: currentPage,
@@ -127,10 +127,10 @@ export function GetEvaluatedOrdersByUserAccount(pageSize, currentPage, account) 
 //管理员
 
 //查询 各个页面需要修改
-export function GetOrdersByConditionNum(orderId, keyword, type) {
+export function GetOrdersNumByConditionWithoutAccount(orderId, keyword, type) {
     return request({
         method: 'GET',
-        url: '/api/Order/GetOrdersByConditionNum',
+        url: '/api/administration/GetOrdersNumByConditionWithoutAccount',
         params: {
             uuid: orderId,
             hotelNameAddress: keyword,
@@ -139,10 +139,10 @@ export function GetOrdersByConditionNum(orderId, keyword, type) {
     })
 }
 
-export function GetOrdersByCondition(pageSize, currentPage, orderId, keyword, type) {
+export function GetOrdersByConditionWithoutAccount(pageSize, currentPage, orderId, keyword, type) {
     return request({
         method: 'GET',
-        url: '/api/Order/GetOrdersByCondition',
+        url: '/api/administration/GetOrdersByConditionWithoutAccount',
         params: {
             pagesize: pageSize,
             currentpage: currentPage,
@@ -156,16 +156,13 @@ export function GetOrdersByCondition(pageSize, currentPage, orderId, keyword, ty
 export function GetAllOrdersNum() {
     return request({
         method: 'GET',
-        url: '/api/Order/GetAllOrdersNum',
-        params: {
-            account: account
-        }
+        url: '/api/administration/GetAllOrdersNum',
     })
 }
 export function GetAllOrders(pageSize, currentPage) {
     return request({
         method: 'GET',
-        url: '/api/Order/GetAllOrders',
+        url: '/api/administration/GetAllOrders',
         params: {
             pageSize: pageSize,
             currentPage: currentPage
@@ -177,13 +174,13 @@ export function GetAllOrders(pageSize, currentPage) {
 export function GetAllUnfinishedOrdersNum() {
     return request({
         method: 'GET',
-        url: '/api/Order/GetAllUnfinishedOrdersNum',
+        url: '/api/administration/GetAllUnfinishedOrdersNum',
     })
 }
 export function GetAllUnfinishedOrders(pageSize, currentPage) {
     return request({
         method: 'GET',
-        url: '/api/Order/GetAllUnfinishedOrders',
+        url: '/api/administration/GetAllUnfinishedOrders',
         params: {
             pageSize: pageSize,
             currentPage: currentPage,
@@ -194,13 +191,13 @@ export function GetAllUnfinishedOrders(pageSize, currentPage) {
 export function GetAllUnevaluatedOrdersNum() {
     return request({
         method: 'GET',
-        url: '/api/Order/GetAllUnevaluatedOrdersNum',
+        url: '/api/administration/GetAllUnevaluatedOrdersNum',
     })
 }
 export function GetAllUnevaluatedOrders(pageSize, currentPage) {
     return request({
         method: 'GET',
-        url: '/api/Order/GetAllUnevaluatedOrders',
+        url: '/api/administration/GetAllUnevaluatedOrders',
         params: {
             pageSize: pageSize,
             currentPage: currentPage,
@@ -211,13 +208,13 @@ export function GetAllUnevaluatedOrders(pageSize, currentPage) {
 export function GetAllEvaluatedOrdersNum() {
     return request({
         method: 'GET',
-        url: '/api/Order/GetAllEvaluatedOrdersNum',
+        url: '/api/administration/GetAllEvaluatedOrdersNum',
     })
 }
 export function GetAllEvaluatedOrders(pageSize, currentPage) {
     return request({
         method: 'GET',
-        url: '/api/Order/GetAllEvaluatedOrders',
+        url: '/api/administration/GetAllEvaluatedOrders',
         params: {
             pageSize: pageSize,
             currentPage: currentPage,
