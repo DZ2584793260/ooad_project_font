@@ -1,5 +1,5 @@
 <!-- 已经完成评价的订单 -->
-<!-- 去评价 -->
+<!-- 查看评价 -->
 <template>
     <div class="uncommentOrder">
         <div class="orderQuery">
