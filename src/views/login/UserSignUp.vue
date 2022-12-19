@@ -103,10 +103,20 @@ export default {
         var validateCode = (rule, value, callback) => {
             if (value === "") {
                 callback(new Error("请输入验证码"));
-            } else if (value === this.code) {
+            } else {
                 callback();
             }
         };
+        var validateEmail = (rule, value, callback) => {
+            if (value === "") {
+                callback(new Error("请输入邮箱"));
+            } else {
+                var reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+                if (!reg.test(value)) {
+                    callback(new Error("请输入正确的邮箱"));
+                } else { callback(); }
+            }
+        }
         return {
             //表单数据
             loginForm: {
@@ -117,7 +127,7 @@ export default {
                 email: "",
                 verifyCode: ""
             },
-            code: 0,
+            code: "0",
             //指定验证规则
             loginRules: {
                 //校验id
@@ -130,7 +140,7 @@ export default {
                 checkPass: [{ required: true, validator: validatePass2, trigger: "blur" }],
                 nickName: [{ required: true, message: '请输入昵称', trigger: 'blur' },
                 { min: 0, max: 10, message: '昵称长度须在 0 到 10 个字符', trigger: 'blur' }],
-                email: [{ required: true, message: '请输入手机号', trigger: "blur" }],
+                email: [{ required: true, validator: validateEmail, trigger: "blur" }],
                 verifyCode: [{ required: true, validator: validateCode, trigger: "blur" }],
             },
         };
@@ -144,11 +154,19 @@ export default {
             this.$refs.loginFormRef.validate(async valid => {
                 //1.验证失败则结束
                 if (!valid) { return; }
+                else if (this.loginForm.verifyCode !== this.code) {
+                    this.$message({
+                        showClose: true,
+                        message: "验证码错误",
+                        type: "error"
+                    });
+                }
                 else {
                     this.$api.loginApi.userSignUp(this.loginForm.nickName, this.loginForm.id,
                         this.loginForm.password, this.loginForm.email).then(res => {
                             if (res.data.code == 7000) {
                                 this.$message({
+                                    showClose: true,
                                     message: res.data.message,
                                     type: "error"
                                 });
@@ -162,8 +180,8 @@ export default {
             })
         },
         getVerifyCode() {
-            this.$api.loginApi.sendEmail(this.loginForm.email, 0).then(res => {
-                this.code = res.data
+            this.$api.loginApi.sendEmail(this.loginForm.email).then(res => {
+                this.code = res.data.code
             }).catch(err => {
                 console.log(err);
             });

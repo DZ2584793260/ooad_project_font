@@ -60,13 +60,13 @@ export function deleteUser(account, password, phoneNumber) {
     })
 }
 
-export function sendEmail(email, code) {
+export function sendEmail(email) {
     return request({
         method: 'POST',
-        url: '/api/user/sendemail',
-        params: {
+        url: '/api/user/sendmail',
+        data: {
             email: email,
-            code: code
+            code: "0"
         }
     })
 }

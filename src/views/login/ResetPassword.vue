@@ -21,9 +21,9 @@
                                 placeholder="请输入账号">
                             </el-input>
                         </el-form-item>
-                        <el-form-item label="手机号" prop="phone" label-width="100px">
+                        <el-form-item label="邮箱" prop="phone" label-width="100px">
                             <el-input class="in" v-model="loginForm.phone" prefix-icon="iconfont icon-shouji"
-                                placeholder="请输入手机号">
+                                placeholder="请输入邮箱">
                             </el-input>
                         </el-form-item>
                         <!-- 密码 -->
@@ -95,7 +95,7 @@ export default {
                 //校验密码
                 password: [{ required: true, validator: validatePass, trigger: "blur" }],
                 checkPass: [{ required: true, validator: validatePass2, trigger: "blur" }],
-                phone: [{ required: true, message: '请输入手机号', trigger: "blur" }],
+                phone: [{ required: true, message: '请输入邮箱', trigger: "blur" }],
             },
         };
 
