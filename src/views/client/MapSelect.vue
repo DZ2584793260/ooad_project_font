@@ -81,8 +81,8 @@ export default {
             type: 'Polygon',
             coordinates: [[[14.599609375, 16.9677734375], [21.6796875, 17.08984375], [21.6796875, 4.7607421875], [14.84375, 4.7607421875]]],
           },
-          id: '007ABA46-7B0C-4F90-B6D4-8F6546363E',
-          properties: { modelId: '2311', id: '007ABA46-7B0C-4F90-B6D4-8F6565EA2B2E', type: 'room' },
+          id: '1',
+          properties: { modelId: '1', id: '1', type: 'room' },
         },
         {
           type: 'Feature',
@@ -90,8 +90,8 @@ export default {
             type: 'Polygon',
             coordinates: [[[22, 17], [28, 17], [28, 5], [22, 5]]],
           },
-          id: '007ABA46-7B0C-4F90-B6D4-8F6565EA2B4E',
-          properties: { modelId: '2411', id: '007ABA46-7B0C-4F90-B6D4-8F6565EA2B4 E', type: 'room' },
+          id: '2',
+          properties: { modelId: '2', id: '2', type: 'room' },
         },
         {
           type: 'Feature',
@@ -99,8 +99,8 @@ export default {
             type: 'Polygon',
             coordinates: [[[28.4, 17], [34.1, 17], [34.1, 5], [28.4, 5]]],
           },
-          id: '007ABA46-7B0C-4F90-B6D4-8F6565EA2B2E',
-          properties: { modelId: '2611', id: '007ABA46-7B0C-4F90-B6D4-8F6565EA2B2E', type: 'room' },
+          id: '3',
+          properties: { modelId: '3', id: '3', type: 'room' },
         },
         ],
       };
@@ -158,6 +158,8 @@ export default {
           const coordinate = getCenter(feature.getGeometry().getExtent());
           alert(property.modelId);
           // we can change this into a new page jumping
+          //YUKI:to roomReserve, past roomID
+           this.$router.push({path: "/client/roomReserve", query:{roomID:property.modelId} });
         }
       });
     },

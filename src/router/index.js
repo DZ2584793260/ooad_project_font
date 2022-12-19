@@ -7,6 +7,7 @@ import UserSignIn from '../views/login/UserSignIn.vue'
 import UserSignUp from '../views/login/UserSignUp.vue'
 import ResetPassword from '../views/login/ResetPassword.vue'
 //YUKI: has add a few new components
+import baiduMap from '../views/client/BaiduMap.vue'
 import clientHotelInfo from '../views/client/HotelInfo.vue'
 import clientMapSelect from '../views/client/MapSelect.vue'
 import clientRoomReserve from '../views/client/RoomReserve.vue'
@@ -76,6 +77,11 @@ const routes = [
         path: '/client/hotelInfo',
         name: 'clientHotelInfo',
         component: clientHotelInfo
+      },
+      {
+        path: '/client/baiduMap',
+        name: 'baiduMap',
+        component: baiduMap
       },
       {
         //client side's home

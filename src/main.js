@@ -7,6 +7,8 @@ import './plugins/element.js'
 import VueParticles from 'vue-particles'
 import './plugins/dialogDrag.js'; //dialog可拖拽
 import api from './apis'
+//YUKI：百度地图的API
+
 
 import VideoPlayer from 'vue-video-player'
 Vue.use(VideoPlayer);

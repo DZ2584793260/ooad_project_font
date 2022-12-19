@@ -4,7 +4,7 @@
 			@close="handleClose" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
 			<div class="navbar-container">
 				<el-menu-item index="/client/hotelInfo">酒店预定</el-menu-item>
-
+				<el-menu-item index="/client/mapselect">平面图预定</el-menu-item>
 				<el-submenu index="2">
 					<template slot="title">订单</template>
 					<el-menu-item index="/client/personalOrder">全部</el-menu-item>

@@ -27,7 +27,7 @@ export function getHotelConditional(pageSize, currentPage, citySelected, keyword
         }
     })
 }
-export function getHotelConditionCount(citySelected, keyword) {
+export function getRConditionCount(citySelected, keyword) {
     return request({
         method: 'GET',
         url: '/api/HotelInstance/getcountbycondition',
@@ -37,3 +37,4 @@ export function getHotelConditionCount(citySelected, keyword) {
         }
     })
 }
+

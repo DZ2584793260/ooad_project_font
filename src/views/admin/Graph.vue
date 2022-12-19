@@ -10,9 +10,11 @@
 <script>
 import echarts from 'echarts'   //npm install echarts@4.9.0
 export default {
+   
     data() {
         return {
-
+            arr1:[2,4,5,6,1,3,7],
+            arr2:[0,0,0,0,0,0,0],
             option: {
                 color: ['#271A3F', '#238D99'],
                 title: {
@@ -101,21 +103,21 @@ export default {
                 },
                 series: [
                     {
-                        name: '上周',
+                        name: '本周',
                         type: 'line',
-                        data: [20, 10, 20, 30, 4, 5, 10, 80],
+                        data:[0,0,0,0,0,0,0],
                         lineStyle: {
                             color: '#271A3F' //线的颜色
                         }
                     },
-                    {
-                        name: '本周',
-                        type: 'line',
-                        data: [10, 20, 30, 40, 10, 20, 30],
-                        lineStyle: {
-                            color: '#238D99' //线的颜色
-                        }
-                    }
+                    // {
+                    //     name: '上周',
+                    //     type: 'line',
+                    //     data: [0,0,0,0,0,0,0],
+                    //     lineStyle: {
+                    //         color: '#238D99' //线的颜色
+                    //     }
+                    // }
                 ]
             }
         }
@@ -132,7 +134,19 @@ export default {
     methods: {
         mycharts() {
             let myChart = echarts.init(this.$refs.charts, "macarons");
-            myChart.setOption(this.option)
+            this.$api.adminApi.adminGraphing().then(res => {
+                // console.log(res.data.count)
+                this.option.series[0].data = res.data.count
+                this.option.xAxis.data = res.data.date
+                // console.log(this.option.series[0].data,res.data.count)
+                myChart.setOption(this.option)
+            }).catch(err => {
+                console.log(err);
+            });
+            
+            // this.option.series[1].data = this.arr2
+            // console.log(this.option.series[1].data)
+            
             //图表自适应
             window.addEventListener("resize", function () {
                 myChart.resize()  // myChart 是实例对象

@@ -49,6 +49,11 @@
         layout="prev, pager, next, sizes, total, jumper" :total="total" />
 
     </div>
+        {{roomID}}
+    <!-- YUKI:testing how to the params transferred between pages -->
+    <div>
+        
+    </div>
   </div>
 </template>
   
@@ -57,8 +62,8 @@ export default {
   methods: {
     handleClick(row) {
       console.log(row);
-      // 去某个酒店,每个酒店地址不同
-      // this.$router.push({ path: "/client/tableBook", query: { hotelName: row.hotelName } });
+      // YUKI：带着ID和名字进入门店里修改
+      this.$router.push({ path: "/admin/roomEdit", query: {hotelName: row.hotelName, hotelId:row.hotelId} });
     },
     handleSizeChange(val) {
       // 更改每页多少条数据
@@ -102,7 +107,6 @@ export default {
       this.$api.clientApi.getHotelConditionCount(city, key)
         .then(res => {
           _this.total = res.data
-
         }).catch(err => {
           console.log(err);
         });
@@ -148,11 +152,14 @@ export default {
       pageSize: 2,//每页显示的行数,默认为2
       tableData: [],
       queryOrNot: false,
+      //YUKI:testing param
+      roomID:0,
     }
   },
   mounted() {
     // 初始时表格展示的数据
     this.getAllAPI(2, 1)
+    this.roomID = this.$route.params.roomID
   },
 }
 
