@@ -89,7 +89,6 @@ export default {
                 password: [{ required: true, validator: validatePass, trigger: "blur" }],
             },
         };
-
     },
     methods: {
         resetLoginForm() {//重置用户名和密码方法

@@ -46,9 +46,9 @@
                                 placeholder="请再次输入密码" show-password>
                             </el-input>
                         </el-form-item>
-                        <el-form-item label="手机号" prop="phone" label-width="100px">
-                            <el-input class="in" v-model="loginForm.phone" prefix-icon="iconfont icon-shouji"
-                                placeholder="请输入手机号">
+                        <el-form-item label="邮箱" prop="email" label-width="100px">
+                            <el-input class="in" v-model="loginForm.email" prefix-icon="iconfont icon-shouji"
+                                placeholder="请输入邮箱">
                             </el-input>
                         </el-form-item>
                         <el-form-item label="验证码" prop="verifyCode" label-width="100px">
@@ -103,7 +103,7 @@ export default {
         var validateCode = (rule, value, callback) => {
             if (value === "") {
                 callback(new Error("请输入验证码"));
-            } else {
+            } else if (value === this.code) {
                 callback();
             }
         };
@@ -114,9 +114,10 @@ export default {
                 password: "",
                 checkPass: "",
                 nickName: "",
-                phone: "",
+                email: "",
                 verifyCode: ""
             },
+            code: 0,
             //指定验证规则
             loginRules: {
                 //校验id
@@ -129,7 +130,7 @@ export default {
                 checkPass: [{ required: true, validator: validatePass2, trigger: "blur" }],
                 nickName: [{ required: true, message: '请输入昵称', trigger: 'blur' },
                 { min: 0, max: 10, message: '昵称长度须在 0 到 10 个字符', trigger: 'blur' }],
-                phone: [{ required: true, message: '请输入手机号', trigger: "blur" }],
+                email: [{ required: true, message: '请输入手机号', trigger: "blur" }],
                 verifyCode: [{ required: true, validator: validateCode, trigger: "blur" }],
             },
         };
@@ -145,9 +146,7 @@ export default {
                 if (!valid) { return; }
                 else {
                     this.$api.loginApi.userSignUp(this.loginForm.nickName, this.loginForm.id,
-                        this.loginForm.password, this.loginForm.phone).then(res => {
-                            console.log("success");
-                            console.log(res.data)
+                        this.loginForm.password, this.loginForm.email).then(res => {
                             if (res.data.code == 7000) {
                                 this.$message({
                                     message: res.data.message,
@@ -163,7 +162,11 @@ export default {
             })
         },
         getVerifyCode() {
-
+            this.$api.loginApi.sendEmail(this.loginForm.email, 0).then(res => {
+                this.code = res.data
+            }).catch(err => {
+                console.log(err);
+            });
         }
     },
 

@@ -59,3 +59,14 @@ export function deleteUser(account, password, phoneNumber) {
         }
     })
 }
+
+export function sendEmail(email, code) {
+    return request({
+        method: 'POST',
+        url: '/api/user/sendemail',
+        params: {
+            email: email,
+            code: code
+        }
+    })
+}
