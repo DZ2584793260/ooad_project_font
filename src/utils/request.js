@@ -2,10 +2,10 @@ import axios from "axios";
 // import router from "../router";
 // import { Message } from "element-ui";
 const request = axios.create({
-    //zyy
-    baseURL: 'http://10.16.38.64:8080',
+    //zzy
+    // baseURL: 'http://10.16.38.64:8080',
     //fcc
-    // baseURL: 'http://10.16.41.156:8080',
+    baseURL: 'http://10.16.41.156:8080',
     //tyf
     // baseURL: 'http://10.16.42.166:8080',
     timeout: 5000

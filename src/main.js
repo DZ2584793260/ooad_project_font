@@ -8,7 +8,7 @@ import VueParticles from 'vue-particles'
 import './plugins/dialogDrag.js'; //dialog可拖拽
 import api from './apis'
 
-//import dayjs from 'dayjs' // ES 2015
+// import dayjs from 'dayjs' // ES 2015
 
 //YUKI：百度地图的API
 

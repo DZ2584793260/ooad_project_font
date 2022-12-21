@@ -1,28 +1,34 @@
 <template>
   <div class="HotelInfo">
-    <div class="homeHeader">
-      <el-form :model="queryForm" ref="queryForm" :inline="true">
-        <el-form-item label="城市" prop="citySelected">
-          <el-select class="selectCity" placeholder="请选择城市" v-model="queryForm.citySelected"
-            value="queryForm.citySelected" clearable>
-            <!-- <el-option v-for="item in tableData" :key="item.hotelName" :label="item.city" :value="item.city">
+    <div class="header">
+      <div class="reserve">
+        <router-link to="/client/mapselect">
+          <el-button>平面图预定</el-button>
+        </router-link>
+      </div>
+      <div class="homeHeader">
+        <el-form :model="queryForm" ref="queryForm" :inline="true">
+          <el-form-item label="城市" prop="citySelected">
+            <el-select class="selectCity" placeholder="请选择城市" v-model="queryForm.citySelected"
+              value="queryForm.citySelected" clearable>
+              <!-- <el-option v-for="item in tableData" :key="item.hotelName" :label="item.city" :value="item.city">
               </el-option> -->
-            <el-option label="北京" value="北京" />
-            <el-option label="上海" value="上海" />
-            <el-option label="广州" value="广州" />
-            <el-option label="深圳" value="深圳" />
-          </el-select>
-        </el-form-item>
+              <el-option label="北京" value="北京" />
+              <el-option label="上海" value="上海" />
+              <el-option label="广州" value="广州" />
+              <el-option label="深圳" value="深圳" />
+            </el-select>
+          </el-form-item>
 
-        <el-form-item label="关键词" prop="keyword">
-          <el-input class="inputBox" placeholder="酒店名/位置" v-model="queryForm.keyword" clearable>
-          </el-input>
-        </el-form-item>
+          <el-form-item label="关键词" prop="keyword">
+            <el-input class="inputBox" placeholder="酒店名/位置" v-model="queryForm.keyword" clearable>
+            </el-input>
+          </el-form-item>
 
-        <el-button type="primary" @click="conditionQuery">查询</el-button>
-      </el-form>
+          <el-button type="primary" @click="conditionQuery">查询</el-button>
+        </el-form>
+      </div>
     </div>
-
     <div class="bookTable">
       <el-table :data="tableData" border style="width: 100%"
         :header-cell-style="{ background: '#00abbe', color: '#fff', 'text-align': 'center' }" highlight-current-row>
@@ -47,6 +53,8 @@
       <el-pagination v-model:page-size="pageSize" background @size-change="handleSizeChange"
         @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[2, 4, 6, 8]"
         layout="prev, pager, next, sizes, total, jumper" :total="total" />
+
+
 
     </div>
   </div>
@@ -172,9 +180,25 @@ export default {
 
 </script>
 <style scoped>
+.header {
+  display: flex;
+}
+
+.reserve {
+  text-align: left;
+  flex: 1;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 5px;
+  margin-left: 25px;
+}
+
 .homeHeader {
   text-align: right;
-  margin: 10px 25px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 25px;
+  margin-left: 5px;
 }
 
 .bookTable {

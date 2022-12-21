@@ -230,7 +230,7 @@ export default {
 }
 </script>
     
-<style>
+<style scoped>
 .orderTable {
     margin: auto;
     margin-top: 30px;
