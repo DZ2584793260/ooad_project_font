@@ -49,10 +49,10 @@
         layout="prev, pager, next, sizes, total, jumper" :total="total" />
 
     </div>
-        {{roomID}}
+    {{ roomID }}
     <!-- YUKI:testing how to the params transferred between pages -->
     <div>
-        
+
     </div>
   </div>
 </template>
@@ -63,7 +63,7 @@ export default {
     handleClick(row) {
       console.log(row);
       // YUKI：带着ID和名字进入门店里修改
-      this.$router.push({ path: "/admin/roomEdit", query: {hotelName: row.hotelName, hotelId:row.hotelId} });
+      this.$router.push({ path: "/admin/roomEdit", query: { hotelName: row.hotelName, hotelId: row.hotelId } });
     },
     handleSizeChange(val) {
       // 更改每页多少条数据
@@ -153,7 +153,7 @@ export default {
       tableData: [],
       queryOrNot: false,
       //YUKI:testing param
-      roomID:0,
+      roomID: 0,
     }
   },
   mounted() {

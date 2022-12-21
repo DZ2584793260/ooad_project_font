@@ -58,7 +58,7 @@ export default {
     handleClick(row) {
       console.log(row);
       // 去某个酒店,每个酒店地址不同
-      this.$router.push({ name: "clientTableSelect", params: { hotelName: row.hotelName, hotelId:row.hotelId, hotelAddress:row.hotelAddress} });
+      this.$router.push({ name: "clientTableSelect", params: { hotelName: row.hotelName, hotelId: row.hotelId, hotelAddress: row.hotelAddress } });
       // 另一个页面在methods中获得参数：var x=this.$route.query.hotelName;
     },
     handleSizeChange(val) {
@@ -123,9 +123,9 @@ export default {
           //   }
           // }
           _this.tableData = res.data
-            for (let i = 0; i < _this.tableData.length; i++) {
-              _this.tableData[i].contactList = _this.tableData[i].contactList.join()
-            }
+          for (let i = 0; i < _this.tableData.length; i++) {
+            _this.tableData[i].contactList = _this.tableData[i].contactList.join()
+          }
         }).catch(err => {
           console.log(err);
         });
@@ -160,13 +160,6 @@ export default {
       currentPage: 1,
       total: 10,//数据一共多少
       pageSize: 2,//每页显示的行数,默认为2
-      // tableData: [
-      //   hotelName = "",
-      //   companyName = "",
-      //   city = "",
-      //   hotelAddress = "",
-      //   contactList = ""
-      // ],
       tableData: [],
       queryOrNot: false,
     }

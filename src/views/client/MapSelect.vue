@@ -159,7 +159,7 @@ export default {
           alert(property.modelId);
           // we can change this into a new page jumping
           //YUKI:to roomReserve, past roomID
-           this.$router.push({path: "/client/roomReserve", query:{roomID:property.modelId} });
+          this.$router.push({ path: "/client/roomReserve", query: { roomID: property.modelId } });
         }
       });
     },
