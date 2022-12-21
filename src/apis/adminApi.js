@@ -17,16 +17,16 @@ export function adminGetDefaultCount() {
         url: '/api/room/getallroomscount'
     })
 
-    
+
 }
 
 export function adminGetCountConditional(companyGroupID, hotelName) {
     return request({
         method: 'GET',
         url: '/api/room/gethotelroomscount',
-        params:{
-            companyGroupID:companyGroupID,
-            hotelName:hotelName
+        params: {
+            companyGroupID: companyGroupID,
+            hotelName: hotelName
         }
     })
 }
@@ -51,8 +51,8 @@ export function adminGetRoomsByCondition(pageSize, currentPage, companyGroupID, 
         params: {
             pagesize: pageSize,
             currentpage: currentPage,
-            companyGroupID:companyGroupID,
-            hotelName:hotelName
+            companyGroupID: companyGroupID,
+            hotelName: hotelName
         }
     })
 }
@@ -63,7 +63,7 @@ export function adminDeleteRoom(id) {
         method: 'DELETE',
         url: '/api/room/deleteguestroom',
         params: {
-            ID:id
+            ID: id
         }
     })
 }
@@ -74,10 +74,10 @@ export function adminModifyRoom(id, roomStatus, price, ichnography) {
         method: 'PUT',
         url: '/api/room/modifyguestroom',
         data: {
-            id:id,
-            roomStatus:roomStatus,
-            price:price,
-            ichnography:ichnography
+            id: id,
+            roomStatus: roomStatus,
+            price: price,
+            ichnography: ichnography
         }
     })
 }
@@ -87,35 +87,35 @@ export function adminAddRoom(Floor, Address, RoomStatus, RoomType, HotelInstance
         method: 'POST',
         url: '/api/room/addguestroom',
         data: {
-            Floor:Floor,
-            Address:Address,
-            RoomStatus:RoomStatus,
-            RoomType:RoomType,
-            HotelInstanceID:HotelInstanceID,
-            Price:Price,
-            Title:Title,
-            Ichnography:Ichnography,
-            Area:Area,
-            BedCount:BedCount,
-            WindowCount:WindowCount,
-            MineralWaterCount:MineralWaterCount,
-            CandomCount:CandomCount
+            Floor: Floor,
+            Address: Address,
+            RoomStatus: RoomStatus,
+            RoomType: RoomType,
+            HotelInstanceID: HotelInstanceID,
+            Price: Price,
+            Title: Title,
+            Ichnography: Ichnography,
+            Area: Area,
+            BedCount: BedCount,
+            WindowCount: WindowCount,
+            MineralWaterCount: MineralWaterCount,
+            CandomCount: CandomCount
         }
     })
 }
 
 //YUKI:add factors
-export function adminPriceStatusSelect(companyGroupID, hotelName, Price, PageSize, currentPage,roomStatus) {
+export function adminPriceStatusSelect(companyGroupID, hotelName, Price, PageSize, currentPage, roomStatus) {
     return request({
         method: 'GET',
         url: '/api/room/gethotelguestroomsconditionaladmin',
         params: {
-            companyGroupID:companyGroupID,
-            hotelName:hotelName,
-            Price:Price,
-            PageSize:PageSize,
-            currentPage:currentPage,
-            roomStatus:roomStatus
+            companyGroupID: companyGroupID,
+            hotelName: hotelName,
+            Price: Price,
+            PageSize: PageSize,
+            currentPage: currentPage,
+            roomStatus: roomStatus
         }
     })
 }
@@ -125,24 +125,24 @@ export function adminPriceStatusSelectCount(companyGroupID, hotelName, Price, ro
         method: 'GET',
         url: '/api/room/gethotelguestroomsconditionaladmincount',
         params: {
-            companyGroupID:companyGroupID,
-            hotelName:hotelName,
-            Price:Price,
-            roomStatus:roomStatus
+            companyGroupID: companyGroupID,
+            hotelName: hotelName,
+            Price: Price,
+            roomStatus: roomStatus
         }
     })
 }
 
-export function adminPriceSelect(companyGroupID, hotelName,  PageSize, currentPage,Price) {
+export function adminPriceSelect(companyGroupID, hotelName, PageSize, currentPage, Price) {
     return request({
         method: 'GET',
         url: '/api/room/gethotelguestroomsconditionaladmin',
         params: {
-            companyGroupID:companyGroupID,
-            hotelName:hotelName,
-            PageSize:PageSize,
-            currentPage:currentPage,
-            Price:Price
+            companyGroupID: companyGroupID,
+            hotelName: hotelName,
+            PageSize: PageSize,
+            currentPage: currentPage,
+            Price: Price
         }
     })
 }
@@ -152,10 +152,10 @@ export function adminPriceSelectCount(companyGroupID, hotelName, Price) {
         method: 'GET',
         url: '/api/room/gethotelguestroomsconditionaladmincount',
         params: {
-            companyGroupID:companyGroupID,
-            hotelName:hotelName,
-     
-            Price:Price
+            companyGroupID: companyGroupID,
+            hotelName: hotelName,
+
+            Price: Price
         }
     })
 }

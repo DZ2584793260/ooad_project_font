@@ -45,13 +45,13 @@ export function queryRoomConditional(companyGroupID, hotelName, Price, StartTime
         method: 'GET',
         url: '/api/room/gethotelguestroomsconditional',
         params: {
-            companyGroupID:companyGroupID,
-            hotelName:hotelName,
-            Price:Price,
-            StartTime:StartTime,
-            EndTime:EndTime,
-            pageSize:pageSize,
-            currentPage:currentPage
+            companyGroupID: companyGroupID,
+            hotelName: hotelName,
+            Price: Price,
+            StartTime: StartTime,
+            EndTime: EndTime,
+            pageSize: pageSize,
+            currentPage: currentPage
         }
     })
 }
@@ -61,11 +61,21 @@ export function queryRoomConditionalCount(companyGroupID, hotelName, Price, Star
         method: 'GET',
         url: '/api/room/gethotelguestroomsconditionalcount',
         params: {
-            companyGroupID:companyGroupID,
-            hotelName:hotelName,
-            Price:Price,
-            StartTime:StartTime,
-            EndTime:EndTime
+            companyGroupID: companyGroupID,
+            hotelName: hotelName,
+            Price: Price,
+            StartTime: StartTime,
+            EndTime: EndTime
+        }
+    })
+}
+
+export function getMessage(account) {
+    return request({
+        method: 'GET',
+        url: '/api/user/getinfobyuser',
+        params: {
+            account: account
         }
     })
 }

@@ -275,13 +275,13 @@ export function addNewOrder(Account, GuestRoomID, Platform, PlatOrderNumber, Res
         method: 'post',
         url: '/api/order/addorder',
         data: {
-            Account:Account,
-            GuestRoomID:GuestRoomID,
-            Platform:Platform,
-            PlatOrderNumber:PlatOrderNumber,
-            ReserveCheckInTime:ReserveCheckInTime,
-            ReserveCheckOutTime:ReserveCheckOutTime,
-            roomAmount:roomAmount
+            Account: Account,
+            GuestRoomID: GuestRoomID,
+            Platform: Platform,
+            PlatOrderNumber: PlatOrderNumber,
+            ReserveCheckInTime: ReserveCheckInTime,
+            ReserveCheckOutTime: ReserveCheckOutTime,
+            roomAmount: roomAmount
         }
     })
 }

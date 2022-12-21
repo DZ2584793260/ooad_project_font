@@ -24,7 +24,7 @@ export default {
 /* 主页渐变背景 */
 .home_background {
     position: relative;
-    min-height: 1000px;
+    min-height: 100vh;
     height: 100%;
     width: 100%;
     /* background: linear-gradient(0deg, rgba(242, 96, 96, 0.826) 0%, rgb(249, 221, 83) 50%, rgb(249, 234, 163) 100%); */
