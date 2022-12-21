@@ -130,6 +130,7 @@ export default {
     },
     getHotelRoom(size, current) {
       const _this = this
+      // console.log(this.companyGroupId, this.hotelName)
       this.$api.adminApi.adminGetCountConditional(this.companyGroupId, this.hotelName)
         .then(res => {
           // console.log(res)

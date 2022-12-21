@@ -66,6 +66,7 @@ export default {
     handleClick(row) {
       console.log(row);
       // 去某个酒店,每个酒店地址不同
+      console.log(row.hotelId, row.hotelName, row.hotelAddress)
       this.$router.push({ name: "clientTableSelect", params: { hotelName: row.hotelName, hotelId: row.hotelId, hotelAddress: row.hotelAddress } });
       // 另一个页面在methods中获得参数：var x=this.$route.query.hotelName;
     },

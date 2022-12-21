@@ -392,6 +392,7 @@ export default {
         }).catch(err => {
           console.log(err)
         })
+      console.log(size, current, this.companyGroupId, this.hotelName)
       this.$api.adminApi.adminGetRoomsByCondition(size, current, this.companyGroupId, this.hotelName)
         .then(res => {
           _this.tableData = res.data
