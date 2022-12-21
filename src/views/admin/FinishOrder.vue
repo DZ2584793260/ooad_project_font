@@ -56,6 +56,7 @@
 </template>
     
 <script>
+import dayjs from "dayjs";
 export default {
     data() {
         return {
@@ -142,6 +143,11 @@ export default {
                         _this.$api.orderApi.GetOrdersByConditionWithoutAccount(_this.pageSize, current, uuid, key, "400")
                             .then(res => {
                                 _this.tableData = res.data
+                                for (let i = 0; i < _this.tableData.length; i++) {
+                                    _this.tableData[i].produceTime = dayjs(_this.tableData[i].produceTime).format("YYYY-MM-DD HH:mm:ss")
+                                    _this.tableData[i].reserveCheckInTime = dayjs(_this.tableData[i].reserveCheckInTime).format("YYYY-MM-DD HH:mm:ss")
+                                    _this.tableData[i].reserveCheckOutTime = dayjs(_this.tableData[i].reserveCheckOutTime).format("YYYY-MM-DD HH:mm:ss")
+                                }
                             }).catch(err => {
                                 console.log(err);
                             });
@@ -162,6 +168,11 @@ export default {
             this.$api.orderApi.GetAllEvaluatedOrders(size, current)
                 .then(res => {
                     _this.tableData = res.data
+                    for (let i = 0; i < _this.tableData.length; i++) {
+                        _this.tableData[i].produceTime = dayjs(_this.tableData[i].produceTime).format("YYYY-MM-DD HH:mm:ss")
+                        _this.tableData[i].reserveCheckInTime = dayjs(_this.tableData[i].reserveCheckInTime).format("YYYY-MM-DD HH:mm:ss")
+                        _this.tableData[i].reserveCheckOutTime = dayjs(_this.tableData[i].reserveCheckOutTime).format("YYYY-MM-DD HH:mm:ss")
+                    }
                 }).catch(err => {
                     console.log(err);
                 });
@@ -179,7 +190,7 @@ export default {
 .orderTable {
     margin: auto;
     margin-top: 30px;
-    width: 70%;
+    width: 80%;
 }
 
 .orderQuery {
