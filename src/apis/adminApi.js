@@ -104,3 +104,58 @@ export function adminAddRoom(Floor, Address, RoomStatus, RoomType, HotelInstance
     })
 }
 
+//YUKI:add factors
+export function adminPriceStatusSelect(companyGroupID, hotelName, Price, PageSize, currentPage,roomStatus) {
+    return request({
+        method: 'GET',
+        url: '/api/room/gethotelguestroomsconditionaladmin',
+        params: {
+            companyGroupID:companyGroupID,
+            hotelName:hotelName,
+            Price:Price,
+            PageSize:PageSize,
+            currentPage:currentPage,
+            roomStatus:roomStatus
+        }
+    })
+}
+
+export function adminPriceStatusSelectCount(companyGroupID, hotelName, Price, roomStatus) {
+    return request({
+        method: 'GET',
+        url: '/api/room/gethotelguestroomsconditionaladmincount',
+        params: {
+            companyGroupID:companyGroupID,
+            hotelName:hotelName,
+            Price:Price,
+            roomStatus:roomStatus
+        }
+    })
+}
+
+export function adminPriceSelect(companyGroupID, hotelName,  PageSize, currentPage,Price) {
+    return request({
+        method: 'GET',
+        url: '/api/room/gethotelguestroomsconditionaladmin',
+        params: {
+            companyGroupID:companyGroupID,
+            hotelName:hotelName,
+            PageSize:PageSize,
+            currentPage:currentPage,
+            Price:Price
+        }
+    })
+}
+
+export function adminPriceSelectCount(companyGroupID, hotelName, Price) {
+    return request({
+        method: 'GET',
+        url: '/api/room/gethotelguestroomsconditionaladmincount',
+        params: {
+            companyGroupID:companyGroupID,
+            hotelName:hotelName,
+     
+            Price:Price
+        }
+    })
+}

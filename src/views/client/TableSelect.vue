@@ -2,26 +2,24 @@
 <template>
   <div class="roomSelect">
     <div class="selectBox">
-      <el-form :model="queryForm" ref="queryForm" :inline="true">
-        <el-form-item label="价格上限" prop="maxCost">
-          <el-select placeholder="请选择可接受的最高价格" v-model="queryForm.maxCost" value="queryForm.maxCost" clearable>
-            <el-option label="300" value="300" />
-            <el-option label="500" value="500" />
-            <el-option label="1000" value="1000" />
-          </el-select>
+      <el-form :model="Form" :inline="true">
+        <el-form-item label="价格上限" >
+            <el-input placeholder="请选择可接受的最高价格"
+                      v-model="Form.maxCost"
+                      >
+                    </el-input>
         </el-form-item>
-        <el-form-item label="入住时间" prop="startTime">
-          <el-date-picker v-model="queryForm.date" type="datetime" placeholder="请选择您的入住时间" format="yyyy-MM-dd HH:mm:ss"
+        <el-form-item label="入住时间" >
+          <el-date-picker v-model="Form.startTime" type="datetime" placeholder="请选择您的入住时间" format="yyyy-MM-dd HH:mm:ss"
             value-format="yyyy-MM-dd HH:mm:ss">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="退房时间" prop="endTime">
-          <el-date-picker v-model="queryForm.date" type="datetime" placeholder="请选择您的退房时间" format="yyyy-MM-dd HH:mm:ss"
+        <el-form-item label="退房时间" v >
+          <el-date-picker v-model="Form.endTime" type="datetime" placeholder="请选择您的退房时间" format="yyyy-MM-dd HH:mm:ss"
             value-format="yyyy-MM-dd HH:mm:ss">
           </el-date-picker>
         </el-form-item>
-
-        <el-button type="primary" @click="conditionQuery">查询</el-button>
+        <el-button type="primary" @click="conditionQuery()">查询</el-button>
       </el-form>
     </div>
 
@@ -33,13 +31,13 @@
       <el-table-column prop="floor" label="所在楼层"></el-table-column>
       <el-table-column prop="address" label="地址"></el-table-column>
       <el-table-column prop="roomType" label="房间类型"></el-table-column>
-      <el-table-column prop="price" label="价格" v-if="!editOrNot">
+      <el-table-column prop="price" label="价格" >
         
       </el-table-column>
  <el-table-column align="center" fixed="right" label="操作" width="200">
           <template slot-scope="scope">
            
-            <el-button @click="routeToNewPage(scope.row)" v-show="!editOrNot" type="primary" size="small">查看详情</el-button>
+            <el-button @click="routeToNewPage(scope.row)"  type="primary" size="small">查看详情</el-button>
           </template>
         </el-table-column>
 
@@ -48,7 +46,7 @@
     <el-pagination v-model:page-size="pageSize" background @size-change="handleSizeChange"
       @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[2, 4, 6, 8]"
       layout="prev, pager, next, sizes, total, jumper" :total="total" />
-      <el-button @click="handleClick(scope.row)" >增加新房间</el-button>
+     
   </div>
   </div>
 </template>
@@ -58,21 +56,76 @@ export default {
   methods: {
     routeToNewPage(row){
         const roomID = row.id
-        this.$router.push({ path: "/client/roomReserve", query: {roomID:roomID} });
+        this.$router.push({ name: "clientRoomReserve", params: {roomID:roomID, 
+          companyGroupId:this.companyGroupId, hotelName:this.hotelName
+        ,price:row.price, startTime: this.Form.startTime.toString(), endTime:this.Form.endTime.toString(),
+      hotelAddres: this.hotelAddress} });
     },
-    handleClick(row) {
-      //YUKI: Add new room
-    },
+    // handleClick(row) {
+    //   //YUKI: Add new room
+    // },
     handleSizeChange(val) {
       // 更改每页多少条数据
-      // console.log(`每页 ${val} 条`);
-      // this.pageSize = val;
+      console.log(`每页 ${val} 条`);
+      this.pageSize = val;
       this.handleCurrentChange();//默认更改每页多少条后重新加载第一页
     },
     handleCurrentChange() {
-      this.getHotelRoom(this.pageSize, this.currentPage)
+      const _this = this
+      if(_this.Form.startTime == "" & _this.Form.endTime == "") {
+        this.getHotelRoom(this.pageSize, this.currentPage)
+      } else{
+        this.conditionQuery()
+      }
     },
+    conditionQuery() {
+      const _this = this
+      console.log(_this.Form)
+      var Form = _this.Form
+      Form.maxCost = parseInt(Form.maxCost)
+      this.$api.clientApi.queryRoomConditionalCount(_this.companyGroupId, _this.hotelName,
+      Form.maxCost, Form.startTime, Form.endTime)
+          .then(res =>{
+            console.log(res)
+            _this.total = res.data
+          }).catch(err => {
+            console.log(err)
+          })
 
+      
+      this.$api.clientApi.queryRoomConditional(_this.companyGroupId, _this.hotelName,
+      Form.maxCost, Form.startTime, Form.endTime, _this.pageSize, _this.currentPage)
+          .then(res =>{
+            console.log(res)
+            _this.tableData = res.data
+            for (let i = 0; i < _this.tableData.length; i++) {
+            _this.tableData[i].roomStatus= this.roomStatus[_this.tableData[i].roomStatus]
+            _this.tableData[i].roomType= this.roomType[_this.tableData[i].roomType]
+          }
+            _this.pageSize = 2
+            _this.currentPage = 1
+        }).catch(err => {
+            console.log(err)
+          })
+    },
+    getDateTime(day) {
+      var _this = this;
+      let yy = new Date().getFullYear() + day;
+      let mm = new Date().getMonth() + 1;
+      let dd = new Date().getDate();
+      let hh = new Date().getHours();
+      let mf =
+        new Date().getMinutes() < 10
+          ? "0" + new Date().getMinutes()
+          : new Date().getMinutes();
+      let ss =
+        new Date().getSeconds() < 10
+          ? "0" + new Date().getSeconds()
+          : new Date().getSeconds();
+      let gettime = yy + "-" + mm + "-" + dd + " " + hh + ":" + mf + ":" + ss;
+      // console.log(gettime)
+      return gettime;
+    },
     getHotelRoom(size, current){
         const _this = this
         this.$api.adminApi.adminGetCountConditional(this.companyGroupId, this.hotelName)
@@ -96,7 +149,16 @@ export default {
   },
   data() {
     return {
-      options: [{
+      companyGroupId:this.$route.params.hotelId,
+      hotelName:this.$route.params.hotelName,
+      hotelAddress:this.$route.params.hotelAddress,
+      Form:{
+        maxCost:1000000,
+        startTime:"",
+        endTime:"",
+      },
+      options: [
+        {
           value: 0,
           label: 'Free'
         },
@@ -125,7 +187,7 @@ export default {
         }]
         ,
         
-      editOrNot: false,
+      // YUKI:取出url的参数
       queryForm: {
       citySelected: "",
       keyword: ""
@@ -137,20 +199,15 @@ export default {
       total: 10,//数据一共多少
       pageSize: 2,//每页显示的行数,默认为2
       tableData: [],
-      tableCopyData:[],
-      queryOrNot: false,
-      // YUKI:取出url的参数
-      companyGroupId:this.$route.query.hotelId,//暂时是hotel Id
-      hotelName: this.$route.query.hotelName
+
     }
   },
   created() {
     // 初始时表格展示的数据
     this.getHotelRoom(2, 1)
+    // console.log(this.queryForm)
   },
-  //对于前端来说，钩子函数就是指再所有函数执行前，我先执行了的函数，即 钩住 我感兴趣的函数，只要它执行，我就先执行。
-  mounted(){
-  }
+  
 }
 </script>
 

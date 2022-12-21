@@ -38,3 +38,34 @@ export function getRConditionCount(citySelected, keyword) {
     })
 }
 
+
+//YUKI: conditional query the room
+export function queryRoomConditional(companyGroupID, hotelName, Price, StartTime, EndTime, pageSize, currentPage) {
+    return request({
+        method: 'GET',
+        url: '/api/room/gethotelguestroomsconditional',
+        params: {
+            companyGroupID:companyGroupID,
+            hotelName:hotelName,
+            Price:Price,
+            StartTime:StartTime,
+            EndTime:EndTime,
+            pageSize:pageSize,
+            currentPage:currentPage
+        }
+    })
+}
+
+export function queryRoomConditionalCount(companyGroupID, hotelName, Price, StartTime, EndTime) {
+    return request({
+        method: 'GET',
+        url: '/api/room/gethotelguestroomsconditionalcount',
+        params: {
+            companyGroupID:companyGroupID,
+            hotelName:hotelName,
+            Price:Price,
+            StartTime:StartTime,
+            EndTime:EndTime
+        }
+    })
+}

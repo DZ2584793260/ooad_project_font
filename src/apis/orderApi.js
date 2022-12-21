@@ -266,3 +266,22 @@ export function GetAllEvaluatedOrders(pageSize, currentPage) {
         }
     })
 }
+
+
+// YUKI：添加订单
+export function addNewOrder(Account, GuestRoomID, Platform, PlatOrderNumber, ReserveCheckInTime,
+    ReserveCheckOutTime, roomAmount) {
+    return request({
+        method: 'post',
+        url: '/api/order/addorder',
+        data: {
+            Account:Account,
+            GuestRoomID:GuestRoomID,
+            Platform:Platform,
+            PlatOrderNumber:PlatOrderNumber,
+            ReserveCheckInTime:ReserveCheckInTime,
+            ReserveCheckOutTime:ReserveCheckOutTime,
+            roomAmount:roomAmount
+        }
+    })
+}
