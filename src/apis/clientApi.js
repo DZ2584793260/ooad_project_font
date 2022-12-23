@@ -79,3 +79,12 @@ export function getMessage(account) {
         }
     })
 }
+export function deleteAllMessage(account) {
+    return request({
+        method: 'GET',
+        url: '/api/user/clearifyinfobyuser',
+        params: {
+            account: account
+        }
+    })
+}

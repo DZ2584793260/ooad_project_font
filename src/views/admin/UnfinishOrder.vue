@@ -51,16 +51,20 @@
             <el-dialog :visible.sync="dialogVisible" :title="dialogTitle" width="35%" close-on-press-escape
                 v-dialogDrag>
                 <h3>请重新选择入住及退房时间</h3>
-                <el-form :model="dialogForm" :rules="editFormRules" ref="dialogForm">
+                <el-form :model="dialogForm" ref="dialogForm">
                     <!--选择日期-->
                     <el-form-item label="入住时间" prop="checkInTime" label-width="120px">
-                        <el-date-picker v-model="dialogForm.checkInTime" placeholder="Please select the date"
-                            format="yyyy/MM/dd" value-format="yyyy/MM/dd" style="width: 100%" />
+                        <el-date-picker v-model="dialogForm.checkInTime" type="datetime" placeholder="选择入住日期时间">
+                        </el-date-picker>
                     </el-form-item>
                     <el-form-item label="退房时间" prop="checkOutTime" label-width="120px">
-                        <el-date-picker v-model="dialogForm.checkOutTime" placeholder="Please select the date"
-                            format="yyyy/MM/dd" value-format="yyyy/MM/dd" style="width: 100%" />
+                        <el-date-picker v-model="dialogForm.checkOutTime" type="datetime" placeholder="选择离开日期时间">
+                        </el-date-picker>
                     </el-form-item>
+                    <el-form-item label="价格" prop="price" label-width="120px">
+                        <el-input v-model="dialogForm.price" placeholder="请重新输入价格"></el-input>
+                    </el-form-item>
+
                 </el-form>
 
                 <div style="text-align:right">
@@ -98,20 +102,17 @@ export default {
             queryOrNot: false,
             //对话框
             dialogVisible: false,//订单详细信息窗口
-            dialogForm: [{
+            dialogForm: {
                 checkInTime: "",
                 checkOutTime: "",
-            }
-            ],//对话框中的form 新增和编辑
+                price: "",
+            },//对话框中的form 新增和编辑
             dialogTitle: "",
-            editFormRules: {
-                checkInTime: [{ required: true, message: '请选择入住时间', trigger: 'change' }],
-                checkOutTime: [{ required: true, message: '请选择退房时间', trigger: 'change' }],
-            },
             //数据
             tableData: [],
             dialogVisibleDelete: false,
             row_index: 0,
+            orderId: "",
         }
     },
     methods: {
@@ -119,10 +120,32 @@ export default {
             this.dialogVisible = false;//对话框不显示
         },
         dialogSave() {
-            //////////////////////////////
+            const _this = this
+            this.$api.orderApi.ModifyOrderByAdmin(this.orderId, dayjs(this.dialogForm.checkInTime).format(), dayjs(this.dialogForm.checkOutTime).format(), this.dialogForm.price).then(res => {
+                if (res.data.code === 3003) {
+                    this.$message({
+                        message: res.data.message,
+                        type: "error"
+                    });
+                } else {
+                    _this.tableData[this.row_index].reserveCheckInTime = dayjs(this.dialogForm.checkInTime).format("YYYY-MM-DD HH:mm:ss")
+                    _this.tableData[this.row_index].reserveCheckOutTime = dayjs(this.dialogForm.checkOutTime).format("YYYY-MM-DD HH:mm:ss")
+                    _this.tableData[this.row_index].price = this.dialogForm.price
+                }
+            }).catch(err => {
+                console.log(err);
+            });
+            this.dialogVisible = false;//对话框不显示
         },
         handleClick(row_index) {
-            this.dialogTitle = "订单：" + this.tableData[row_index].uuid;
+            this.row_index = row_index
+            //给日期时间选择器赋值（初始值）
+            this.orderId = this.tableData[row_index].uuid
+            this.dialogForm.checkInTime = new Date(this.tableData[row_index].reserveCheckInTime)
+            this.dialogForm.checkOutTime = new Date(this.tableData[row_index].reserveCheckOutTime)
+            this.dialogForm.price = this.tableData[row_index].price
+
+            this.dialogTitle = "订单：" + this.orderId;
             this.dialogVisible = true;
         },
         //---------------删除订单
