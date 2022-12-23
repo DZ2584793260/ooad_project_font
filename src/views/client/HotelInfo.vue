@@ -43,9 +43,10 @@
         </el-table-column>
         <el-table-column prop="contactList" label="前台电话">
         </el-table-column>
-        <el-table-column align="center" fixed="right" label="操作" width="100">
+        <el-table-column align="center" fixed="right" label="操作" width="150px">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" type="text" size="small">查看详情</el-button>
+            <el-button @click="handleSubscribe(scope.row)" type="text" size="small">订阅</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -54,8 +55,6 @@
         @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[2, 4, 6, 8]"
         layout="prev, pager, next, sizes, total, jumper" :total="total" />
 
-
-
     </div>
   </div>
 </template>
@@ -63,6 +62,36 @@
 <script>
 export default {
   methods: {
+    handleSubscribe(row) {
+      ////订阅某酒店
+      const _this = this
+      this.$api.clientApi.subscribeHotel(this.$store.getters.getUser.id, row.hotelName)
+        .then(res => {
+          console.log(res)
+          if (res.data.code === 10000) {
+            this.$message({
+              showClose: true,
+              message: res.data.message,
+              type: "error"
+            });
+          } else if (res.data.code === 10002) {
+            this.$message({
+              showClose: true,
+              message: res.data.message,
+              type: "error"
+            });
+          } else {
+            this.$message({
+              showClose: true,
+              message: '您已成功订阅酒店' + row.hotelName,
+              type: 'success'
+            });
+          }
+        }).catch(err => {
+          console.log(err);
+        });
+
+    },
     handleClick(row) {
       console.log(row);
       // 去某个酒店,每个酒店地址不同
@@ -149,7 +178,6 @@ export default {
         });
       this.$api.clientApi.getHotelAll(size, current)
         .then(res => {
-          console.log(res)
           _this.tableData = res.data
           for (let i = 0; i < _this.tableData.length; i++) {
             _this.tableData[i].contactList = _this.tableData[i].contactList.join()

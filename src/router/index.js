@@ -16,6 +16,8 @@ import clientPersonalOrder from '../views/client/PersonalOrder.vue'
 import clientReserveOrder from '../views/client/ReserveOrder.vue'
 import clientUncommentOrder from '../views/client/UncommentOrder.vue'
 import clientFinishOrder from '../views/client/FinishOrder.vue'
+import clientFavorites from '../views/client/Favorites.vue'
+import clientStore from '../views/client/Store.vue'
 import clientNav from '../components/ClientNavbar.vue'
 import clientMessageNotification from '../views/client/MessageNotification.vue'
 //YUKI: admin routes
@@ -127,6 +129,14 @@ const routes = [
         path: '/client/messageNotification',
         name: 'clientMessageNotification',
         component: clientMessageNotification
+      }, {
+        path: '/client/favorites',
+        name: 'clientFavorites',
+        component: clientFavorites
+      }, {
+        path: '/client/store',
+        name: 'clientStore',
+        component: clientStore
       }
     ]
   },

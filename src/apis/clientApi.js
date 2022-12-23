@@ -70,6 +70,7 @@ export function queryRoomConditionalCount(companyGroupID, hotelName, Price, Star
     })
 }
 
+///////////消息通知系统
 export function getMessage(account) {
     return request({
         method: 'GET',
@@ -85,6 +86,47 @@ export function deleteAllMessage(account) {
         url: '/api/user/clearifyinfobyuser',
         params: {
             account: account
+        }
+    })
+}
+//////////收藏功能
+export function subscribeHotel(account, hotelName) {
+    return request({
+        method: 'GET',
+        url: '/api/hotelinstance/subscribehotel',
+        params: {
+            account: account,
+            hotelName: hotelName
+        }
+    })
+}
+export function unsubscribeHotel(account, hotelName) {
+    return request({
+        method: 'GET',
+        url: '/api/hotelinstance/unsubscribehotel',
+        params: {
+            account: account,
+            hotelName: hotelName
+        }
+    })
+}
+export function getHotelsCountSubscribed(account) {
+    return request({
+        method: 'GET',
+        url: '/api/hotelinstance/gethotelscountsubscribed',
+        params: {
+            account: account,
+        }
+    })
+}
+export function getHotelsSubscribed(pageSize, currentPage, account) {
+    return request({
+        method: 'GET',
+        url: '/api/hotelinstance/gethotelssubscribed',
+        params: {
+            pageSize: pageSize,
+            currentPage: currentPage,
+            account: account,
         }
     })
 }

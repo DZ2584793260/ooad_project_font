@@ -37,7 +37,7 @@
         </el-table-column>
         <el-table-column prop="contactList" label="前台电话">
         </el-table-column>
-        <el-table-column align="center" fixed="right" label="操作" width="100">
+        <el-table-column align="center" fixed="right" label="操作" width="100px">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" type="text" size="small">查看详情</el-button>
           </template>

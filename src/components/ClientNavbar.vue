@@ -28,7 +28,22 @@
 						<span>消息</span>
 					</template>
 				</el-menu-item>
-				
+
+				<el-menu-item index="/client/favorites">
+					<template slot="title">
+						<i class="el-icon-star-off"></i>
+						<span>收藏夹</span>
+					</template>
+				</el-menu-item>
+
+				<el-menu-item index="/client/store">
+					<template slot="title">
+						<i class="el-icon-goods"></i>
+						<span>积分兑换商城</span>
+					</template>
+				</el-menu-item>
+
+
 				<el-menu-item index="/userLogin" :disabled="isLogin">
 					<template slot="title">
 						<i class="el-icon-user"></i>
