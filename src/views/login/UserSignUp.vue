@@ -46,6 +46,11 @@
                                 placeholder="请再次输入密码" show-password>
                             </el-input>
                         </el-form-item>
+                        <el-form-item label="电话" prop="phone" label-width="100px">
+                            <el-input class="in" v-model="loginForm.phone" prefix-icon="iconfont icon-shouji"
+                                placeholder="请输入电话号">
+                            </el-input>
+                        </el-form-item>
                         <el-form-item label="邮箱" prop="email" label-width="100px">
                             <el-input class="in" v-model="loginForm.email" prefix-icon="iconfont icon-shouji"
                                 placeholder="请输入邮箱">
@@ -124,6 +129,7 @@ export default {
                 password: "",
                 checkPass: "",
                 nickName: "",
+                phone:"",
                 email: "",
                 verifyCode: ""
             },
@@ -140,6 +146,7 @@ export default {
                 checkPass: [{ required: true, validator: validatePass2, trigger: "blur" }],
                 nickName: [{ required: true, message: '请输入昵称', trigger: 'blur' },
                 { min: 0, max: 10, message: '昵称长度须在 0 到 10 个字符', trigger: 'blur' }],
+                phone: [{ required: true, validator: validateEmail, trigger: "blur" }],
                 email: [{ required: true, validator: validateEmail, trigger: "blur" }],
                 verifyCode: [{ required: true, validator: validateCode, trigger: "blur" }],
             },
@@ -163,7 +170,7 @@ export default {
                 }
                 else {
                     this.$api.loginApi.userSignUp(this.loginForm.nickName, this.loginForm.id,
-                        this.loginForm.password, this.loginForm.email).then(res => {
+                        this.loginForm.password, this.loginForm.phone).then(res => {
                             if (res.data.code == 7000) {
                                 this.$message({
                                     showClose: true,
@@ -194,7 +201,7 @@ export default {
 <style scoped>
 .login_box {
     width: 45%;
-    height: 80%;
+    height: 90%;
     border-radius: 20px;
     position: absolute;
     left: 50%;

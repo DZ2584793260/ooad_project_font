@@ -30,6 +30,7 @@ export default {
 				//YUKI:write as path
 				{ name: '/admin/hotelInfo', navItem: '房间管理' },
 				{ name: '/admin/graph', navItem: '订购量分析' },
+				{ name: '/admin/creditsExchange', navItem: '用户积分兑换情况查看' }
 				// { name: '/admin/graph', navItem: '订购量统计' },
 				// { name: '/admin/graph', navItem: '营业额分析' },
 				// { name: '/admin/checkReserve', navItem: '顾客预定信息查询' },

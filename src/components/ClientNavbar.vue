@@ -36,12 +36,15 @@
 					</template>
 				</el-menu-item>
 
-				<el-menu-item index="/client/store">
+
+				<el-submenu index="2222">
 					<template slot="title">
 						<i class="el-icon-goods"></i>
-						<span>积分兑换商城</span>
+						<span>积分兑换</span>
 					</template>
-				</el-menu-item>
+					<el-menu-item index="/client/store">积分兑换商城</el-menu-item>
+					<el-menu-item index="/client/pointItemView">兑换物品查看</el-menu-item>
+				</el-submenu>
 
 
 				<el-menu-item index="/userLogin" :disabled="isLogin">

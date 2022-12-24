@@ -1,15 +1,15 @@
 <template>
     <div class="Store">
         <el-row>
-            <el-col :span="8" v-for="(o, index) in 2" :key="o" :offset="index > 0 ? 2 : 0">
+            <el-col :span="8" v-for="(o, index) in 9" :key="o">
                 <el-card :body-style="{ padding: '0px' }">
-                    <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-                        class="image">
+                    <img class="image" :src="img_list[index]" alt />
                     <div style="padding: 14px;">
-                        <span>好吃的汉堡</span>
+                        <h3>{{ description_list[index] }}</h3>
+                        <span>需要{{ point_list[index] }}积分</span>
                         <div class="bottom clearfix">
-                            <time class="time">{{ currentDate }}</time>
-                            <el-button type="text" class="button">操作按钮</el-button>
+                            <el-button type="primary" class="button"
+                                @click="handleBuy(description_list[index], point_list[index])">兑换</el-button>
                         </div>
                     </div>
                 </el-card>
@@ -21,13 +21,36 @@
 <script>
 export default {
     data() {
+        var img1 = require("../../assets/award/airpods.jpg");
+        var img2 = require("../../assets/award/iphone.jpg");
+        var img3 = require("../../assets/award/bear.jpg");
+        var img4 = require("../../assets/award/cup.jpg");
+        var img5 = require("../../assets/award/keyboard.jpg");
+        var img6 = require("../../assets/award/light.jpg");
+        var img7 = require("../../assets/award/manghe.jpg");
+        var img8 = require("../../assets/award/mouse.jpg");
+        var img9 = require("../../assets/award/notebook.jpg");
         return {
-            currentDate: new Date()
+            img_list: [img1, img2, img3, img4, img5, img6, img7, img8, img9],
+            description_list: ["耳机", "手机", "小熊玩偶", "杯子", "键盘", "小夜灯", "盲盒", "鼠标", "笔记本"],
+            point_list: ["2000", "9999", "500", "300", "400", "30", "100", "150", "66"]
         };
+    },
+    methods: {
+        handleBuy(award_name, award_point) {
+            this.$router.push({ name: "clientShippingAddress", params: { award_name: award_name, award_point: award_point } });
+        }
     }
 }
 </script>
 <style>
+.Store {
+    margin-top: 3%;
+    margin-bottom: 3;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
 .time {
     font-size: 13px;
     color: #999;

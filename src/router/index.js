@@ -18,6 +18,8 @@ import clientUncommentOrder from '../views/client/UncommentOrder.vue'
 import clientFinishOrder from '../views/client/FinishOrder.vue'
 import clientFavorites from '../views/client/Favorites.vue'
 import clientStore from '../views/client/Store.vue'
+import clientShippingAddress from '../views/client/ShippingAddress.vue'
+import clientPointItemView from '../views/client/PointItemView.vue'
 import clientNav from '../components/ClientNavbar.vue'
 import clientMessageNotification from '../views/client/MessageNotification.vue'
 //YUKI: admin routes
@@ -30,6 +32,7 @@ import adminUnfinishOrder from '../views/admin/UnfinishOrder.vue'
 import adminFinishOrder from '../views/admin/FinishOrder.vue'
 import adminRoomEdit from '../views/admin/RoomEdit.vue'
 import adminRoomSelect from '../views/admin/RoomSelect.vue'
+import adminCreditsExchange from '../views/admin/CreditsExchange.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -137,6 +140,14 @@ const routes = [
         path: '/client/store',
         name: 'clientStore',
         component: clientStore
+      }, {
+        path: '/client/store/shippingAddress',
+        name: 'clientShippingAddress',
+        component: clientShippingAddress
+      },{
+        path: '/client/pointItemView',
+        name: 'lientPointItemView',
+        component: clientPointItemView
       }
     ]
   },
@@ -197,8 +208,11 @@ const routes = [
         path: '/admin/hotelInfo',
         name: 'adminHotelInfo',
         component: adminHotelInfo
-      },
-
+      }, {
+        path: '/admin/creditsExchange',
+        name: 'adminCreditsExchange',
+        component: adminCreditsExchange
+      }
     ]
   },
 
