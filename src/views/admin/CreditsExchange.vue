@@ -6,17 +6,17 @@
                 :header-cell-style="{ background: '#909399', color: '#fff', 'text-align': 'center' }"
                 highlight-current-row>
 
-                <el-table-column fixed prop="userId" label="用户账号">
+                <el-table-column fixed prop="account" label="用户账号">
                 </el-table-column>
-                <el-table-column prop="userId" label="收货人">
+                <el-table-column prop="consignee" label="收货人">
                 </el-table-column>
-                <el-table-column prop="award" label="奖品">
+                <el-table-column prop="goods" label="物品">
                 </el-table-column>
-                <el-table-column prop="score" label="奖品积分">
+                <el-table-column prop="goodsPoints" label="奖品积分">
                 </el-table-column>
-                <el-table-column prop="address" label="收货地址">
+                <el-table-column prop="deliveryAddress" label="收货地址">
                 </el-table-column>
-                <el-table-column prop="phoneNumber" label="联系电话">
+                <el-table-column prop="contactNumber" label="联系电话">
                 </el-table-column>
 
                 <!-- <el-table-column align="center" fixed="right" label="操作" width="150px">
@@ -92,13 +92,13 @@ export default {
 
         getAllAPI(size, current) {
             const _this = this
-            this.$api.clientApi.getHotelsCountSubscribed()
+            this.$api.adminApi.getAllAwardsCount()
                 .then(res => {
                     _this.total = res.data
                 }).catch(err => {
                     console.log(err);
                 });
-            this.$api.clientApi.getHotelsSubscribed(size, current)
+            this.$api.adminApi.getAllAwards(size, current)
                 .then(res => {
                     _this.tableData = res.data
                 }).catch(err => {

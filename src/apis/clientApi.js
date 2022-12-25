@@ -130,3 +130,48 @@ export function getHotelsSubscribed(pageSize, currentPage, account) {
         }
     })
 }
+
+//////////////积分兑换功能
+export function getAllAwardsCountByUser(account) {
+    return request({
+        method: 'GET',
+        url: '/api/award/getawardscountbyuser',
+        params: {
+            account: account,
+        }
+    })
+}
+export function getAllAwardsByUser(pageSize, currentPage, account) {
+    return request({
+        method: 'GET',
+        url: '/api/award/getawardsbyuser',
+        params: {
+            pageSize: pageSize,
+            currentPage: currentPage,
+            account: account,
+        }
+    })
+}
+export function getPoint(account) {
+    return request({
+        method: 'GET',
+        url: '/api/award/getpoint',
+        params: {
+            account: account
+        }
+    })
+}
+export function addAward(account, point, goods, consignee, contactNumber, deliveryAddress) {
+    return request({
+        method: 'POST',
+        url: '/api/award/addaward',
+        data: {
+            account: account,
+            point: point,
+            consignee: consignee,
+            goods: goods,
+            contactNumber: contactNumber,
+            deliveryAddress: deliveryAddress
+        }
+    })
+}

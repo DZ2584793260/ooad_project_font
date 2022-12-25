@@ -1,5 +1,6 @@
 <template>
     <div class="Store">
+        <h3>您共有{{ userPoint }}积分</h3>
         <el-row>
             <el-col :span="8" v-for="(o, index) in 9" :key="o">
                 <el-card :body-style="{ padding: '0px' }">
@@ -33,13 +34,31 @@ export default {
         return {
             img_list: [img1, img2, img3, img4, img5, img6, img7, img8, img9],
             description_list: ["耳机", "手机", "小熊玩偶", "杯子", "键盘", "小夜灯", "盲盒", "鼠标", "笔记本"],
-            point_list: ["2000", "9999", "500", "300", "400", "30", "100", "150", "66"]
+            point_list: ["2000", "99999", "500", "300", "400", "30", "100", "150", "66"],
+            userPoint: 0
         };
     },
     methods: {
         handleBuy(award_name, award_point) {
-            this.$router.push({ name: "clientShippingAddress", params: { award_name: award_name, award_point: award_point } });
+            if (this.userPoint < award_point) {
+                this.$message({
+                    showClose: true,
+                    message: "您的积分不够，请重新选择兑换物品",
+                    type: "error"
+                });
+            } else {
+                this.$router.push({ name: "clientShippingAddress", params: { award_name: award_name, award_point: award_point } });
+            }
         }
+    },
+    mounted() {
+        const _this = this
+        this.$api.clientApi.getPoint(this.$store.getters.getUser.id).then(res => {
+            _this.userPoint = res.data
+        }).catch(err => {
+            console.log(err);
+        });
+
     }
 }
 </script>

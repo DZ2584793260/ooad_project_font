@@ -16,8 +16,6 @@ export function adminGetDefaultCount() {
         method: 'GET',
         url: '/api/room/getallroomscount'
     })
-
-
 }
 
 export function adminGetCountConditional(companyGroupID, hotelName) {
@@ -156,6 +154,23 @@ export function adminPriceSelectCount(companyGroupID, hotelName, Price) {
             hotelName: hotelName,
 
             Price: Price
+        }
+    })
+}
+////////////积分兑换功能
+export function getAllAwardsCount() {
+    return request({
+        method: 'GET',
+        url: '/api/award/getallawardscount',
+    })
+}
+export function getAllAwards(pageSize, currentPage) {
+    return request({
+        method: 'GET',
+        url: '/api/award/getallawards',
+        params: {
+            pageSize: pageSize,
+            currentPage: currentPage
         }
     })
 }

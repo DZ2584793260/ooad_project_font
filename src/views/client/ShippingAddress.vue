@@ -1,4 +1,4 @@
-<!-- YUKI: edit12/17 -->
+<!-- 兑换物品填写收货信息 -->
 <template>
     <div id="picture">
         <div class="shippingAddress">
@@ -37,6 +37,7 @@
 export default {
     data() {
         return {
+            account: this.$store.getters.getUser.id,
             award_name: this.$route.params.award_name,
             award_point: this.$route.params.award_point,
             //表单数据
@@ -57,13 +58,37 @@ export default {
             this.$refs.buyFormRef.resetFields();
         },
         submitBuyForm() {
+            this.$refs.buyFormRef.validate(async valid => {
+                //1.验证失败则结束
+                if (!valid) { return; }
+                else {
+                    this.$api.clientApi.addAward(this.account, this.award_point, this.award_name, this.buyForm.receiveName, this.buyForm.phoneNumber, this.buyForm.address)
+                        .then(res => {
+                            if (res.data.code == 20000) {
+                                this.$message({
+                                    showClose: true,
+                                    message: res.data.message,
+                                    type: "error"
+                                });
+                            } else {
+                                this.$message({
+                                    showClose: true,
+                                    message: "兑换成功！",
+                                    type: "success"
+                                });
+                                this.$router.push({ path: "/client/store" });
+                            }
+                        }).catch(err => {
+                            console.log(err);
+                        });
+                }
+            })
         },
     }
     // mounted() {
     //     console.log(this.award_name)
     //     console.log(this.award_point)
     // }
-
 }
 </script>
   
