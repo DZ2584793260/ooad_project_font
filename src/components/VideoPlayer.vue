@@ -26,7 +26,7 @@ export default {
                     type: "video/mp4",
                     src: "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" //你的视频地址（必填）
                 }],
-                poster: "https://img1.baidu.com/it/u=1877910717,1572929573&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800", //你的封面地址
+                poster: "", //你的封面地址
                 width: document.documentElement.clientWidth,
                 notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
                 controlBar: {

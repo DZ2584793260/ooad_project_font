@@ -2,6 +2,33 @@
 //POST请求：后一个请求不会把第一个请求覆盖掉。（所以Post用来增加源）
 import request from '../utils/request';
 //用户
+//评价
+// export function AddEvaluate(image_list) {
+//     return request({
+//         method: 'POST',
+//         url: '/api/Order/AddEvaluate',
+//         data: {
+//             bytes: image_list
+//         },
+//         // headers: {
+//         //     'Content-Type': 'multipart/form-data'// 修改请求头
+//         // }
+//         // transformRequest: [function (data, headers) {
+//         //     // 去除post请求默认的Content-Type
+//         //     delete headers.post['Content-Type']
+//         //     return data
+//         // }],
+//     })
+// }
+export function AddEvaluate(image_list) {
+    return request({
+        method: 'POST',
+        url: '/api/Order/AddEvaluate',
+        data: {
+            bytes: image_list
+        }
+    })
+}
 //modify
 export function ModifyOrderByUser(orderId, reserveCheckInTime, reserveCheckOutTime) {
     return request({
@@ -295,6 +322,18 @@ export function getCoupon(account) {
         url: '/api/user/getcouponbyuser',
         params: {
             account: account
+        }
+    })
+}
+
+//支付
+export function orderpay(uuid, money) {
+    return request({
+        method: 'POST',
+        url: 'api/Alipay/pay',
+        data: {
+            uuid: uuid,
+            money: money
         }
     })
 }

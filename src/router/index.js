@@ -6,7 +6,8 @@ import Home from '../views/Home.vue'
 import UserSignIn from '../views/login/UserSignIn.vue'
 import UserSignUp from '../views/login/UserSignUp.vue'
 import ResetPassword from '../views/login/ResetPassword.vue'
-//YUKI: has add a few new components
+
+
 import baiduMap from '../views/client/BaiduMap.vue'
 import clientHotelInfo from '../views/client/HotelInfo.vue'
 import clientMapSelect from '../views/client/MapSelect.vue'
@@ -22,7 +23,10 @@ import clientShippingAddress from '../views/client/ShippingAddress.vue'
 import clientPointItemView from '../views/client/PointItemView.vue'
 import clientNav from '../components/ClientNavbar.vue'
 import clientMessageNotification from '../views/client/MessageNotification.vue'
-//YUKI: admin routes
+import clientSuccessPay from '../views/client/SuccessPay.vue'
+import clientFailPay from '../views/client/FailPay.vue'
+
+
 import adminHotelInfo from '../views/admin/HotelInfo.vue'///////////
 import adminGraph from '../views/admin/Graph.vue'
 import adminNav from '../components/AdminNavbar.vue'
@@ -145,11 +149,19 @@ const routes = [
         path: '/client/store/shippingAddress',
         name: 'clientShippingAddress',
         component: clientShippingAddress
-      },{
+      }, {
         path: '/client/pointItemView',
         name: 'lientPointItemView',
         component: clientPointItemView
-      }
+      }, {
+        path: '/client/successPay',
+        name: 'clientSuccessPay',
+        component: clientSuccessPay
+      }, {
+        path: '/client/failPay',
+        name: 'clientFailPay',
+        component: clientFailPay
+      },
     ]
   },
 
@@ -213,7 +225,7 @@ const routes = [
         path: '/admin/creditsExchange',
         name: 'adminCreditsExchange',
         component: adminCreditsExchange
-      },{
+      }, {
         path: '/admin/employeeManage',
         name: 'adminEmployeeManage',
         component: adminEmployeeManage
