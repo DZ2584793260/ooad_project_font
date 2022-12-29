@@ -82,7 +82,7 @@ export default {
             coordinates: [[[14.599609375, 16.9677734375], [21.6796875, 17.08984375], [21.6796875, 4.7607421875], [14.84375, 4.7607421875]]],
           },
           id: '1',
-          properties: { modelId: '1', id: '1', type: 'room' },
+          properties: { modelId: '1', id: '1', type: 'room', companyGroupId: 1, hotelName: "专家公寓", address: "专家公寓", price: 100 }
         },
         {
           type: 'Feature',
@@ -91,7 +91,7 @@ export default {
             coordinates: [[[22, 17], [28, 17], [28, 5], [22, 5]]],
           },
           id: '2',
-          properties: { modelId: '2', id: '2', type: 'room' },
+          properties: { modelId: '2', id: '2', type: 'room', companyGroupId: 1 },
         },
         {
           type: 'Feature',
@@ -100,7 +100,7 @@ export default {
             coordinates: [[[28.4, 17], [34.1, 17], [34.1, 5], [28.4, 5]]],
           },
           id: '3',
-          properties: { modelId: '3', id: '3', type: 'room' },
+          properties: { modelId: '3', id: '3', type: 'room', companyGroupId: 1 },
         },
         ],
       };
@@ -118,7 +118,7 @@ export default {
         layers: [
           new ImageLayer({
             source: new Static({
-              url: '/roommap/A-10.png',
+              url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTahh_KEr7nyApxm99Aqz0HVvPknVQ6rAC9RA&usqp=CAU',
               projection,
               imageExtent: extent,
             }),
@@ -132,6 +132,7 @@ export default {
           zoom: 0,
           maxZoom: 4,
           minZoom: 1,
+          dragging: false
         }),
       });
       // 选中之后的样式
@@ -159,7 +160,14 @@ export default {
           alert(property.modelId);
           // we can change this into a new page jumping
           //YUKI:to roomReserve, past roomID
-          this.$router.push({ path: "/client/roomReserve", query: { roomID: property.modelId } });
+          this.$router.push({
+            name: "clientRoomReserve", params: {
+              roomID: parseInt(property.id),
+              companyGroupId: property.companyGroupId, hotelName: property.hotelName
+              , price: property.price, startTime: "", endTime: "",
+              hotelAddres: property.address
+            }
+          });
         }
       });
     },

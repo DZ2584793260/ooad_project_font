@@ -175,3 +175,4 @@ export function addAward(account, point, goods, consignee, contactNumber, delive
         }
     })
 }
+

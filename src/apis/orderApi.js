@@ -270,7 +270,7 @@ export function GetAllEvaluatedOrders(pageSize, currentPage) {
 
 // YUKI：添加订单
 export function addNewOrder(Account, GuestRoomID, Platform, PlatOrderNumber, ReserveCheckInTime,
-    ReserveCheckOutTime, roomAmount) {
+    ReserveCheckOutTime, roomAmount, Price) {
     return request({
         method: 'post',
         url: '/api/order/addorder',
@@ -281,7 +281,20 @@ export function addNewOrder(Account, GuestRoomID, Platform, PlatOrderNumber, Res
             PlatOrderNumber: PlatOrderNumber,
             ReserveCheckInTime: ReserveCheckInTime,
             ReserveCheckOutTime: ReserveCheckOutTime,
-            roomAmount: roomAmount
+            roomAmount: roomAmount,
+            Price: Price
+        }
+    })
+}
+
+
+//YUKI：12/28 20:32
+export function getCoupon(account) {
+    return request({
+        method: 'GET',
+        url: '/api/user/getcouponbyuser',
+        params: {
+            account: account
         }
     })
 }

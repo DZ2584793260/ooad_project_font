@@ -33,6 +33,7 @@ import adminFinishOrder from '../views/admin/FinishOrder.vue'
 import adminRoomEdit from '../views/admin/RoomEdit.vue'
 import adminRoomSelect from '../views/admin/RoomSelect.vue'
 import adminCreditsExchange from '../views/admin/CreditsExchange.vue'
+import adminEmployeeManage from '../views/admin/EmployeeManage.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -212,6 +213,10 @@ const routes = [
         path: '/admin/creditsExchange',
         name: 'adminCreditsExchange',
         component: adminCreditsExchange
+      },{
+        path: '/admin/employeeManage',
+        name: 'adminEmployeeManage',
+        component: adminEmployeeManage
       }
     ]
   },

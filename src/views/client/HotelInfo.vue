@@ -2,9 +2,7 @@
   <div class="HotelInfo">
     <div class="header">
       <div class="reserve">
-        <router-link to="/client/mapselect">
-          <el-button>平面图预定</el-button>
-        </router-link>
+
       </div>
       <div class="homeHeader">
         <el-form :model="queryForm" ref="queryForm" :inline="true">
@@ -95,7 +93,7 @@ export default {
     handleClick(row) {
       console.log(row);
       // 去某个酒店,每个酒店地址不同
-      console.log(row.hotelId, row.hotelName, row.hotelAddress)
+      // console.log(row.hotelId, row.hotelName, row.hotelAddress)
       this.$router.push({ name: "clientTableSelect", params: { hotelName: row.hotelName, hotelId: row.hotelId, hotelAddress: row.hotelAddress } });
       // 另一个页面在methods中获得参数：var x=this.$route.query.hotelName;
     },
@@ -202,6 +200,7 @@ export default {
     }
   },
   mounted() {
+
     // 初始时表格展示的数据
     this.getAllAPI(2, 1)
   },

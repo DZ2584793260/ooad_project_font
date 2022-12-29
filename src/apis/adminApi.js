@@ -1,15 +1,14 @@
-
 import request from '../utils/request';
 //YUKI: graph api -> success
-export function adminGraphing() {
-    return request({
-        method: 'GET',
-        url: '/api/Order/GetWeekOrderCountByDay',
-        params: {
-            //So what params shall I put->nothing
-        }
-    })
-}
+// export function adminGraphing() {
+//     return request({
+//         method: 'GET',
+//         url: '/api/Order/GetWeekOrderCountByDay',
+//         params: {
+//             //So what params shall I put->nothing
+//         }
+//     })
+// }
 
 export function adminGetDefaultCount() {
     return request({
@@ -171,6 +170,117 @@ export function getAllAwards(pageSize, currentPage) {
         params: {
             pageSize: pageSize,
             currentPage: currentPage
+        }
+    })
+}
+
+
+//YUKI:图表分析
+//YUKI：graph
+export function getWeekOrderSumByNow() {
+    return request({
+        method: 'GET',
+        url: '/api/order/getweekordersumbynow',
+        params: {
+
+        }
+    })
+}
+
+export function getWeekOrderCountByNow() {
+    return request({
+        method: 'GET',
+        url: '/api/order/getweekordercountbynow',
+        params: {
+
+        }
+    })
+}
+
+export function getWeekOrderSumByRoomNow() {
+    return request({
+        method: 'GET',
+        url: '/api/order/getweekordersumbyroomnow',
+        params: {
+
+        }
+    })
+}
+
+export function getWeekOrderCountByRoomNow() {
+    return request({
+        method: 'GET',
+        url: '/api/order/getweekordercountbyroomnow',
+        params: {
+
+        }
+    })
+}
+
+//YUKI:员工管理
+//YUKI
+//根据指定id来删除employee,删除行
+export function deleteEmployee(id) {
+    return request({
+        method: 'DELETE',
+        url: '/api/employeeinstance/deleteemployee',
+        params: {
+            id: id
+        }
+    })
+}
+
+//更改指定证件号的数据
+export function modifyEmployee(ID, EmployeeName, IdentityCardType, IdentityCardId, Character, PhoneNumber) {
+    return request({
+        method: 'PUT',
+        url: '/api/employeeinstance/modifyemployee',
+        data: {
+            ID: ID,//int
+            EmployeeName: EmployeeName,
+            IdentityCardType: IdentityCardType,//int
+            IdentityCardId: IdentityCardId,
+            Character: Character,
+            PhoneNumber: PhoneNumber
+        }
+    })
+}
+
+
+//添加员工，如果证件号存在，返回777；如果证件号不合法，返回888，999，其他情况返回正确数据
+export function addEmployee(EmployeeName, IdentityCardType, IdentityCardId, Character, PhoneNumber) {
+    return request({
+        method: 'POST',
+        url: '/api/employeeinstance/addemployeeinstance',
+        data: {
+            EmployeeName: EmployeeName,
+            IdentityCardType: IdentityCardType,//int
+            IdentityCardId: IdentityCardId,
+            Character: Character,
+            PhoneNumber: PhoneNumber
+        }
+    })
+}
+
+//返回所有employees
+export function getAllEmployee(pageSize, currentPage) {
+    return request({
+        method: 'GET',
+        url: '/api/employeeinstance/getallemployees',
+        params: {
+            pageSize: pageSize,
+            currentPage: currentPage
+        }
+    })
+}
+
+//返回所有employees
+export function getAllEmployeeCount() {
+    return request({
+        method: 'GET',
+        url: '/api/employeeinstance/getemployeescount',
+        params: {
+
         }
     })
 }

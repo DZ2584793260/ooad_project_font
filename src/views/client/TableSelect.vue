@@ -25,11 +25,11 @@
     <div class="roomTable">
       <el-table :data="tableData" border style="width: 100%"
         :header-cell-style="{ background: '#00abbe', color: '#fff', 'text-align': 'center' }" highlight-current-row>
-        <el-table-column fixed prop="id" label="房间号码"></el-table-column>
-        <el-table-column prop="floor" label="所在楼层"></el-table-column>
-        <el-table-column prop="address" label="地址"></el-table-column>
-        <el-table-column prop="roomType" label="房间类型"></el-table-column>
-        <el-table-column prop="price" label="价格">
+        <el-table-column align="center" fixed prop="id" label="房间号码"></el-table-column>
+        <el-table-column align="center" fixed prop="floor" label="所在楼层"></el-table-column>
+        <el-table-column align="center" fixed prop="address" label="地址"></el-table-column>
+        <el-table-column align="center" fixed prop="guestRoomType" label="客房类型"></el-table-column>
+        <el-table-column align="center" fixed prop="price" label="价格">
 
         </el-table-column>
         <el-table-column align="center" fixed="right" label="操作" width="200">
@@ -46,11 +46,17 @@
         layout="prev, pager, next, sizes, total, jumper" :total="total" />
 
     </div>
+
+    <flatmap></flatmap>
   </div>
 </template>
 
 <script>
+import flatmap from './MapSelect.vue'
 export default {
+  components: {
+    flatmap
+  },
   methods: {
     routeToNewPage(row) {
       const roomID = row.id
@@ -133,17 +139,18 @@ export default {
       // console.log(this.companyGroupId, this.hotelName)
       this.$api.adminApi.adminGetCountConditional(this.companyGroupId, this.hotelName)
         .then(res => {
-          // console.log(res)
+
           _this.total = res.data
         }).catch(err => {
           console.log(err)
         })
       this.$api.adminApi.adminGetRoomsByCondition(size, current, this.companyGroupId, this.hotelName)
         .then(res => {
+          console.log(res.data)
           _this.tableData = res.data
           for (let i = 0; i < _this.tableData.length; i++) {
             _this.tableData[i].roomStatus = this.roomStatus[_this.tableData[i].roomStatus]
-            _this.tableData[i].roomType = this.roomType[_this.tableData[i].roomType]
+            _this.tableData[i].guestRoomType = this.roomType[_this.tableData[i].roomType]
           }
         }).catch(err => {
           console.log(err)
@@ -196,7 +203,7 @@ export default {
         keyword: ""
       },
       roomStatus: ["Free", "Reserved", "CheckIn", "LeftNeedClean", "NotOpen", "OnCleaning", "WaitChecking"],
-      roomType: ["GuestRoom", "LaundryRoom", "GymRoom", "StaffRoom", "MeetingRoom"],
+      roomType: ["BarrierFree无障碍", "Single单人间", "Double双人间", "Triple三人间", "Quadruple四人套房", "Deluxe豪华套房"],
       currentPage: 1,
       queryCurrentPage: 1,
       total: 10,//数据一共多少

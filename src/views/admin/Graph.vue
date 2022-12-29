@@ -1,179 +1,430 @@
 <template>
-  <div class="HotelInfo">
-    <div class="homeHeader">
-      <el-form :model="queryForm" ref="queryForm" :inline="true">
-        <el-form-item label="城市" prop="citySelected">
-          <el-select class="selectCity" placeholder="请选择城市" v-model="queryForm.citySelected"
-            value="queryForm.citySelected" clearable>
-            <!-- <el-option v-for="item in tableData" :key="item.hotelName" :label="item.city" :value="item.city">
-                  </el-option> -->
-            <el-option label="北京" value="北京" />
-            <el-option label="上海" value="上海" />
-            <el-option label="广州" value="广州" />
-            <el-option label="深圳" value="深圳" />
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="关键词" prop="keyword">
-          <el-input class="inputBox" placeholder="酒店名/位置" v-model="queryForm.keyword" clearable>
-          </el-input>
-        </el-form-item>
-
-        <el-button type="primary" @click="conditionQuery">查询</el-button>
-      </el-form>
-    </div>
-
-    <div class="bookTable">
-      <el-table :data="tableData" border style="width: 100%"
-        :header-cell-style="{ background: '#00abbe', color: '#fff', 'text-align': 'center' }" highlight-current-row>
-
-        <el-table-column fixed prop="hotelName" label="名称">
-        </el-table-column>
-        <el-table-column prop="companyName" label="集团">
-        </el-table-column>
-        <el-table-column prop="city" label="城市">
-        </el-table-column>
-        <el-table-column prop="hotelAddress" label="地址">
-        </el-table-column>
-        <el-table-column prop="contactList" label="前台电话">
-        </el-table-column>
-        <el-table-column align="center" fixed="right" label="操作" width="100">
-          <template slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" type="text" size="small">查看详情</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <!--分页-->
-      <el-pagination v-model:page-size="pageSize" background @size-change="handleSizeChange"
-        @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[2, 4, 6, 8]"
-        layout="prev, pager, next, sizes, total, jumper" :total="total" />
-
-    </div>
-    {{ roomID }}
-    <!-- YUKI:testing how to the params transferred between pages -->
     <div>
 
+        <div :style="{
+    float: 'center', width: '100%', height: '40px', 'padding-bottom': '1px'
+    , 'padding-top': '20px', 'font-size': '20px', 'text-align': 'center'
+}">当周七天订单交易额
+        </div>
+
+        <div class="echart" id="weeklySumByDate" :style="{
+    float: 'center', width: '100%', height: '400px', 'padding-bottom': '50px'
+}">
+        </div>
+
+        <div :style="{
+    float: 'center', width: '100%', height: '40px', 'padding-bottom': '1px'
+    , 'padding-top': '20px', 'font-size': '20px', 'text-align': 'center'
+}">当周七天订单各房型交易额
+        </div>
+
+        <div class="echart" id="weeklySumByRoom" :style="{
+    float: 'center', width: '100%', height: '400px', 'padding-bottom': '50px'
+    , 'padding-top': '50px'
+}">
+        </div>
+
+        <div :style="{
+    float: 'center', width: '100%', height: '40px', 'padding-bottom': '1px'
+    , 'padding-top': '20px', 'font-size': '20px', 'text-align': 'center'
+}">当周七天订单成交数量统计
+        </div>
+
+        <div class="echart" id="weeklyCountByDate" :style="{
+    float: 'center', width: '100%', height: '400px', 'padding-bottom': '50px'
+    , 'padding-top': '50px'
+}">
+        </div>
+        <div :style="{
+    float: 'center', width: '100%', height: '40px', 'padding-bottom': '1px'
+    , 'padding-top': '20px', 'font-size': '20px', 'text-align': 'center'
+}">当周七天订单成交各房型数量统计
+        </div>
+
+
+        <div class="echart" id="weeklyCountByRoom" :style="{
+    float: 'center', width: '100%', height: '400px', 'padding-bottom': '50px'
+    , 'padding-top': '50px'
+}">
+        </div>
+
     </div>
-  </div>
 </template>
-    
+
 <script>
+import * as echarts from "echarts";
+
 export default {
-  methods: {
-    handleClick(row) {
-      console.log(row);
-      // YUKI：带着ID和名字进入门店里修改
-      this.$router.push({ name: "adminRoomEdit", params: { hotelName: row.hotelName, hotelId: parseInt(row.hotelId), hotelAddress: row.hotelAddress } });
-    },
-    handleSizeChange(val) {
-      // 更改每页多少条数据
-      console.log(`每页 ${val} 条`);
-      this.pageSize = val;
-      this.handleCurrentChange(1);//默认更改每页多少条后重新加载第一页
-    },
+    data() {
+        return {
+            option2: {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                    }
+                },
+                legend: {
+                    data: ['BarrierFree', 'Deluxe', 'Double', 'Quadruple', 'Single', 'Triple']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'value'
+                },
+                yAxis: {
+                    type: 'category',
+                    data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                },
+                series: [
+                    {
+                        name: 'BarrierFree',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'insideRight'
+                            }
+                        },
+                        data: [320, 302, 301, 334, 390, 330, 320]
+                    },
+                    {
+                        name: 'Deluxe',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'insideRight'
+                            }
+                        },
+                        data: [120, 132, 101, 134, 90, 230, 210]
+                    },
+                    {
+                        name: 'Double',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'insideRight'
+                            }
+                        },
+                        data: [220, 182, 191, 234, 290, 330, 310]
+                    },
+                    {
+                        name: 'Quadruple',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'insideRight'
+                            }
+                        },
+                        data: [150, 212, 201, 154, 190, 330, 410]
+                    },
+                    {
+                        name: 'Single',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'insideRight'
+                            }
+                        },
+                        data: [820, 832, 901, 934, 1290, 1330, 1320]
+                    },
+                    {
+                        name: 'Triple',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'insideRight'
+                            }
+                        },
+                        data: [820, 832, 901, 934, 1290, 1330, 1320]
+                    }
+                ]
+            },
+            option1: {
+                tooltip: {
+                    show: true,
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow',
+                        z: 100,
+                        shadowStyle: {
+                            shadowColor: "rgba(167, 167, 167, 1)",
+                            shadowBlur: 10,
+                            color: "rgba(255, 255, 255, 1)"
+                        }
+                    },
+                    formatter: function (params) {
+                        console.log(params)
+                    },
+                },
+                grid: {
+                    top: 20,
+                    bottom: 20,
+                    left: 30,
+                    right: 20
+                },
+                xAxis: [{
+                    type: 'category',
+                    axisTick: {
+                        show: false,
+                        alignWithLabel: true,
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: "#889fcc"
+                        }
+                    },
+                    data: []
+                }],
+                yAxis: [{
+                    type: 'value',
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            color: "rgba(136, 159, 204, .2)"
+                        }
+                    },
+                    axisLine: {
+                        show: false,
+                        lineStyle: {
+                            color: "#889fcc"
+                        }
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                }],
+                series: [
+                    {
+                        data: [0, 0, 0, 0, 0, 2, 3],
+                        z: 200,
+                        type: 'line',
+                        smooth: true,
+                        symbolSize: 15,
+                        showSymbol: false,
+                        itemStyle: {
+                            normal: {
+                                show: false,
+                                color: "#3282FF", //改变折线点的颜色
+                                lineStyle: {
+                                    color: "#3282FF" //改变折线颜色
+                                },
+                                label: {
+                                    show: false, //开启显示
+                                    position: 'top', //在上方显示
+                                    textStyle: { //数值样式
+                                        color: '#999999',
+                                        fontSize: 10
+                                    }
+                                },
 
-    handleCurrentChange() {
-      if (this.queryOrNot === false) {
-        this.getAllAPI(this.pageSize, this.currentPage)
-      } else {
-        if (this.queryForm.citySelected === "" && this.queryForm.keyword !== "") {
-          this.conditionQueryAPI(this.currentPage, "%", this.queryForm.keyword)
-        } else if (this.queryForm.citySelected !== "" && this.queryForm.keyword === "") {
-          this.conditionQueryAPI(this.currentPage, this.queryForm.citySelected, "%")
-        } else {
-          this.conditionQueryAPI(this.currentPage, this.queryForm.citySelected, this.queryForm.keyword)
+                            },
+                            emphasis: {
+                                show: true,
+                                color: "#3282FF",
+                                borderColor: "#ffffff",
+                                label: {
+                                    show: true, //开启显示
+                                    position: 'top', //在上方显示
+                                    textStyle: { //数值样式
+                                        color: '##fff',
+                                        fontSize: 14,
+                                    }
+                                }
+                            }
+                        },
+                        areaStyle: {
+                            normal: {
+                                color: new echarts.graphic.LinearGradient(
+                                    0,
+                                    0,
+                                    0,
+                                    1,
+                                    [{
+                                        offset: 0,
+                                        color: 'rgba(50,130,255,0.3)'
+                                    },
+                                    {
+                                        offset: 1,
+                                        color: 'rgba(50,130,255,0)'
+                                    }
+                                    ],
+                                    false
+                                ),
+                                shadowColor: 'rgba(59, 34, 201,1)',
+                                shadowBlur: 10
+                            }
+                        },
+
+                    },
+                    {
+                        z: 200,
+                        type: 'bar',
+                        barWidth: '5',
+                        itemStyle: {
+                            normal: {
+                                color: "transparent"
+                            },
+                            emphasis: {
+                                color: '#2B75D4',
+                            }
+                        },
+                        // data: []
+                    }
+                ]
+            },
         }
-      }
     },
+    mounted() {
+        this.init()
+        window.addEventListener("resize", () => {
+            weeklySumByDate.resize();
+        })
+    },
+    methods: {
+        init() {
+            let weeklySumByDate = echarts.init(document.getElementById("weeklySumByDate"));
+            this.$api.adminApi.getWeekOrderSumByNow()
+                .then(res => {
+                    var copy = res.data
+                    this.option1.xAxis[0].data = copy.date
+                    this.option1.series[0].data = copy.count
+                    console.log(this.option1.xAxis[0].data)
+                    console.log(this.option1.series[0].data)
+                    weeklySumByDate.setOption(this.option1);// 渲染页面
+                }).catch(err => {
+                    console.log(err);
+                });// 图标初始化
 
-    conditionQuery() {
-      this.queryOrNot = true;
-      if (this.queryForm.citySelected === "" && this.queryForm.keyword === "") {
-        // this.getAllAPI(2, 1) //相当于重新刷新了
-        this.getAllAPI(this.pageSize, 1)
-        this.queryOrNot = false
-      } else if (this.queryForm.citySelected === "" && this.queryForm.keyword !== "") {
-        this.conditionQueryAPI(1, "%", this.queryForm.keyword)
-      } else if (this.queryForm.citySelected !== "" && this.queryForm.keyword === "") {
-        this.conditionQueryAPI(1, this.queryForm.citySelected, "%")
-      } else {
-        this.conditionQueryAPI(1, this.queryForm.citySelected, this.queryForm.keyword)
-      }
-      this.currentPage = 1
-    },
+            //随着屏幕大小调节图表
+            window.addEventListener("resize", () => {
+                weeklySumByDate.resize();
+            })
 
-    conditionQueryAPI(current, city, key) {
-      const _this = this
-      this.$api.clientApi.getHotelConditionCount(city, key)
-        .then(res => {
-          _this.total = res.data
-        }).catch(err => {
-          console.log(err);
-        });
-      this.$api.clientApi.getHotelConditional(this.pageSize, current, city, key)
-        .then(res => {
-          _this.tableData = res.data
-          for (let i = 0; i < _this.tableData.length; i++) {
-            _this.tableData[i].contactList = _this.tableData[i].contactList.join()
-          }
-        }).catch(err => {
-          console.log(err);
-        });
-    },
-    getAllAPI(size, current) {
-      const _this = this
-      this.$api.clientApi.getHotelAllCount()
-        .then(res => {
-          _this.total = res.data
-        }).catch(err => {
-          console.log(err);
-        });
-      this.$api.clientApi.getHotelAll(size, current)
-        .then(res => {
-          console.log(res)
-          _this.tableData = res.data
-          for (let i = 0; i < _this.tableData.length; i++) {
-            _this.tableData[i].contactList = _this.tableData[i].contactList.join()
-          }
-        }).catch(err => {
-          console.log(err);
-        });
+            let weeklySumByRoom = echarts.init(document.getElementById("weeklySumByRoom"));// 图标初始化
+
+            this.$api.adminApi.getWeekOrderSumByRoomNow()
+                .then(res => {
+                    console.log(this.option2.series[0].data)
+                    // var copy = res.data
+                    this.option2.yAxis.data = res.data.date
+                    this.option2.series[0].data = res.data.count.BarrierFree
+                    this.option2.series[1].data = res.data.count.Deluxe
+                    this.option2.series[2].data = res.data.count.Double
+                    this.option2.series[3].data = res.data.count.Quadruple
+                    this.option2.series[4].data = res.data.count.Single
+                    this.option2.series[5].data = res.data.count.Triple
+                    weeklySumByRoom.setOption(this.option2);// 渲染页面
+                }).catch(err => {
+                    console.log(err);
+                });// 图标初始化
+            //随着屏幕大小调节图表
+            window.addEventListener("resize", () => {
+                weeklySumByRoom.resize();
+            })
+
+
+            let weeklyCountByDate = echarts.init(document.getElementById("weeklyCountByDate"));
+            this.$api.adminApi.getWeekOrderCountByNow()
+                .then(res => {
+                    var copy = res.data
+                    this.option1.xAxis[0].data = copy.date
+                    this.option1.series[0].data = copy.count
+                    console.log(this.option1.xAxis[0].data)
+                    console.log(this.option1.series[0].data)
+                    weeklyCountByDate.setOption(this.option1);// 渲染页面
+                }).catch(err => {
+                    console.log(err);
+                });// 图标初始化
+
+            //随着屏幕大小调节图表
+            window.addEventListener("resize", () => {
+                weeklyCountByDate.resize();
+            })
+
+
+            let weeklyCountByRoom = echarts.init(document.getElementById("weeklyCountByRoom"));// 图标初始化
+
+            this.$api.adminApi.getWeekOrderCountByRoomNow()
+                .then(res => {
+                    console.log(this.option2.series[0].data)
+                    // var copy = res.data
+                    this.option2.yAxis.data = res.data.date
+                    this.option2.series[0].data = res.data.count.BarrierFree
+                    this.option2.series[1].data = res.data.count.Deluxe
+                    this.option2.series[2].data = res.data.count.Double
+                    this.option2.series[3].data = res.data.count.Quadruple
+                    this.option2.series[4].data = res.data.count.Single
+                    this.option2.series[5].data = res.data.count.Triple
+                    weeklyCountByRoom.setOption(this.option2);// 渲染页面
+                }).catch(err => {
+                    console.log(err);
+                });// 图标初始化
+            //随着屏幕大小调节图表
+            window.addEventListener("resize", () => {
+                weeklyCountByRoom.resize();
+            })
+
+
+
+        }
     }
-  },
 
-  data() {
-    return {
-      queryForm: {
-        citySelected: "",
-        keyword: ""
-      },
-      currentPage: 1,
-      total: 10,//数据一共多少
-      pageSize: 2,//每页显示的行数,默认为2
-      tableData: [],
-      queryOrNot: false,
-      //YUKI:testing param
-      roomID: 0,
-    }
-  },
-  mounted() {
-    // 初始时表格展示的数据
-    this.getAllAPI(2, 1)
-    this.roomID = this.$route.params.roomID
-  },
+
+
 }
-
 </script>
-<style scoped>
-.homeHeader {
-  text-align: right;
-  margin: 10px 25px;
+
+
+<style>
+.el-header,
+.el-footer {
+    background-color: #B3C0D1;
+    color: #333;
+    text-align: center;
+    line-height: 60px;
 }
 
-.bookTable {
-  margin: auto;
-  margin-top: 30px;
-  width: 70%;
+.el-aside {
+    background-color: #D3DCE6;
+    color: #333;
+    text-align: center;
+    line-height: 200px;
+}
+
+.el-main {
+    background-color: #E9EEF3;
+    color: #333;
+    text-align: center;
+    line-height: 400px;
+    width: auto;
+}
+
+body>.el-container {
+    margin-bottom: 40px;
+}
+
+.el-container:nth-child(5) .el-aside,
+.el-container:nth-child(6) .el-aside {
+    line-height: 260px;
+}
+
+.el-container:nth-child(7) .el-aside {
+    line-height: 320px;
 }
 </style>
-    

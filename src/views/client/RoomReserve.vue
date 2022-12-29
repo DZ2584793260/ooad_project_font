@@ -7,8 +7,6 @@
           请填写订单信息
         </div>
 
-
-
         <div class="roomForm">
           <el-form :model="formTable">
 
@@ -32,7 +30,7 @@
               </el-date-picker>
             </el-form-item>
 
-            <el-form-item label="平台编号">
+            <!-- <el-form-item label="平台编号">
               <el-input v-model="formTable.Platform" :disabled="true">
               </el-input>
             </el-form-item>
@@ -40,7 +38,7 @@
             <el-form-item label="平台运单编号">
               <el-input v-model="formTable.PlatOrderNumber">
               </el-input>
-            </el-form-item>
+            </el-form-item> -->
 
             <el-form-item label="预订房间数量">
               <el-input v-model="formTable.roomAmount" :disabled="true">
@@ -48,11 +46,24 @@
             </el-form-item>
 
             <el-form-item label="价格">
-              <el-input v-model="formTable.price" autocomplete="off"></el-input>
+              <el-input v-model="formTable.price" autocomplete="off" :disabled="true"></el-input>
             </el-form-item>
 
             <el-form-item label="总共需要支付金额">
-              <el-input v-model="formTable.sum" autocomplete="off"></el-input>
+              <el-input v-model="formTable.sum" autocomplete="off" :disabled="true"></el-input>
+            </el-form-item>
+
+            <el-form-item label="可用优惠券">
+              <el-button @click="drawer = true" type="primary" style="margin-left: 16px;">
+                查看已有优惠券
+              </el-button>
+
+              <el-drawer title="我是标题" :visible.sync="drawer" :with-header="false">
+                <!-- <span>我来啦!</span> -->
+                <div class="coupon" v-for="item in coupons" v-if="item != 0">
+                  {{ item }}元抵用券
+                </div>
+              </el-drawer>
             </el-form-item>
 
 
@@ -71,7 +82,10 @@
 </template>
 
 <script>
+
+
 export default {
+
   methods: {
     backToTableSelect() {
       this.$router.push({ name: "clientTableSelect", params: { hotelName: this.hotelName, hotelId: this.companyGroupId, hotelAddress: this.hotelAddress } });
@@ -87,7 +101,7 @@ export default {
       this.$api.orderApi.addNewOrder(_this.formTable.account, parseInt(_this.formTable.roomId),
         parseInt(_this.formTable.Platform), _this.formTable.PlatOrderNumber,
         _this.formTable.ReserveCheckInTime, _this.formTable.ReserveCheckOutTime,
-        _this.formTable.roomAmount)
+        parseInt(_this.formTable.roomAmount), (_this.formTable.price * 100))
         .then(res => {
           console.log(res)
           this.$message({
@@ -160,6 +174,7 @@ export default {
   },
   data() {
     return {
+      drawer: false,
       formTable: {
         account: this.$store.getters.getUser.id,
         roomId: this.$route.params.roomID,
@@ -171,6 +186,7 @@ export default {
         Platform: 5,
         PlatOrderNumber: "",
       },
+      coupons: null,
       RoomID: this.$route.params.roomID,
       companyGroupId: this.$route.params.companyGroupId,
       hotelName: this.$route.params.hotelName,
@@ -180,6 +196,12 @@ export default {
   created() {
     // console.log(this.$route.params.startTime)
     // console.log(this.$route.params.endTime)
+    this.$api.orderApi.getCoupon(this.$store.getters.getUser.id)
+      .then(res => {
+        this.coupons = res.data
+      }).catch(err => {
+        console.log(err)
+      })
     this.formTable.ReserveCheckInTime = this.getBeforeDate(0, this.$route.params.startTime)
     this.formTable.ReserveCheckOutTime = this.getBeforeDate(-1, this.$route.params.endTime)
     console.log(this.formTable)
@@ -199,5 +221,43 @@ export default {
 .title {
   font-size: large;
   line-height: 1.5;
+}
+
+.coupon {
+  position: relative;
+  width: 400px;
+  height: 160px;
+  margin: 20px auto;
+  color: #fff;
+  font-size: 30px;
+  text-indent: 40px;
+  line-height: 160px;
+  background-image: radial-gradient(circle at 1px 8px, transparent 6px, #f60 6px, #f60 0),
+    radial-gradient(circle at 199px 8px, transparent 6px, #f60 6px, #f60 0);
+  background-size: 200px 18px;
+  background-position: 0 0, 200px 0;
+  background-repeat-x: no-repeat;
+}
+
+.coupon::before {
+  position: absolute;
+  content: "";
+  left: 240px;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1px dashed #fff;
+}
+
+.coupon::after {
+  content: "下单即享满减优惠";
+  position: absolute;
+  width: 70px;
+  top: 50%;
+  right: 2%;
+  transform: translate(-50%, -50%);
+  line-height: 40px;
+  text-indent: 5px;
+  font-size: 30px;
 }
 </style>

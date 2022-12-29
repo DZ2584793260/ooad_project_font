@@ -78,11 +78,11 @@
         <el-table-column align="center" fixed="right" label="操作" width="200">
           <template slot-scope="scope">
             <el-button @click="handleEdit()" v-show="!editOrNot" type="success" size="small">编辑</el-button>
-            <el-button @click="warn(scope.$index, tableData)" v-show="!editOrNot" type="primary"
+            <el-button @click="warn(scope.$index, tableData)" v-show="!editOrNot" type="danger"
               size="small">删除</el-button>
-            <el-button @click="handleSave(scope.$index, tableData)" v-show="editOrNot" type="success"
+            <el-button @click="handleSave(scope.$index, tableData)" v-show="editOrNot" type="success" plain
               size="small">保存</el-button>
-            <el-button @click="handleCancel()" v-show="editOrNot" type="primary" size="small">取消</el-button>
+            <el-button @click="handleCancel()" v-show="editOrNot" type="primary" plain size="small">取消</el-button>
           </template>
         </el-table-column>
       </el-table>
