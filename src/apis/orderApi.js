@@ -2,30 +2,42 @@
 //POST请求：后一个请求不会把第一个请求覆盖掉。（所以Post用来增加源）
 import request from '../utils/request';
 //用户
-//评价
-// export function AddEvaluate(image_list) {
-//     return request({
-//         method: 'POST',
-//         url: '/api/Order/AddEvaluate',
-//         data: {
-//             bytes: image_list
-//         },
-//         // headers: {
-//         //     'Content-Type': 'multipart/form-data'// 修改请求头
-//         // }
-//         // transformRequest: [function (data, headers) {
-//         //     // 去除post请求默认的Content-Type
-//         //     delete headers.post['Content-Type']
-//         //     return data
-//         // }],
-//     })
-// }
-export function AddEvaluate(image_list) {
+// 评价
+export function UploadPictures(formData) {
     return request({
         method: 'POST',
-        url: '/api/Order/AddEvaluate',
-        data: {
-            bytes: image_list
+        url: 'api/order/UploadPictures',
+        data: formData,
+        headers: { 'content-type': 'multipart/form-data' },
+    })
+}
+
+export function AddEvaluate(uuid, grade, wordComment) {
+    return request({
+        method: 'POST',
+        url: 'api/order/AddEvaluate',
+        params: {
+            uuid: uuid,
+            grade: grade,
+            evaluate: wordComment
+        }
+    })
+}
+export function UploadVideo(formData) {
+    return request({
+        method: 'POST',
+        url: 'api/order/UploadVideo',
+        data: formData,
+        headers: { 'content-type': 'multipart/form-data' },
+    })
+}
+//查看评价
+export function getGradeEvaluate(uuid) {
+    return request({
+        method: 'GET',
+        url: 'api/order/getGradeEvaluate',
+        params: {
+            uuid: uuid,
         }
     })
 }
@@ -37,7 +49,7 @@ export function ModifyOrderByUser(orderId, reserveCheckInTime, reserveCheckOutTi
         data: {
             uuid: orderId,
             reserveCheckInTime: reserveCheckInTime,
-            reserveCheckOutTime: reserveCheckOutTime //待使用
+            reserveCheckOutTime: reserveCheckOutTime
         }
     })
 }
@@ -296,16 +308,14 @@ export function GetAllEvaluatedOrders(pageSize, currentPage) {
 
 
 // YUKI：添加订单
-export function addNewOrder(Account, GuestRoomID, Platform, PlatOrderNumber, ReserveCheckInTime,
-    ReserveCheckOutTime, roomAmount, Price) {
+export function addNewOrder(Account, GuestRoomID, ReserveCheckInTime, ReserveCheckOutTime, roomAmount, Price) {
     return request({
         method: 'post',
         url: '/api/order/addorder',
         data: {
             Account: Account,
             GuestRoomID: GuestRoomID,
-            Platform: Platform,
-            PlatOrderNumber: PlatOrderNumber,
+            Platform: 1,
             ReserveCheckInTime: ReserveCheckInTime,
             ReserveCheckOutTime: ReserveCheckOutTime,
             roomAmount: roomAmount,

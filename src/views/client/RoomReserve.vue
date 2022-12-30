@@ -97,29 +97,30 @@ export default {
       // _this.formTable.ReserveCheckInTime = _this.formTable.ReserveCheckInTime.dayjs().millisecond(0).valueOf
       _this.formTable.ReserveCheckOutTime = dayjs(_this.formTable.ReserveCheckOutTime).format()
       // _this.formTable.ReserveCheckOutTime = _this.formTable.ReserveCheckOutTime.dayjs().millisecond(0).valueOf
-      // console.log(_this.formTable)
-      // this.$api.orderApi.addNewOrder(_this.formTable.account, parseInt(_this.formTable.roomId),
-      //   parseInt(_this.formTable.Platform), _this.formTable.PlatOrderNumber,
-      //   _this.formTable.ReserveCheckInTime, _this.formTable.ReserveCheckOutTime,
-      //   parseInt(_this.formTable.roomAmount), (_this.formTable.price * 100))
-      //   .then(res => {
-      //     console.log(res)
-      //     this.$message({
-      //       showClose: true,
-      //       message: '您已经成功订房！',
-      //       type: 'success'
-      //     });
 
-      //     this.$router.push({ name: "clientTableSelect", params: { hotelName: this.hotelName, hotelId: this.companyGroupId, hotelAddress: this.hotelAddress } });
-      //   }).catch(err => {
-      //     console.log(err)
-      //   })
-      this.$api.orderApi.orderpay("12345678", 100)
+
+      this.$api.orderApi.addNewOrder(_this.formTable.account, parseInt(_this.formTable.roomId),
+        _this.formTable.ReserveCheckInTime, _this.formTable.ReserveCheckOutTime,
+        parseInt(_this.formTable.roomAmount), (_this.formTable.price * 100))
         .then(res => {
           console.log(res)
+          this.$message({
+            showClose: true,
+            message: '您已经成功订房！',
+            type: 'success'
+          });
+
+          this.$router.push({ name: "clientTableSelect", params: { hotelName: this.hotelName, hotelId: this.companyGroupId, hotelAddress: this.hotelAddress } });
         }).catch(err => {
-          console.log(err);
-        });
+          console.log(err)
+        })
+      //支付API！！！！！！！！！！！！
+      // this.$api.orderApi.orderpay("12345678", 100)
+      //   .then(res => {
+      //     console.log(res)
+      //   }).catch(err => {
+      //     console.log(err);
+      //   });
     },
     getBeforeDate(num, time) {
       let n = num;
@@ -190,8 +191,6 @@ export default {
         roomAmount: 1,
         price: this.$route.params.price,
         sum: this.$route.params.price,
-        Platform: 5,
-        PlatOrderNumber: "",
       },
       coupons: null,
       RoomID: this.$route.params.roomID,

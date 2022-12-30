@@ -3,12 +3,12 @@ import axios from "axios";
 // import { Message } from "element-ui";
 const request = axios.create({
     //zzy
-    // baseURL: 'http://10.21.144.36:8080',
+    // baseURL: 'http://10.21.144.99:8080',
     //fcc
     // baseURL: 'http://10.16.41.156:8080',
     //tyf
     baseURL: 'http://10.16.42.166:8080',
-    timeout: 5000
+    timeout: 10000
 })
 
 //请求拦截器  在发请求前，进行统一的修改

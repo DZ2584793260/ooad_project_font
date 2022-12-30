@@ -1,11 +1,6 @@
 <template>
   <div class="HotelInfo">
     <div class="header">
-      <!-- <div class="reserve">
-        <router-link to="/client/mapselect">
-          <el-button>平面图预定</el-button>
-        </router-link>
-      </div> -->
       <div class="homeHeader">
         <el-form :model="queryForm" ref="queryForm" :inline="true">
           <el-form-item label="城市" prop="citySelected">
@@ -209,25 +204,9 @@ export default {
 
 </script>
 <style scoped>
-.header {
-  display: flex;
-}
-
-/* .reserve {
-  text-align: left;
-  flex: 1;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  margin-right: 5px;
-  margin-left: 25px;
-} */
-
 .homeHeader {
   text-align: right;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  margin-right: 25px;
-  margin-left: 5px;
+  margin: 10px 25px;
 }
 
 .bookTable {

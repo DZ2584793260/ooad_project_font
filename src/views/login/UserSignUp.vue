@@ -129,7 +129,7 @@ export default {
                 password: "",
                 checkPass: "",
                 nickName: "",
-                phone:"",
+                phone: "",
                 email: "",
                 verifyCode: ""
             },
@@ -146,7 +146,7 @@ export default {
                 checkPass: [{ required: true, validator: validatePass2, trigger: "blur" }],
                 nickName: [{ required: true, message: '请输入昵称', trigger: 'blur' },
                 { min: 0, max: 10, message: '昵称长度须在 0 到 10 个字符', trigger: 'blur' }],
-                phone: [{ required: true, validator: validateEmail, trigger: "blur" }],
+                phone: [{ required: true, message: '请输入电话', trigger: "blur" }],
                 email: [{ required: true, validator: validateEmail, trigger: "blur" }],
                 verifyCode: [{ required: true, validator: validateCode, trigger: "blur" }],
             },

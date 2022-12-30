@@ -271,7 +271,6 @@ export default {
 .orderQuery {
   text-align: right;
   margin: 10px 25px;
-
 }
 
 h3 {

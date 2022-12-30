@@ -63,10 +63,10 @@
           <el-timeline-item timestamp="请添加图片" placement="top">
 
             <!-- :http-request 自定义的上传行为 -->
-            <el-upload ref="elupload" :file-list="fileList" multiple action="" :limit="6" :auto-upload="false"
-              :http-request="handleupload" list-type="picture-card" :on-preview="handlePictureCardPreview"
-              :on-remove="handleRemove" :before-remove="beforeRemove" :on-exceed="handleExceed"
-              :on-change="beforeUpload">
+            <el-upload ref="elupload" name="picture" :file-list="fileList" multiple action="" :limit="6"
+              :auto-upload="false" :http-request="handleupload" list-type="picture-card"
+              :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :before-remove="beforeRemove"
+              :on-exceed="handleExceed" :on-change="beforeUpload">
               <i class="el-icon-plus"></i>
             </el-upload>
             <el-dialog :visible.sync="pictureVisible" :append-to-body="true">
@@ -75,7 +75,7 @@
           </el-timeline-item>
           <!-- :on-preview="handlePreviewVideo" -->
           <el-timeline-item timestamp="请添加视频" placement="top">
-            <el-upload class="uploadVideo" :file-list="videoList" action="" :limit="1" :auto-upload="false"
+            <el-upload ref="uploadVideo" :file-list="videoList" action="" :limit="1" :auto-upload="false"
               :http-request="handleuploadVideo" :on-preview="handlePreviewVideo" :on-remove="handleRemoveVideo"
               :before-remove="beforeRemoveVideo" :on-exceed="handleExceedVideo" :on-change="beforeUploadVideo">
               <el-button size="small" type="primary">点击上传</el-button>
@@ -109,6 +109,7 @@ export default {
   },
   data() {
     return {
+      uuid: "",
       dialogImageUrl: '',//预览图片地址
       pictureVisible: false,//是否显示放大图片的对话框
       videoVisible: false,
@@ -129,7 +130,7 @@ export default {
       //对话框
       dialogVisible: false,//订单详细信息窗口
       dialogForm: {
-        grade: "",
+        grade: 0,
         wordComment: "",
       },
       dialogTitle: "",
@@ -242,26 +243,60 @@ export default {
       return true;
     },
     dialogSave() {
+      // 上传评分和文字评价
+      if (this.dialogForm.wordComment === "") {
+        this.dialogForm.wordComment = "该用户觉得体验很好，给出了" + this.dialogForm.grade + "星评价"
+      }
+      this.$api.orderApi.AddEvaluate(this.uuid, this.dialogForm.grade, this.dialogForm.wordComment)
+        .then(res => {
+          console.log(res)
+          this.dialogForm.grade = 0
+          this.dialogForm.wordComment = ""
+        }).catch(err => {
+          console.log(err);
+        });
+
+      //上传图片！！！！！
       let formdata = new FormData()
+      formdata.append("uuid", this.uuid)
       this.$refs.elupload.submit(); // 这里是执行文件上传的函数，其实也就是获取我们要上传的文件  
       this.fileList.forEach(item => {
-        formdata.append("file", item)  //将每一个文件图片都加进formdata
+        formdata.append("pictures", item)  //将每一个文件图片都加进formdata
       })
-      // axios.post("接口地址", formdata).then(res => { console.log(res) })
-      // console.log('formdata', JSON.stringify(formdata))
-      // console.log(formdata.getAll("file"))
-      this.$api.orderApi.AddEvaluate(formdata)
+      console.log(formdata)
+      console.log(formdata.getAll("picture"))
+      this.$api.orderApi.UploadPictures(formdata)
         .then(res => {
+          this.fileList = []
           console.log(res)
         }).catch(err => {
           console.log(err);
         });
+
+      //上传视频
+      let videoform = new FormData()
+      videoform.append("uuid", this.uuid)
+      this.$refs.uploadVideo.submit(); // 这里是执行文件上传的函数，其实也就是获取我们要上传的文件  
+      this.videoList.forEach(item => {
+        videoform.append("video", item)  //将每一个文件图片都加进formdata
+      })
+      this.$api.orderApi.UploadVideo(videoform)
+        .then(res => {
+          console.log(res)
+          this.videoList = []
+        }).catch(err => {
+          console.log(err);
+        });
+
+      this.dialogVisible = false
     },
+
     dialogCancel() {
       this.dialogVisible = false;//对话框不显示
     },
     handleClick(row_index) {
-      this.dialogTitle = "订单：" + this.tableData[row_index].uuid;
+      this.uuid = this.tableData[row_index].uuid;
+      this.dialogTitle = "订单：" + this.uuid;
       this.dialogVisible = true;
     },
     /////////////////////////////////////////////表格

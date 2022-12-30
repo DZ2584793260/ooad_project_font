@@ -12,6 +12,10 @@
 6. npm install vue-video-player@5.0.2 videojs-contrib-hls@5.14.1
 7. npm install better-scroll --save  (没有用，下次可以不安装)
 
+8. npm i @amap/amap-jsapi-loader -save
+9. npm install leaftlet
+10. npm install leaftlet.pm
+
 # 前后端交互Api
 1. 前端接口已经进行了封装
 2. utils的request.js当中放了baseURL，主要用于后端IP地址发生改变的时候，我们不需要该很多交互的接口，只需要在其中改baseURL就可以

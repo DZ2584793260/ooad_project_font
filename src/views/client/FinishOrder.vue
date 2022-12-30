@@ -1,4 +1,4 @@
-<!-- 去评价 -->
+<!-- 查看评价 -->
 <template>
   <div class="uncommentOrder">
     <div class="orderQuery">
@@ -100,6 +100,7 @@ export default {
     // var img8 = require("../../assets/award/mouse.jpg");
     // var img9 = require("../../assets/award/notebook.jpg");
     return {
+      uuid: "",
       // img_list: [img1, img2, img3, img4, img5, img6, img7, img8, img9],
       img_list: [],//图片的列表
       account: this.$store.getters.getUser.id,
@@ -117,8 +118,8 @@ export default {
       dialogVisible: false,//订单详细信息窗口
       dialogTitle: "",
       dialogForm: {
-        grade: 3,
-        wordComment: "1111111",
+        grade: 0,
+        wordComment: "",
       },
       //数据
       tableData: [],
@@ -152,7 +153,17 @@ export default {
       this.dialogVisible = false;//对话框不显示
     },
     handleClick(row_index) {
-      this.dialogTitle = "订单：" + this.tableData[row_index].uuid;
+      this.uuid = this.tableData[row_index].uuid
+      this.dialogTitle = "订单：" + this.uuid;
+
+      this.$api.orderApi.getGradeEvaluate(this.uuid)
+        .then(res => {
+          console.log(res)
+          this.dialogForm.grade = res.data[0].grade
+          this.dialogForm.wordComment = res.data[0].evaluate
+        }).catch(err => {
+          console.log(err);
+        });
       this.dialogVisible = true;
     },
     handleSizeChange(val) {

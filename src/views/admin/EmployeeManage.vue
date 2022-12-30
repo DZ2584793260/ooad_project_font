@@ -8,7 +8,7 @@
         </el-table-column>
         <el-table-column fixed align="center" label="员工ID" v-if="editOrNot">
           <template v-slot="scope">
-            <el-input size="mini" v-model="scope.row.id"></el-input>
+            <el-input :disabled="true" size="mini" v-model="scope.row.id"></el-input>
           </template>
         </el-table-column>
 
@@ -114,10 +114,8 @@ export default {
     handleAdd() {
       var array = new Array()
       array.push(parseInt(this.form.Character))
-      console.log(this.form.EmployeeName,
-        this.form.IdentityCardType, this.form.IdentityCardId, array, this.form.PhoneNumber)
-      this.$api.adminApi.addEmployee(this.form.EmployeeName,
-        this.form.IdentityCardType, this.form.IdentityCardId, array, this.form.PhoneNumber)
+      console.log(this.form.EmployeeName, this.form.IdentityCardType, this.form.IdentityCardId, array, this.form.PhoneNumber)
+      this.$api.adminApi.addEmployee(this.form.EmployeeName, this.form.IdentityCardType, this.form.IdentityCardId, array, this.form.PhoneNumber)
         .then(res => {
           console.log(res)
           if (res.data.code == "777" || res.data.code == "888" || res.data.code == "999") {
@@ -134,10 +132,15 @@ export default {
             this.addOrNot = false
             this.currentPage = 1
             this.pageSize = 2
+            this.form = {
+              EmployeeName: "",
+              IdentityCardType: 0,
+              IdentityCardId: "",
+              Character: 1,
+              PhoneNumber: ""
+            }
             this.getAllEmployee(2, 1)
           }
-
-
         }).catch(err => {
           console.log(err)
         })
