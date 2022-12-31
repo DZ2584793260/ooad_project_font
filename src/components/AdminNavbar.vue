@@ -9,7 +9,7 @@
 					</template>
 				</el-menu-item>
 				<el-submenu index="2">
-					<template slot="title">订单</template>
+					<template slot="title">订单 &nbsp &nbsp </template>
 					<el-menu-item index="/admin/allorder">全部</el-menu-item>
 					<el-menu-item index="/admin/unfinishOrder">未出行</el-menu-item>
 					<el-menu-item index="/admin/uncommentOrder">待评价</el-menu-item>

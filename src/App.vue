@@ -22,16 +22,16 @@ export default {
       path: ''
     }
   },
-  methods: {
-    saveState() {
-      sessionStorage.setItem('state', JSON.stringify(this.$store.state.user))
-    }
-  },
+  // methods: {
+  //   saveState() {
+  //     sessionStorage.setItem('state', JSON.stringify(this.$store.state.user))
+  //   }
+  // },
 
   // 判断路由
   mounted() {
     this.path = this.$route.path;
-    window.addEventListener('unload', this.saveState)
+    // window.addEventListener('unload', this.saveState)
   },
   watch: {
     $route(to, from) {
