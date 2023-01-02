@@ -47,7 +47,7 @@
     <div class="orderModify">
       <el-dialog :visible.sync="dialogVisible" :title="dialogTitle" width="35%" close-on-press-escape v-dialogDrag>
         <h3>请重新选择入住及退房时间</h3>
-        <el-form :model="dialogForm" ref="dialogForm">
+        <el-form :model="dialogForm" :rules="editFormRules" ref="dialogForm">
           <!--选择日期-->
           <el-form-item label="入住时间" prop="checkInTime" label-width="120px">
             <el-date-picker v-model="dialogForm.checkInTime" type="datetime" placeholder="选择入住日期时间">

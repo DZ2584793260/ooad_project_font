@@ -44,7 +44,7 @@
       <el-dialog :visible.sync="dialogVisible" :title="dialogTitle" width="38%" close-on-press-escape v-dialogDrag>
 
         <h3>请进行评价</h3>
-        <el-timeline :model="dialogForm" :rules="editFormRules" ref="dialogForm">
+        <el-timeline :model="dialogForm" ref="dialogForm">
 
           <el-timeline-item timestamp="评分" placement="top">
             <el-card>
@@ -87,7 +87,6 @@
               </video-player>
             </el-dialog>
           </el-timeline-item>
-
         </el-timeline>
 
         <div style="text-align:right">
@@ -134,9 +133,6 @@ export default {
         wordComment: "",
       },
       dialogTitle: "",
-      editFormRules: {
-        grade: [{ required: true, message: '请选择评分', trigger: 'change' }],
-      },
       //数据
       tableData: [],
       //视频！！！！
@@ -243,52 +239,61 @@ export default {
       return true;
     },
     dialogSave() {
-      // 上传评分和文字评价
-      if (this.dialogForm.wordComment === "") {
-        this.dialogForm.wordComment = "该用户觉得体验很好，给出了" + this.dialogForm.grade + "星评价"
+      const _this = this
+      if (this.dialogForm.grade === 0) {
+        this.$message({
+          message: "请选择评分！！",
+          type: "error"
+        });
+      } else {
+        // 上传评分和文字评价
+        if (this.dialogForm.wordComment === "") {
+          this.dialogForm.wordComment = "该用户觉得体验很好，给出了" + this.dialogForm.grade + "星评价"
+        }
+        this.$api.orderApi.AddEvaluate(this.uuid, this.dialogForm.grade, this.dialogForm.wordComment)
+          .then(res => {
+            console.log(res)
+            _this.dialogForm.grade = 0
+            _this.dialogForm.wordComment = ""
+            _this.getAllAPI(this.pageSize, 1)
+          }).catch(err => {
+            console.log(err);
+          });
+
+        //上传图片！！！！！
+        let formdata = new FormData()
+        formdata.append("uuid", this.uuid)
+        this.$refs.elupload.submit(); // 这里是执行文件上传的函数，其实也就是获取我们要上传的文件  
+        this.fileList.forEach(item => {
+          formdata.append("pictures", item)  //将每一个文件图片都加进formdata
+        })
+        // console.log(formdata)
+        // console.log(formdata.getAll("picture"))
+        this.$api.orderApi.UploadPictures(formdata)
+          .then(res => {
+            _this.fileList = []
+            console.log(res)
+          }).catch(err => {
+            console.log(err);
+          });
+
+        //上传视频
+        let videoform = new FormData()
+        videoform.append("uuid", this.uuid)
+        this.$refs.uploadVideo.submit(); // 这里是执行文件上传的函数，其实也就是获取我们要上传的文件  
+        this.videoList.forEach(item => {
+          videoform.append("video", item)  //将每一个文件图片都加进formdata
+        })
+        this.$api.orderApi.UploadVideo(videoform)
+          .then(res => {
+            console.log(res)
+            _this.videoList = []
+          }).catch(err => {
+            console.log(err);
+          });
+
+        this.dialogVisible = false
       }
-      this.$api.orderApi.AddEvaluate(this.uuid, this.dialogForm.grade, this.dialogForm.wordComment)
-        .then(res => {
-          console.log(res)
-          this.dialogForm.grade = 0
-          this.dialogForm.wordComment = ""
-        }).catch(err => {
-          console.log(err);
-        });
-
-      //上传图片！！！！！
-      let formdata = new FormData()
-      formdata.append("uuid", this.uuid)
-      this.$refs.elupload.submit(); // 这里是执行文件上传的函数，其实也就是获取我们要上传的文件  
-      this.fileList.forEach(item => {
-        formdata.append("pictures", item)  //将每一个文件图片都加进formdata
-      })
-      console.log(formdata)
-      console.log(formdata.getAll("picture"))
-      this.$api.orderApi.UploadPictures(formdata)
-        .then(res => {
-          this.fileList = []
-          console.log(res)
-        }).catch(err => {
-          console.log(err);
-        });
-
-      //上传视频
-      let videoform = new FormData()
-      videoform.append("uuid", this.uuid)
-      this.$refs.uploadVideo.submit(); // 这里是执行文件上传的函数，其实也就是获取我们要上传的文件  
-      this.videoList.forEach(item => {
-        videoform.append("video", item)  //将每一个文件图片都加进formdata
-      })
-      this.$api.orderApi.UploadVideo(videoform)
-        .then(res => {
-          console.log(res)
-          this.videoList = []
-        }).catch(err => {
-          console.log(err);
-        });
-
-      this.dialogVisible = false
     },
 
     dialogCancel() {

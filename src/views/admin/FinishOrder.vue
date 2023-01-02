@@ -43,11 +43,37 @@
         </div>
 
         <div class="seeComment">
-            <el-dialog :visible.sync="dialogVisible" :title="dialogTitle" width="35%" close-on-press-escape
+            <el-dialog :visible.sync="dialogVisible" :title="dialogTitle" width="500px" close-on-press-escape
                 v-dialogDrag>
-                <!-- 查看评价 -->
+                <el-timeline :model="dialogForm" ref="dialogForm">
+                    <el-timeline-item timestamp="评分" placement="top">
+                        <el-card>
+                            <el-rate v-model="dialogForm.grade" disabled :colors="['#99A9BF', '#F7BA2A', '#FF9900']">
+                            </el-rate>
+                        </el-card>
+                    </el-timeline-item>
+                    <el-timeline-item timestamp="文字评价" placement="top">
+                        <el-card>
+                            <span>{{ dialogForm.wordComment }}</span>
+                        </el-card>
+                    </el-timeline-item>
+                    <el-timeline-item timestamp="图片评价" placement="top" v-if="pictureOrNot">
+                        <el-row>
+                            <el-col :span="8" v-for="item in img_list" :key="item">
+                                <el-card :body-style="{ padding: '0px' }">
+                                    <img class="image" :src="item" alt />
+                                </el-card>
+                            </el-col>
+                        </el-row>
+                    </el-timeline-item>
+                    <!-- :on-preview="handlePreviewVideo" -->
+                    <el-timeline-item timestamp="视频评价" placement="top" v-if="videoOrNot">
+                        <video-player class="video-player vjs-custom-skin" ref="videoPlayer" :playsinline="true"
+                            :options="playerOptions" @play="onPlayerPlay($event)" @pause="onPlayerPause($event)">
+                        </video-player>
+                    </el-timeline-item>
+                </el-timeline>
                 <div style="text-align:right">
-                    <el-button type="primary" v-on:click="dialogSave()">确定</el-button>
                     <el-button @click="dialogCancel()">退出</el-button>
                 </div>
             </el-dialog>
@@ -60,6 +86,17 @@ import dayjs from "dayjs";
 export default {
     data() {
         return {
+            pictureOrNot: false,
+            videoOrNot: false,
+            uuid: "",
+            img_list: [],//图片的列表
+            //对话框
+            dialogVisible: false,//订单详细信息窗口
+            dialogTitle: "",
+            dialogForm: {
+                grade: 0,
+                wordComment: "",
+            },
             //分页
             currentPage: 1,
             total: 10,//数据一共多少
@@ -70,27 +107,76 @@ export default {
                 keyword: ""
             },
             queryOrNot: false,
-            //对话框
-            dialogVisible: false,//订单详细信息窗口
-            dialogTitle: "",
-            dialogForm: [{
-                // grade: "",
-                // wordComment: "",
-            },
-            ],//对话框中的form 新增和编辑
-            //数据
             tableData: [],
+            playerOptions: {
+                playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
+                autoplay: false, //如果true,浏览器准备好时开始回放。
+                muted: false, // 默认情况下将会消除任何音频。
+                loop: false, // 导致视频一结束就重新开始。
+                preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+                language: 'zh-CN',
+                aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+                fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+                sources: [{
+                    type: "video/mp4",
+                    src: "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" //你的视频地址（必填）
+                    // src: "" //你的视频地址（必填）
+                }],
+                poster: "", //你的封面地址
+                width: document.documentElement.clientWidth,
+                notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
+                controlBar: {
+                    timeDivider: true,
+                    durationDisplay: true,
+                    remainingTimeDisplay: false,
+                    fullscreenToggle: true  //全屏按钮
+                }
+            }
         }
     },
     methods: {
         dialogCancel() {
             this.dialogVisible = false;//对话框不显示
         },
-        dialogSave() {
-            //保存编辑！！！！！！！
-        },
         handleClick(row_index) {
-            this.dialogTitle = "订单：" + this.tableData[row_index].uuid;
+            this.uuid = this.tableData[row_index].uuid
+            this.dialogTitle = "订单：" + this.uuid;
+            const _this = this
+            this.$api.orderApi.getGradeEvaluate(this.uuid)
+                .then(res => {
+                    _this.dialogForm.grade = res.data[0].grade
+                    _this.dialogForm.wordComment = res.data[0].evaluate
+                }).catch(err => {
+                    console.log(err);
+                });
+
+            this.$api.orderApi.getPictures(this.uuid)
+                .then(res => {
+                    console.log(res)
+                    if (res.data[0].length !== 0) {
+                        _this.pictureOrNot = true
+                        _this.img_list = []
+                        for (let i = 0; i < res.data[0].length; i++) {
+                            _this.img_list.push("data:image/png;base64," + res.data[0][i])
+                        }
+                    } else {
+                        _this.pictureOrNot = false
+                    }
+                }).catch(err => {
+                    console.log(err);
+                });
+
+            this.$api.orderApi.getVideo(this.uuid)
+                .then(res => {
+                    if (res.data[0] !== "") {
+                        _this.videoOrNot = true
+                        _this.playerOptions.sources[0].src = "data:video/mp4;base64," + res.data[0]
+                    } else {
+                        _this.videoOrNot = false
+                    }
+                }).catch(err => {
+                    console.log(err);
+                });
             this.dialogVisible = true;
         },
         handleSizeChange(val) {

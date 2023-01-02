@@ -1,7 +1,36 @@
 //PUT请求：如果两个请求相同，后一个请求会把第一个请求覆盖掉。（所以PUT用来改资源）
 //POST请求：后一个请求不会把第一个请求覆盖掉。（所以Post用来增加源）
 import request from '../utils/request';
-//用户
+//查看评价
+export function getGradeEvaluate(uuid) {
+    return request({
+        method: 'GET',
+        url: 'api/order/getGradeEvaluate',
+        params: {
+            uuid: uuid,
+        }
+    })
+}
+export function getPictures(uuid) {
+    return request({
+        method: 'GET',
+        url: 'api/order/getPictures',
+        params: {
+            uuid: uuid,
+        },
+    })
+}
+export function getVideo(uuid) {
+    return request({
+        method: 'GET',
+        url: 'api/order/getVideo',
+        params: {
+            uuid: uuid,
+        }
+    })
+}
+
+//用户///////////////////////////////////
 // 评价
 export function UploadPictures(formData) {
     return request({
@@ -29,16 +58,6 @@ export function UploadVideo(formData) {
         url: 'api/order/UploadVideo',
         data: formData,
         headers: { 'content-type': 'multipart/form-data' },
-    })
-}
-//查看评价
-export function getGradeEvaluate(uuid) {
-    return request({
-        method: 'GET',
-        url: 'api/order/getGradeEvaluate',
-        params: {
-            uuid: uuid,
-        }
     })
 }
 //modify
@@ -186,7 +205,7 @@ export function GetEvaluatedOrdersByUserAccount(pageSize, currentPage, account) 
     })
 }
 
-//管理员
+//管理员//////////////////////////////////////////
 //modify
 export function ModifyOrderByAdmin(orderId, reserveCheckInTime, reserveCheckOutTime, price) {
     return request({

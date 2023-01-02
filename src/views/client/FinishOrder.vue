@@ -58,7 +58,7 @@
             </el-card>
           </el-timeline-item>
 
-          <el-timeline-item timestamp="图片评价" placement="top">
+          <el-timeline-item timestamp="图片评价" placement="top" v-if="pictureOrNot">
             <el-row>
               <el-col :span="8" v-for="item in img_list" :key="item">
                 <el-card :body-style="{ padding: '0px' }">
@@ -69,7 +69,7 @@
           </el-timeline-item>
 
           <!-- :on-preview="handlePreviewVideo" -->
-          <el-timeline-item timestamp="视频评价" placement="top">
+          <el-timeline-item timestamp="视频评价" placement="top" v-if="videoOrNot">
             <video-player class="video-player vjs-custom-skin" ref="videoPlayer" :playsinline="true"
               :options="playerOptions" @play="onPlayerPlay($event)" @pause="onPlayerPause($event)">
             </video-player>
@@ -90,19 +90,18 @@ import dayjs from "dayjs";
 import { videoPlayer } from 'vue-video-player';
 export default {
   data() {
-    // var img1 = require("../../assets/award/airpods.jpg");
-    // var img2 = require("../../assets/award/iphone.jpg");
-    // var img3 = require("../../assets/award/bear.jpg");
-    // var img4 = require("../../assets/award/cup.jpg");
-    // var img5 = require("../../assets/award/keyboard.jpg");
-    // var img6 = require("../../assets/award/light.jpg");
-    // var img7 = require("../../assets/award/manghe.jpg");
-    // var img8 = require("../../assets/award/mouse.jpg");
-    // var img9 = require("../../assets/award/notebook.jpg");
     return {
+      pictureOrNot: false,
+      videoOrNot: false,
       uuid: "",
-      // img_list: [img1, img2, img3, img4, img5, img6, img7, img8, img9],
       img_list: [],//图片的列表
+      //对话框
+      dialogVisible: false,//订单详细信息窗口
+      dialogTitle: "",
+      dialogForm: {
+        grade: 0,
+        wordComment: "",
+      },
       account: this.$store.getters.getUser.id,
       //分页
       currentPage: 1,
@@ -114,13 +113,6 @@ export default {
         keyword: ""
       },
       queryOrNot: false,
-      //对话框
-      dialogVisible: false,//订单详细信息窗口
-      dialogTitle: "",
-      dialogForm: {
-        grade: 0,
-        wordComment: "",
-      },
       //数据
       tableData: [],
       playerOptions: {
@@ -135,6 +127,7 @@ export default {
         sources: [{
           type: "video/mp4",
           src: "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" //你的视频地址（必填）
+          // src: "" //你的视频地址（必填）
         }],
         poster: "", //你的封面地址
         width: document.documentElement.clientWidth,
@@ -155,12 +148,39 @@ export default {
     handleClick(row_index) {
       this.uuid = this.tableData[row_index].uuid
       this.dialogTitle = "订单：" + this.uuid;
-
+      const _this = this
       this.$api.orderApi.getGradeEvaluate(this.uuid)
         .then(res => {
+          _this.dialogForm.grade = res.data[0].grade
+          _this.dialogForm.wordComment = res.data[0].evaluate
+        }).catch(err => {
+          console.log(err);
+        });
+
+      this.$api.orderApi.getPictures(this.uuid)
+        .then(res => {
           console.log(res)
-          this.dialogForm.grade = res.data[0].grade
-          this.dialogForm.wordComment = res.data[0].evaluate
+          if (res.data[0].length !== 0) {
+            _this.pictureOrNot = true
+            _this.img_list = []
+            for (let i = 0; i < res.data[0].length; i++) {
+              _this.img_list.push("data:image/png;base64," + res.data[0][i])
+            }
+          } else {
+            _this.pictureOrNot = false
+          }
+        }).catch(err => {
+          console.log(err);
+        });
+
+      this.$api.orderApi.getVideo(this.uuid)
+        .then(res => {
+          if (res.data[0] !== "") {
+            _this.videoOrNot = true
+            _this.playerOptions.sources[0].src = "data:video/mp4;base64," + res.data[0]
+          } else {
+            _this.videoOrNot = false
+          }
         }).catch(err => {
           console.log(err);
         });
