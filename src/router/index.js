@@ -23,7 +23,7 @@ import clientShippingAddress from '../views/client/ShippingAddress.vue'
 import clientPointItemView from '../views/client/PointItemView.vue'
 import clientNav from '../components/ClientNavbar.vue'
 import clientMessageNotification from '../views/client/MessageNotification.vue'
-import clientSuccessPay from '../views/client/SuccessPay.vue'
+import clientPay from '../views/client/Pay.vue'
 import clientFailPay from '../views/client/FailPay.vue'
 
 
@@ -86,12 +86,14 @@ const routes = [
       {
         path: '/client/hotelInfo',
         name: 'clientHotelInfo',
-        component: clientHotelInfo
+        component: clientHotelInfo,
+        meta: ['用户', '门店信息']
       },
       {
         path: '/client/baiduMap',
         name: 'baiduMap',
-        component: baiduMap
+        component: baiduMap,
+        meta: ['用户', '门店地图信息']
       },
       {
         //client side's home
@@ -103,13 +105,15 @@ const routes = [
         //client side's selection page
         path: '/client/tableSelect',
         name: 'clientTableSelect',
-        component: clientTableSelect
+        component: clientTableSelect,
+        meta: ['用户', '门店信息', '房间信息']
       },
       {
         //client side's reserve page merely for one room(information about the room)
         path: '/client/roomReserve',
         name: 'clientRoomReserve',
-        component: clientRoomReserve
+        component: clientRoomReserve,
+        meta: ['用户', '门店信息', '房间信息', '房间预定']
       },
       {
         //
@@ -137,11 +141,13 @@ const routes = [
         path: '/client/messageNotification',
         name: 'clientMessageNotification',
         component: clientMessageNotification
-      }, {
+      },
+      {
         path: '/client/favorites',
         name: 'clientFavorites',
         component: clientFavorites
-      }, {
+      },
+      {
         path: '/client/store',
         name: 'clientStore',
         component: clientStore
@@ -149,15 +155,18 @@ const routes = [
         path: '/client/store/shippingAddress',
         name: 'clientShippingAddress',
         component: clientShippingAddress
-      }, {
+      },
+      {
         path: '/client/pointItemView',
         name: 'lientPointItemView',
         component: clientPointItemView
-      }, {
-        path: '/client/successPay',
-        name: 'clientSuccessPay',
-        component: clientSuccessPay
-      }, {
+      },
+      {
+        path: '/client/pay',
+        name: 'clientPay',
+        component: clientPay
+      },
+      {
         path: '/client/failPay',
         name: 'clientFailPay',
         component: clientFailPay
@@ -242,7 +251,10 @@ const router = new VueRouter({
 })
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem("token")
-  if (to.name === 'clientRoomReserve' && !token) next({ name: 'userLogin' })
+  const paths = ['clientRoomReserve', 'clientMessageNotification',
+    'clientFavorites', 'clientStore', 'clientPersonalOrder',
+    'clientReserveOrder', 'clientUncommentOrder', 'clientFinishOrder']
+  if ((paths.includes(to.name) || to.path.includes("/admin")) && !token) next({ name: 'userLogin' })
   else next()
 })
 export default router

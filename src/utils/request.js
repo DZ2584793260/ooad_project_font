@@ -3,7 +3,7 @@ import axios from "axios";
 // import { Message } from "element-ui";
 const request = axios.create({
     //zzy
-    // baseURL: 'http://10.21.144.99:8080',
+    // baseURL: 'http://10.21.144.44:8080',
     //fcc
     baseURL: 'http://10.16.41.156:8080',
     //tyf

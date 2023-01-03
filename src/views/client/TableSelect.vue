@@ -1,6 +1,13 @@
 <!-- YUKI: edit12/17 -->
 <template>
   <div class="roomSelect">
+    <div class="breadcrumb">
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item v-for="(item, index) in $route.meta" key="index">
+          {{ item }}
+        </el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
     <div class="selectBox">
       <el-form :model="Form" :inline="true">
         <el-form-item label="价格上限">
@@ -222,6 +229,11 @@ export default {
 </script>
 
 <style scoped>
+.breadcrumb {
+  float: left;
+  margin-left: 25px;
+}
+
 .selectBox {
   text-align: right;
   margin: 10px 25px;
@@ -229,7 +241,7 @@ export default {
 
 .roomTable {
   margin: auto;
-  margin-top: 30px;
+  margin-top: 20px;
   width: 70%;
 }
 </style>

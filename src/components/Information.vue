@@ -33,7 +33,7 @@ export default {
         var duola = require("../assets/duola.png")
         return {
             img_list_1: [img2, img1, img3, img4],
-            img_list_2: [duola, duola, duola, duola],
+            img_list_2: [img2, img1, img3, img4],
             // 图片父容器高度
             bannerHeight: window.innerHeight,
             // 浏览器宽度

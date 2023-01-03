@@ -3,6 +3,11 @@
     <el-container>
       <el-aside width="200px"></el-aside>
       <el-main>
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item v-for="(item, index) in $route.meta" key="index">
+            {{ item }}
+          </el-breadcrumb-item>
+        </el-breadcrumb>
         <div class="title">
           请填写订单信息
         </div>
@@ -54,7 +59,7 @@
             </el-form-item>
 
             <el-form-item label="可用优惠券">
-              <el-button @click="drawer = true" type="primary" style="margin-left: 16px;">
+              <el-button @click="drawer = true" type="success" style="margin-left: 16px;">
                 查看已有优惠券
               </el-button>
 
@@ -65,18 +70,15 @@
                 </div>
               </el-drawer>
             </el-form-item>
-
-
           </el-form>
+        </div>
+        <div class="btn">
+          <el-button v-show="true" @click="backToTableSelect">取 消</el-button>
+          <el-button v-show="true" type="primary" @click="addRoom()">确 定</el-button>
         </div>
       </el-main>
       <el-aside width="200px"></el-aside>
-
     </el-container>
-    <div slot="footer" class="dialog-footer" align="center">
-      <el-button v-show="true" @click="backToTableSelect">取 消</el-button>
-      <el-button v-show="true" type="primary" @click="addRoom()">确 定</el-button>
-    </div>
   </div>
 
 </template>
@@ -91,36 +93,30 @@ export default {
       this.$router.push({ name: "clientTableSelect", params: { hotelName: this.hotelName, hotelId: this.companyGroupId, hotelAddress: this.hotelAddress } });
     },
     addRoom() {
-      const _this = this
       const dayjs = require('dayjs')
-      _this.formTable.ReserveCheckInTime = dayjs(_this.formTable.ReserveCheckInTime).format()
+      this.formTable.ReserveCheckInTime = dayjs(this.formTable.ReserveCheckInTime).format()
       // _this.formTable.ReserveCheckInTime = _this.formTable.ReserveCheckInTime.dayjs().millisecond(0).valueOf
-      _this.formTable.ReserveCheckOutTime = dayjs(_this.formTable.ReserveCheckOutTime).format()
+      this.formTable.ReserveCheckOutTime = dayjs(this.formTable.ReserveCheckOutTime).format()
       // _this.formTable.ReserveCheckOutTime = _this.formTable.ReserveCheckOutTime.dayjs().millisecond(0).valueOf
 
-
-      this.$api.orderApi.addNewOrder(_this.formTable.account, parseInt(_this.formTable.roomId),
-        _this.formTable.ReserveCheckInTime, _this.formTable.ReserveCheckOutTime,
-        parseInt(_this.formTable.roomAmount), (_this.formTable.price * 100))
+      const _this = this
+      this.$api.orderApi.addNewOrder(this.formTable.account, parseInt(this.formTable.roomId),
+        this.formTable.ReserveCheckInTime, this.formTable.ReserveCheckOutTime,
+        parseInt(this.formTable.roomAmount), (this.formTable.price * 100))
         .then(res => {
-          console.log(res)
-          this.$message({
-            showClose: true,
-            message: '您已经成功订房！',
-            type: 'success'
-          });
 
-          this.$router.push({ name: "clientTableSelect", params: { hotelName: this.hotelName, hotelId: this.companyGroupId, hotelAddress: this.hotelAddress } });
+          _this.$api.orderApi.orderpay(res.data.uuid, 100).then(res => {
+            this.$router.push({
+              path: '/client/successPay',
+              query: { html: res.data }
+            })
+          }).catch(err => {
+            console.log(err);
+          });
+          // this.$router.push({ name: "clientTableSelect", params: { hotelName: this.hotelName, hotelId: this.companyGroupId, hotelAddress: this.hotelAddress } });
         }).catch(err => {
           console.log(err)
         })
-      //支付API！！！！！！！！！！！！
-      // this.$api.orderApi.orderpay("12345678", 100)
-      //   .then(res => {
-      //     console.log(res)
-      //   }).catch(err => {
-      //     console.log(err);
-      //   });
     },
     getBeforeDate(num, time) {
       let n = num;
@@ -227,6 +223,8 @@ export default {
 .title {
   font-size: large;
   line-height: 1.5;
+  font-weight: bold;
+  margin: 15px 0px;
 }
 
 .coupon {
@@ -265,5 +263,9 @@ export default {
   line-height: 40px;
   text-indent: 5px;
   font-size: 30px;
+}
+
+.btn {
+  text-align: center;
 }
 </style>

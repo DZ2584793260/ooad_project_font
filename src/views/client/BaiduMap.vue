@@ -1,5 +1,12 @@
 <template>
   <div>
+    <div class="breadcrumb">
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item v-for="(item, index) in $route.meta" key="index">
+          {{ item }}
+        </el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
     <div class="selection">
       <el-form :model="queryForm" ref="queryForm" :inline="true">
         <el-form-item label="城市" prop="citySelected">
@@ -24,7 +31,8 @@
       <div class="info-middle" style="background-color: white;">
         <img class="image" :src="img_list[devInfo.icon]" alt />
         <br>地址：{{ devInfo.address }}<br>
-        <div class="info-div">集团：{{ devInfo.group }} </div><span class="info-span"> 前台电话：{{ devInfo.phone }}<br>
+        <div class="info-div">集团：{{ devInfo.group }} </div>
+        <span class="info-span"> 前台电话：{{ devInfo.phone }}<br>
           <el-button type="primary"
             @click="route(devInfo.hotelName, devInfo.hotelId, devInfo.hotelAddress)">查看门店房间</el-button>
         </span>
@@ -32,7 +40,6 @@
       <div class="info-bottom" style="position: relative; top: 0px; margin: 0px auto;"><img
           src="https://webapi.amap.com/images/sharp.png"></div>
     </div>
-
   </div>
 </template>
 <script>
@@ -267,5 +274,17 @@ div.info-bottom img {
 .amap-marker-content img {
   width: 64px;
   height: 64px;
+}
+
+.breadcrumb {
+  float: left;
+  margin-left: 25px;
+}
+
+.selection {
+  text-align: right;
+  margin-right: 25px;
+  margin-top: 10px;
+
 }
 </style>
