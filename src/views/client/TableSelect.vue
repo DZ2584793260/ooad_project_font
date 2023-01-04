@@ -3,7 +3,7 @@
   <div class="roomSelect">
     <div class="breadcrumb">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item v-for="(item, index) in $route.meta" key="index">
+        <el-breadcrumb-item v-for="item in $route.meta">
           {{ item }}
         </el-breadcrumb-item>
       </el-breadcrumb>
@@ -51,9 +51,7 @@
       <el-pagination v-model:page-size="pageSize" background @size-change="handleSizeChange"
         @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[2, 4, 6, 8]"
         layout="prev, pager, next, sizes, total, jumper" :total="total" />
-
     </div>
-
     <flatmap></flatmap>
   </div>
 </template>
@@ -76,12 +74,8 @@ export default {
         }
       });
     },
-    // handleClick(row) {
-    //   //YUKI: Add new room
-    // },
     handleSizeChange(val) {
       // 更改每页多少条数据
-      console.log(`每页 ${val} 条`);
       this.pageSize = val;
       this.handleCurrentChange();//默认更改每页多少条后重新加载第一页
     },
@@ -95,69 +89,46 @@ export default {
     },
     conditionQuery() {
       const _this = this
-      console.log(_this.Form)
       var Form = _this.Form
       Form.maxCost = parseInt(Form.maxCost)
       this.$api.clientApi.queryRoomConditionalCount(_this.companyGroupId, _this.hotelName,
         Form.maxCost, Form.startTime, Form.endTime)
         .then(res => {
-          console.log(res)
           _this.total = res.data
+
+          _this.$api.clientApi.queryRoomConditional(_this.companyGroupId, _this.hotelName,
+            Form.maxCost, Form.startTime, Form.endTime, _this.pageSize, _this.currentPage)
+            .then(resp => {
+              _this.tableData = resp.data
+              for (let i = 0; i < _this.tableData.length; i++) {
+                _this.tableData[i].guestRoomType = _this.roomType[_this.tableData[i].guestRoomType]
+                _this.tableData[i].price = _this.tableData[i].price / 100
+              }
+              _this.pageSize = 2
+              _this.currentPage = 1
+            }).catch(err => {
+              console.log(err)
+            })
         }).catch(err => {
           console.log(err)
         })
-
-
-      this.$api.clientApi.queryRoomConditional(_this.companyGroupId, _this.hotelName,
-        Form.maxCost, Form.startTime, Form.endTime, _this.pageSize, _this.currentPage)
-        .then(res => {
-          console.log(res)
-          _this.tableData = res.data
-          for (let i = 0; i < _this.tableData.length; i++) {
-            _this.tableData[i].roomStatus = this.roomStatus[_this.tableData[i].roomStatus]
-            _this.tableData[i].roomType = this.roomType[_this.tableData[i].roomType]
-          }
-          _this.pageSize = 2
-          _this.currentPage = 1
-        }).catch(err => {
-          console.log(err)
-        })
-    },
-    getDateTime(day) {
-      var _this = this;
-      let yy = new Date().getFullYear() + day;
-      let mm = new Date().getMonth() + 1;
-      let dd = new Date().getDate();
-      let hh = new Date().getHours();
-      let mf =
-        new Date().getMinutes() < 10
-          ? "0" + new Date().getMinutes()
-          : new Date().getMinutes();
-      let ss =
-        new Date().getSeconds() < 10
-          ? "0" + new Date().getSeconds()
-          : new Date().getSeconds();
-      let gettime = yy + "-" + mm + "-" + dd + " " + hh + ":" + mf + ":" + ss;
-      // console.log(gettime)
-      return gettime;
     },
     getHotelRoom(size, current) {
       const _this = this
-      // console.log(this.companyGroupId, this.hotelName)
       this.$api.adminApi.adminGetCountConditional(this.companyGroupId, this.hotelName)
         .then(res => {
-
           _this.total = res.data
         }).catch(err => {
           console.log(err)
         })
       this.$api.adminApi.adminGetRoomsByCondition(size, current, this.companyGroupId, this.hotelName)
         .then(res => {
-          console.log(res.data)
+          console.log(res)
           _this.tableData = res.data
+          console.log(_this.tableData)
           for (let i = 0; i < _this.tableData.length; i++) {
-            _this.tableData[i].roomStatus = this.roomStatus[_this.tableData[i].roomStatus]
-            _this.tableData[i].guestRoomType = this.roomType[_this.tableData[i].roomType]
+            _this.tableData[i].guestRoomType = _this.roomType[_this.tableData[i].guestRoomType]
+            _this.tableData[i].price = _this.tableData[i].price / 100
           }
         }).catch(err => {
           console.log(err)
@@ -174,57 +145,18 @@ export default {
         startTime: "",
         endTime: "",
       },
-      options: [
-        {
-          value: 0,
-          label: 'Free'
-        },
-        {
-          value: 1,
-          label: 'Reserved'
-        },
-        {
-          value: 2,
-          label: 'CheckIn'
-        },
-        {
-          value: 3,
-          label: 'LeftNeedClean'
-        }, {
-          value: 4,
-          label: 'NotOpen'
-        }
-        , {
-          value: 5,
-          label: 'OnCleaning'
-        },
-        {
-          value: 6,
-          label: 'WaitChecking'
-        }]
-      ,
-
-      // YUKI:取出url的参数
-      queryForm: {
-        citySelected: "",
-        keyword: ""
-      },
-      roomStatus: ["Free", "Reserved", "CheckIn", "LeftNeedClean", "NotOpen", "OnCleaning", "WaitChecking"],
       roomType: ["BarrierFree无障碍", "Single单人间", "Double双人间", "Triple三人间", "Quadruple四人套房", "Deluxe豪华套房"],
       currentPage: 1,
       queryCurrentPage: 1,
       total: 10,//数据一共多少
       pageSize: 2,//每页显示的行数,默认为2
       tableData: [],
-
     }
   },
-  created() {
+  mounted() {
     // 初始时表格展示的数据
     this.getHotelRoom(2, 1)
-    // console.log(this.queryForm)
-  },
-
+  }
 }
 </script>
 

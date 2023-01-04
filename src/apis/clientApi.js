@@ -27,7 +27,7 @@ export function getHotelConditional(pageSize, currentPage, citySelected, keyword
         }
     })
 }
-export function getRConditionCount(citySelected, keyword) {
+export function getHotelConditionCount(citySelected, keyword) {
     return request({
         method: 'GET',
         url: '/api/HotelInstance/getcountbycondition',
@@ -38,8 +38,6 @@ export function getRConditionCount(citySelected, keyword) {
     })
 }
 
-
-//YUKI: conditional query the room
 export function queryRoomConditional(companyGroupID, hotelName, Price, StartTime, EndTime, pageSize, currentPage) {
     return request({
         method: 'GET',

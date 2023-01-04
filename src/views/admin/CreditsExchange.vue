@@ -19,11 +19,6 @@
                 <el-table-column prop="contactNumber" label="联系电话">
                 </el-table-column>
 
-                <!-- <el-table-column align="center" fixed="right" label="操作" width="150px">
-                    <template slot-scope="scope">
-                        <el-button @click="handleUnsubscribe(scope.row)" type="text" size="small">取消订阅</el-button>
-                    </template>
-                </el-table-column> -->
             </el-table>
             <!--分页-->
             <el-pagination v-model:page-size="pageSize" background @size-change="handleSizeChange"
@@ -32,15 +27,6 @@
 
         </div>
 
-        <!-- <div class="deleteOrder">
-            <el-dialog :visible.sync="dialogVisible" width="35%" close-on-press-escape v-dialogDrag>
-                <span>确定取消订阅？</span>
-                <div style="text-align:right">
-                    <el-button type="primary" v-on:click="dialogSave()">确定</el-button>
-                    <el-button @click="dialogCancel()">退出</el-button>
-                </div>
-            </el-dialog>
-        </div> -->
     </div>
 </template>
   
@@ -52,34 +38,9 @@ export default {
             total: 10,//数据一共多少
             pageSize: 2,//每页显示的行数,默认为2
             tableData: [],
-            // dialogVisible: false,
-            // row: ""
         }
     },
     methods: {
-        // dialogCancel() {
-        //     this.dialogVisible = false;//对话框不显示
-        // },
-        // dialogSave() {
-        //     const _this = this
-        //     this.$api.clientApi.unsubscribeHotel(this.account, this.row.hotelName)
-        //         .then(res => {
-        //             _this.getAllAPI(this.pageSize, 1)
-        //         }).catch(err => {
-        //             console.log(err);
-        //         });
-        //     this.dialogVisible = false;
-        //     this.$message({
-        //         showClose: true,
-        //         message: '您已成功取消订阅酒店' + this.row.hotelName,
-        //         type: 'success'
-        //     });
-        // },
-        // handleUnsubscribe(row) {
-        //     this.dialogVisible = true;
-        //     this.row = row
-        // },
-
         handleSizeChange(val) {
             // 更改每页多少条数据
             console.log(`每页 ${val} 条`);

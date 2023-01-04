@@ -5,8 +5,6 @@
         <el-form-item label="城市" prop="citySelected">
           <el-select class="selectCity" placeholder="请选择城市" v-model="queryForm.citySelected"
             value="queryForm.citySelected" clearable>
-            <!-- <el-option v-for="item in tableData" :key="item.hotelName" :label="item.city" :value="item.city">
-                </el-option> -->
             <el-option label="北京" value="北京" />
             <el-option label="上海" value="上海" />
             <el-option label="广州" value="广州" />
@@ -49,11 +47,6 @@
         layout="prev, pager, next, sizes, total, jumper" :total="total" />
 
     </div>
-    {{ roomID }}
-    <!-- YUKI:testing how to the params transferred between pages -->
-    <div>
-
-    </div>
   </div>
 </template>
   
@@ -90,7 +83,6 @@ export default {
     conditionQuery() {
       this.queryOrNot = true;
       if (this.queryForm.citySelected === "" && this.queryForm.keyword === "") {
-        // this.getAllAPI(2, 1) //相当于重新刷新了
         this.getAllAPI(this.pageSize, 1)
         this.queryOrNot = false
       } else if (this.queryForm.citySelected === "" && this.queryForm.keyword !== "") {
@@ -153,14 +145,11 @@ export default {
       pageSize: 2,//每页显示的行数,默认为2
       tableData: [],
       queryOrNot: false,
-      //YUKI:testing param
-      roomID: 0,
     }
   },
   mounted() {
     // 初始时表格展示的数据
     this.getAllAPI(2, 1)
-    this.roomID = this.$route.params.roomID
   },
 }
 

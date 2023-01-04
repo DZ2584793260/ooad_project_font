@@ -4,7 +4,7 @@
       <el-aside width="200px"></el-aside>
       <el-main>
         <el-breadcrumb separator="/">
-          <el-breadcrumb-item v-for="(item, index) in $route.meta" key="index">
+          <el-breadcrumb-item v-for="item in $route.meta">
             {{ item }}
           </el-breadcrumb-item>
         </el-breadcrumb>
@@ -64,7 +64,6 @@
               </el-button>
 
               <el-drawer title="我是标题" :visible.sync="drawer" :with-header="false">
-                <!-- <span>我来啦!</span> -->
                 <div class="coupon" v-for="item in coupons" v-if="item != 0">
                   {{ item }}元抵用券
                 </div>
@@ -95,20 +94,17 @@ export default {
     addRoom() {
       const dayjs = require('dayjs')
       this.formTable.ReserveCheckInTime = dayjs(this.formTable.ReserveCheckInTime).format()
-      // _this.formTable.ReserveCheckInTime = _this.formTable.ReserveCheckInTime.dayjs().millisecond(0).valueOf
       this.formTable.ReserveCheckOutTime = dayjs(this.formTable.ReserveCheckOutTime).format()
-      // _this.formTable.ReserveCheckOutTime = _this.formTable.ReserveCheckOutTime.dayjs().millisecond(0).valueOf
 
       const _this = this
       this.$api.orderApi.addNewOrder(this.formTable.account, parseInt(this.formTable.roomId),
         this.formTable.ReserveCheckInTime, this.formTable.ReserveCheckOutTime,
-        parseInt(this.formTable.roomAmount), (this.formTable.price * 100))
+        parseInt(this.formTable.roomAmount), this.formTable.price)
         .then(res => {
-
-          _this.$api.orderApi.orderpay(res.data.uuid, 100).then(res => {
+          _this.$api.orderApi.orderpay(res.data.uuid, res.data.price).then(resp => {
             this.$router.push({
-              path: '/client/successPay',
-              query: { html: res.data }
+              path: '/client/pay',
+              query: { html: resp.data.body }
             })
           }).catch(err => {
             console.log(err);
@@ -130,14 +126,8 @@ export default {
       let mon = d.getMonth() + 1;
       let day = d.getDate();
       let hh = d.getHours();
-      let mf =
-        d.getMinutes() < 10
-          ? "0" + d.getMinutes()
-          : d.getMinutes();
-      let ss =
-        d.getSeconds() < 10
-          ? "0" + d.getSeconds()
-          : d.getSeconds();
+      let mf = d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes();
+      let ss = d.getSeconds() < 10 ? "0" + d.getSeconds() : d.getSeconds();
       if (day <= n) {
         if (mon > 1) {
           mon = mon - 1;
@@ -154,25 +144,16 @@ export default {
       return s;
     },
     getDateTime(time, day) {
-      console.log(time)
       if (time != "") {
         return time
       }
-      var _this = this;
       let yy = new Date().getFullYear();
       let mm = new Date().getMonth() + 1;
       let dd = new Date().getDate() + day;
       let hh = new Date().getHours();
-      let mf =
-        new Date().getMinutes() < 10
-          ? "0" + new Date().getMinutes()
-          : new Date().getMinutes();
-      let ss =
-        new Date().getSeconds() < 10
-          ? "0" + new Date().getSeconds()
-          : new Date().getSeconds();
+      let mf = new Date().getMinutes() < 10 ? "0" + new Date().getMinutes() : new Date().getMinutes();
+      let ss = new Date().getSeconds() < 10 ? "0" + new Date().getSeconds() : new Date().getSeconds();
       let gettime = yy + "-" + mm + "-" + dd + " " + hh + ":" + mf + ":" + ss;
-      // console.log(gettime)
       return gettime;
     },
   },
@@ -196,8 +177,6 @@ export default {
     }
   },
   created() {
-    // console.log(this.$route.params.startTime)
-    // console.log(this.$route.params.endTime)
     this.$api.orderApi.getCoupon(this.$store.getters.getUser.id)
       .then(res => {
         this.coupons = res.data

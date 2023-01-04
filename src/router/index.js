@@ -35,7 +35,6 @@ import adminUncommentOrder from '../views/admin/UncommentOrder.vue'
 import adminUnfinishOrder from '../views/admin/UnfinishOrder.vue'
 import adminFinishOrder from '../views/admin/FinishOrder.vue'
 import adminRoomEdit from '../views/admin/RoomEdit.vue'
-import adminRoomSelect from '../views/admin/RoomSelect.vue'
 import adminCreditsExchange from '../views/admin/CreditsExchange.vue'
 import adminEmployeeManage from '../views/admin/EmployeeManage.vue'
 Vue.use(VueRouter)
@@ -76,7 +75,7 @@ const routes = [
     component: ResetPassword
   },
 
-  //YUKI: check client side's main page
+  /////////////用户
   {
     //client side's home
     path: '/client',
@@ -116,13 +115,11 @@ const routes = [
         meta: ['用户', '门店信息', '房间信息', '房间预定']
       },
       {
-        //
         path: '/client/personalOrder',
         name: 'clientPersonalOrder',
         component: clientPersonalOrder
       },
       {
-        //
         path: '/client/reserveOrder',
         name: 'clientReserveOrder',
         component: clientReserveOrder
@@ -173,25 +170,18 @@ const routes = [
       },
     ]
   },
-
-  //YUKI: check admin side's main page
+  /////////管理员
   {
     path: '/admin',
     name: 'adminNav',
-    //暂时设的是管理员端必须登录
-    // meta: {
-    //   requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
-    // },
     component: adminNav,
     children: [
       {
-        //
         path: '/admin/graph',
         name: 'adminGraph',
         component: adminGraph
       },
       {
-        //
         path: '/admin/allOrder',
         name: 'adminAllOrder',
         component: adminAllOrder
@@ -215,16 +205,9 @@ const routes = [
 
       },
       {
-        //
         path: '/admin/roomEdit',
         name: 'adminRoomEdit',
         component: adminRoomEdit
-      },
-      {
-        //
-        path: '/admin/roomSelect',
-        name: 'adminRoomSelect',
-        component: adminRoomSelect
       },
       {
         path: '/admin/hotelInfo',
@@ -254,7 +237,8 @@ router.beforeEach((to, from, next) => {
   const paths = ['clientRoomReserve', 'clientMessageNotification',
     'clientFavorites', 'clientStore', 'clientPersonalOrder',
     'clientReserveOrder', 'clientUncommentOrder', 'clientFinishOrder']
-  if ((paths.includes(to.name) || to.path.includes("/admin")) && !token) next({ name: 'userLogin' })
+  // if ((paths.includes(to.name) || to.path.includes("/admin")) && !token) next({ name: 'userLogin' })
+  if ((paths.includes(to.name)) && !token) next({ name: 'userLogin' })
   else next()
 })
 export default router

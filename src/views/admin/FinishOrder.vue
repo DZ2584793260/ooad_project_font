@@ -1,4 +1,3 @@
-<!-- 已经完成评价的订单 和用户页面不完全一样 查看评价一样 -->
 <!-- 查看评价 -->
 <template>
     <div class="uncommentOrder">
@@ -66,7 +65,7 @@
                             </el-col>
                         </el-row>
                     </el-timeline-item>
-                    <!-- :on-preview="handlePreviewVideo" -->
+            
                     <el-timeline-item timestamp="视频评价" placement="top" v-if="videoOrNot">
                         <video-player class="video-player vjs-custom-skin" ref="videoPlayer" :playsinline="true"
                             :options="playerOptions" @play="onPlayerPlay($event)" @pause="onPlayerPause($event)">

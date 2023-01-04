@@ -1,5 +1,5 @@
 <template>
-    <!-- <span>支付成功</span> -->
+    <!-- xtbork7986@sandbox.com -->
 </template>
 <script>
 export default {

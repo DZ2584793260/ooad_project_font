@@ -79,7 +79,6 @@ export default {
         },
 
         handleSizeChange(val) {
-            // 更改每页多少条数据
             console.log(`每页 ${val} 条`);
             this.pageSize = val;
             this.handleCurrentChange(1);//默认更改每页多少条后重新加载第一页

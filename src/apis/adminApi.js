@@ -1,14 +1,4 @@
 import request from '../utils/request';
-//YUKI: graph api -> success
-// export function adminGraphing() {
-//     return request({
-//         method: 'GET',
-//         url: '/api/Order/GetWeekOrderCountByDay',
-//         params: {
-//             //So what params shall I put->nothing
-//         }
-//     })
-// }
 
 export function adminGetDefaultCount() {
     return request({
@@ -218,7 +208,6 @@ export function getWeekOrderCountByRoomNow() {
 }
 
 //YUKI:员工管理
-//YUKI
 //根据指定id来删除employee,删除行
 export function deleteEmployee(id) {
     return request({

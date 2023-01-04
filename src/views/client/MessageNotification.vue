@@ -35,15 +35,6 @@ import dayjs from "dayjs";
 export default {
     data() {
         return {
-            // activities: [
-            //     {
-            //         timestamp: "",
-            //         content: "211111111"
-            //     }, {
-            //         timestamp: "",
-            //         content: "333333333333"
-            //     }
-            // ],
             activities: [],
             dialogVisible: false,
         };

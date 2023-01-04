@@ -1,51 +1,35 @@
 <template>
     <div>
-
-        <div :style="{
-    float: 'center', width: '100%', height: '40px', 'padding-bottom': '1px'
-    , 'padding-top': '20px', 'font-size': '20px', 'text-align': 'center'
-}">当周七天订单交易额
+        <div
+            :style="{ float: 'center', width: '100%', height: '40px', 'padding-bottom': '1px', 'padding-top': '20px', 'font-size': '20px', 'text-align': 'center' }">
+            当周七天订单交易额
+        </div>
+        <div class="echart" id="weeklySumByDate"
+            :style="{ float: 'center', width: '100%', height: '400px', 'padding-bottom': '50px' }">
+        </div>
+        <div
+            :style="{ float: 'center', width: '100%', height: '40px', 'padding-bottom': '1px', 'padding-top': '20px', 'font-size': '20px', 'text-align': 'center' }">
+            当周七天订单各房型交易额
         </div>
 
-        <div class="echart" id="weeklySumByDate" :style="{
-    float: 'center', width: '100%', height: '400px', 'padding-bottom': '50px'
-}">
+        <div class="echart" id="weeklySumByRoom"
+            :style="{ float: 'center', width: '100%', height: '400px', 'padding-bottom': '50px', 'padding-top': '50px' }">
         </div>
 
-        <div :style="{
-    float: 'center', width: '100%', height: '40px', 'padding-bottom': '1px'
-    , 'padding-top': '20px', 'font-size': '20px', 'text-align': 'center'
-}">当周七天订单各房型交易额
+        <div
+            :style="{ float: 'center', width: '100%', height: '40px', 'padding-bottom': '1px', 'padding-top': '20px', 'font-size': '20px', 'text-align': 'center' }">
+            当周七天订单成交数量统计
         </div>
 
-        <div class="echart" id="weeklySumByRoom" :style="{
-    float: 'center', width: '100%', height: '400px', 'padding-bottom': '50px'
-    , 'padding-top': '50px'
-}">
+        <div class="echart" id="weeklyCountByDate"
+            :style="{ float: 'center', width: '100%', height: '400px', 'padding-bottom': '50px', 'padding-top': '50px' }">
         </div>
-
-        <div :style="{
-    float: 'center', width: '100%', height: '40px', 'padding-bottom': '1px'
-    , 'padding-top': '20px', 'font-size': '20px', 'text-align': 'center'
-}">当周七天订单成交数量统计
+        <div
+            :style="{ float: 'center', width: '100%', height: '40px', 'padding-bottom': '1px', 'padding-top': '20px', 'font-size': '20px', 'text-align': 'center' }">
+            当周七天订单成交各房型数量统计
         </div>
-
-        <div class="echart" id="weeklyCountByDate" :style="{
-    float: 'center', width: '100%', height: '400px', 'padding-bottom': '50px'
-    , 'padding-top': '50px'
-}">
-        </div>
-        <div :style="{
-    float: 'center', width: '100%', height: '40px', 'padding-bottom': '1px'
-    , 'padding-top': '20px', 'font-size': '20px', 'text-align': 'center'
-}">当周七天订单成交各房型数量统计
-        </div>
-
-
-        <div class="echart" id="weeklyCountByRoom" :style="{
-    float: 'center', width: '100%', height: '400px', 'padding-bottom': '50px'
-    , 'padding-top': '50px'
-}">
+        <div class="echart" id="weeklyCountByRoom"
+            :style="{ float: 'center', width: '100%', height: '400px', 'padding-bottom': '50px', 'padding-top': '50px' }">
         </div>
 
     </div>
@@ -284,7 +268,6 @@ export default {
                                 color: '#2B75D4',
                             }
                         },
-                        // data: []
                     }
                 ]
             },

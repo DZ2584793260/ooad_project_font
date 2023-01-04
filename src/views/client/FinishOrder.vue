@@ -34,7 +34,6 @@
           </template>
         </el-table-column>
       </el-table>
-      <!--分页-->
       <el-pagination v-model:page-size="pageSize" background @size-change="handleSizeChange"
         @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[2, 4, 6, 8]"
         layout="prev, pager, next, sizes, total, jumper" :total="total" />
@@ -42,8 +41,6 @@
 
     <div class="seeComment">
       <el-dialog :visible.sync="dialogVisible" :title="dialogTitle" width="500px" close-on-press-escape v-dialogDrag>
-        <!-- 查看评价 -->
-
         <el-timeline :model="dialogForm" ref="dialogForm">
 
           <el-timeline-item timestamp="评分" placement="top">
@@ -68,13 +65,11 @@
             </el-row>
           </el-timeline-item>
 
-          <!-- :on-preview="handlePreviewVideo" -->
           <el-timeline-item timestamp="视频评价" placement="top" v-if="videoOrNot">
             <video-player class="video-player vjs-custom-skin" ref="videoPlayer" :playsinline="true"
               :options="playerOptions" @play="onPlayerPlay($event)" @pause="onPlayerPause($event)">
             </video-player>
           </el-timeline-item>
-
 
         </el-timeline>
         <div style="text-align:right">

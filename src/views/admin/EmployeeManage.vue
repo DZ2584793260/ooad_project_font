@@ -6,7 +6,7 @@
 
         <el-table-column fixed align="center" prop="id" label="员工ID" v-if="!editOrNot">
         </el-table-column>
-        <el-table-column fixed align="center" label="员工ID" v-if="editOrNot">
+        <el-table-column key="1" fixed align="center" label="员工ID" v-if="editOrNot">
           <template v-slot="scope">
             <el-input :disabled="true" size="mini" v-model="scope.row.id"></el-input>
           </template>
@@ -68,7 +68,7 @@
         @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[2, 4, 6, 8]"
         layout="prev, pager, next, sizes, total, jumper" :total="total" />
 
-      <el-button type="primary" @click="openForm()">增加新员工</el-button>
+      <el-button type="success" @click="openForm()">增加新员工</el-button>
     </div>
 
 
@@ -184,7 +184,6 @@ export default {
         })
     },
     handleSizeChange(val) {
-      // console.log(val)
       this.pageSize = val
       this.getAllEmployee(this.pageSize, 1)
     },
@@ -193,7 +192,6 @@ export default {
       this.getAllEmployee(_this.pageSize, this.currentPage)
     },
     getAllEmployee(size, current) {
-      // console.log(size,current)
       const _this = this
       this.$api.adminApi.getAllEmployeeCount()
         .then(res => {
@@ -203,7 +201,6 @@ export default {
         });
       this.$api.adminApi.getAllEmployee(size, current)
         .then(res => {
-          // console.log(res)
           _this.tableData = res.data
           _this.tableDataCopy = res.data
         }).catch(err => {

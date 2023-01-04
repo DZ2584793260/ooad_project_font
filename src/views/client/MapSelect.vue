@@ -38,7 +38,7 @@ export default {
   methods: {
     initMap() {
       const getStyles = (param) => {
-        console.log(param);
+        // console.log(param);
         const style = new Style({
           stroke: new Stroke({
             color: '#2d9fd8',
@@ -63,7 +63,7 @@ export default {
           style.getStroke().setColor('#ad8677');
         }
         style.getText().setText(param);
-        console.log(style.getText());
+        // console.log(style.getText());
         return style;
       };
       const styleFunction = (feature) => getStyles(feature.values_.modelId);
@@ -104,7 +104,7 @@ export default {
         },
         ],
       };
-      console.log((new GeoJSON()).readFeatures(geojsonObject));
+      // console.log((new GeoJSON()).readFeatures(geojsonObject));
       const vectorSource = new VectorSource({
         features: (new GeoJSON()).readFeatures(geojsonObject),
       });

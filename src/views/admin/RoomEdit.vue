@@ -1,3 +1,4 @@
+<!-- 对于前端来说，钩子函数就是指再所有函数执行前，我先执行了的函数，即钩住 我感兴趣的函数，只要它执行，我就先执行。 -->
 <template>
   <div class="roomEdit">
     <!-- YUKI: add new room, expect to fill a form which will check simple grammar -->
@@ -8,7 +9,7 @@
           </el-input>
         </el-form-item>
         <el-form-item label="房间状态">
-          <el-select v-model="priceStatusQuery.roomStatus" placeholder="请筛选房间状态">
+          <el-select v-model="priceStatusQuery.roomStatus" placeholder="请筛选房间状态" clearable>
             <el-option label="All" value="7"></el-option>
             <el-option label="Free" value="0"></el-option>
             <el-option label="Reserved" value="1"></el-option>
@@ -19,62 +20,81 @@
             <el-option label="WaitChecking" value="6"></el-option>
           </el-select>
         </el-form-item>
-
         <el-button type="primary" @click="conditionalQuery(); checkOrNot = true">查询</el-button>
       </el-form>
     </div>
-
-
 
 
     <div class="roomTable">
       <el-table :data="tableData" border style="width: 100%"
         :header-cell-style="{ background: '#00abbe', color: '#fff', 'text-align': 'center' }" highlight-current-row>
         <el-table-column fixed prop="id" label="房间号码"></el-table-column>
-        <el-table-column prop="floor" label="所在楼层"></el-table-column>
         <el-table-column prop="address" label="地址"></el-table-column>
-        <el-table-column prop="roomType" label="房间类型"></el-table-column>
-        <el-table-column prop="price" label="价格" v-if="!editOrNot">
 
+        <el-table-column key="1" label="房间标题" v-if="editOrNot">
+          <template v-slot="scope">
+            <el-input placeholder="请输入标题" size="mini" v-model="scope.row.title" v-if="editOrNot"></el-input>
+          </template>
         </el-table-column>
+        <el-table-column prop="title" label="房间标题" v-if="!editOrNot"></el-table-column>
 
+        <el-table-column label="房间类型" v-if="editOrNot">
+          <template v-slot="scope">
+            <el-select size="mini" v-model="scope.row.roomType" placeholder="请选择房间类型" v-if="editOrNot">
+              <el-option v-for="item in roomType" :key="item" :label="item" :value="item">
+              </el-option>
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column prop="roomType" label="房间类型" v-if="!editOrNot"></el-table-column>
 
         <el-table-column label="房间状态" v-if="editOrNot">
           <template v-slot="scope">
             <el-select size="mini" v-model="scope.row.roomStatus" placeholder="请选择房间状态" v-if="editOrNot">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+              <el-option v-for="item in roomStatus" :key="item" :label="item" :value="item">
               </el-option>
             </el-select>
-            <!-- <span v-if="editOrNot">{{ scope.row.roomStatus }}</span> -->
           </template>
         </el-table-column>
-
-        <el-table-column prop="roomStatus" label="房间状态" v-if="!editOrNot">
-
-        </el-table-column>
-
-        <el-table-column prop="ichnography" label="房间图片链接" v-if="!editOrNot">
-
-        </el-table-column>
-
-        <el-table-column label="房间图片链接" v-if="editOrNot">
-          <template v-slot="scope">
-            <el-input placeholder="请输入房间图片链接" size="mini" v-model="scope.row.ichnography"></el-input>
-            <!-- <span v-if="editOrNot">{{scope.row.ichnography }}</span> -->
-          </template>
-        </el-table-column>
-
-
-
-
-
+        <el-table-column prop="roomStatus" label="房间状态" v-if="!editOrNot"></el-table-column>
 
         <el-table-column label="价格" v-if="editOrNot">
           <template v-slot="scope">
             <el-input placeholder="请输入价格" size="mini" v-model="scope.row.price" v-if="editOrNot"></el-input>
-            <!-- <span v-if="editOrNot">{{scope.row.price }}</span> -->
           </template>
         </el-table-column>
+        <el-table-column prop="price" label="价格" v-if="!editOrNot"></el-table-column>
+
+        <el-table-column label="房间面积" v-if="editOrNot">
+          <template v-slot="scope">
+            <el-input placeholder="请输入面积" size="mini" v-model="scope.row.area" v-if="editOrNot"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="area" label="房间面积" v-if="!editOrNot"></el-table-column>
+
+        <el-table-column label="床数" v-if="editOrNot">
+          <template v-slot="scope">
+            <el-input placeholder="请输入床数" size="mini" v-model="scope.row.bedCount" v-if="editOrNot"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="bedCount" label="床数" v-if="!editOrNot"></el-table-column>
+
+        <el-table-column label="窗户数" v-if="editOrNot">
+          <template v-slot="scope">
+            <el-input placeholder="请输入窗户数" size="mini" v-model="scope.row.windowCount" v-if="editOrNot"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="windowCount" label="窗户数" v-if="!editOrNot"></el-table-column>
+
+        <el-table-column label="矿泉水数" v-if="editOrNot">
+          <template v-slot="scope">
+            <el-input placeholder="请输入矿泉水数" size="mini" v-model="scope.row.mineralWaterCount"
+              v-if="editOrNot"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="mineralWaterCount" label="矿泉水数" v-if="!editOrNot"></el-table-column>
+
+
         <el-table-column align="center" fixed="right" label="操作" width="200">
           <template slot-scope="scope">
             <el-button @click="handleEdit()" v-show="!editOrNot" type="success" size="small">编辑</el-button>
@@ -86,60 +106,53 @@
           </template>
         </el-table-column>
       </el-table>
-      <!--分页-->
+
       <el-pagination v-model:page-size="pageSize" background @size-change="handleSizeChange"
         @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[2, 4, 6, 8]"
         layout="prev, pager, next, sizes, total, jumper" :total="total" />
-      <el-button @click="openForm()">增加新房间</el-button>
+      <el-button type="success" @click="openForm()">增加新房间</el-button>
       <el-button type="primary" @click="backToHotelInfo()">返 回</el-button>
     </div>
 
 
     <div class="form">
-      <el-dialog title="添加新房间" :visible.sync="addOrNot">
+      <el-dialog title="添加新房间" :visible.sync="addOrNot" width="35%">
         <el-form :model="form">
-          <el-form-item label="房间所在楼层" :label-width="formLabelWidth">
-            <el-input v-model="form.Floor" autocomplete="off"></el-input>
-          </el-form-item>
           <el-form-item label="门店地址" :label-width="formLabelWidth">
             <el-input v-model="form.Address" autocomplete="off" :disabled="true"></el-input>
           </el-form-item>
           <el-form-item label="房间类型" :label-width="formLabelWidth">
-            <el-input v-model="form.RoomType" :disabled="true">
-            </el-input>
-
+            <el-select placeholder="请选择房间类型" v-model="form.RoomType" value="form.RoomType" clearable>
+              <el-option label="GuestRoom" value="0" />
+              <el-option label="LaundryRoom" value="1" />
+              <el-option label="GymRoom" value="2" />
+              <el-option label="StaffRoom" value="3" />
+              <el-option label="MeetingRoom" value="4" />
+            </el-select>
           </el-form-item>
 
           <el-form-item label="房间状态" :label-width="formLabelWidth">
             <el-select v-model="form.RoomStatus" placeholder="请选择房间状态">
-
-              <el-option label="Free" value="0"></el-option>
-              <el-option label="Reserved" value="1"></el-option>
-              <el-option label="CheckIn" value="2"></el-option>
-              <el-option label="LeftNeedClean" value="3"></el-option>
-              <el-option label="NotOpen" value="4"></el-option>
-              <el-option label="OnCleaning" value="5"></el-option>
-              <el-option label="WaitChecking" value="6"></el-option>
+              <el-option label="Free" value="0" />
+              <el-option label="Reserved" value="1" />
+              <el-option label="CheckIn" value="2" />
+              <el-option label="LeftNeedClean" value="3" />
+              <el-option label="NotOpen" value="4" />
+              <el-option label="OnCleaning" value="5" />
+              <el-option label="WaitChecking" value="6" />
             </el-select>
           </el-form-item>
-
 
           <el-form-item label="门店ID" :label-width="formLabelWidth">
             <el-input v-model="form.HotelInstanceID" :disabled="true">
             </el-input>
-
           </el-form-item>
-
-
 
           <el-form-item label="价格" :label-width="formLabelWidth">
             <el-input v-model="form.Price" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="房间标题" :label-width="formLabelWidth">
             <el-input v-model="form.Title" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="图片链接" :label-width="formLabelWidth">
-            <el-input v-model="form.Ichnography" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="房间面积" :label-width="formLabelWidth">
             <el-input v-model="form.Area" autocomplete="off"></el-input>
@@ -153,16 +166,13 @@
           <el-form-item label="预备矿泉水数量" :label-width="formLabelWidth">
             <el-input v-model="form.MineralWaterCount" autocomplete="off"></el-input>
           </el-form-item>
-
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="closeForm()">取 消</el-button>
           <el-button type="primary" @click="addRoom()">确 定</el-button>
-
         </div>
       </el-dialog>
     </div>
-
   </div>
 </template>
 
@@ -175,7 +185,6 @@ export default {
     },
     conditionalQuery() {
       const _this = this
-      console.log(this.priceStatusQuery)
       var page = _this.currentPage
       if (_this.checkOrNot) {
         page = 1
@@ -185,21 +194,18 @@ export default {
         this.$api.adminApi.adminPriceStatusSelectCount(_this.companyGroupId, _this.hotelName,
           parseInt(_this.priceStatusQuery.price), parseInt(_this.priceStatusQuery.roomStatus))
           .then(res => {
-            // console.log(res)
             _this.total = res.data
-
           }).catch(err => {
             console.log(err)
           })
         this.$api.adminApi.adminPriceStatusSelect(_this.companyGroupId, _this.hotelName,
           parseInt(_this.priceStatusQuery.price), _this.pageSize, page, parseInt(_this.priceStatusQuery.roomStatus))
           .then(res => {
-            // console.log(res)
             _this.tableData = res.data
-
             for (let i = 0; i < _this.tableData.length; i++) {
               _this.tableData[i].roomStatus = this.roomStatus[_this.tableData[i].roomStatus]
               _this.tableData[i].roomType = this.roomType[_this.tableData[i].roomType]
+              _this.tableData[i].price = _this.tableData[i].price / 100
             }
           }).catch(err => {
             console.log(err)
@@ -208,33 +214,28 @@ export default {
         this.$api.adminApi.adminPriceSelectCount(_this.companyGroupId, _this.hotelName,
           parseInt(_this.priceStatusQuery.price))
           .then(res => {
-            console.log(res)
             _this.total = res.data
-
           }).catch(err => {
             console.log(err)
           })
         this.$api.adminApi.adminPriceSelect(_this.companyGroupId, _this.hotelName,
           _this.pageSize, page, parseInt(_this.priceStatusQuery.price))
           .then(res => {
-            console.log(res)
             _this.tableData = res.data
-
             for (let i = 0; i < _this.tableData.length; i++) {
               _this.tableData[i].roomStatus = this.roomStatus[_this.tableData[i].roomStatus]
               _this.tableData[i].roomType = this.roomType[_this.tableData[i].roomType]
+              _this.tableData[i].price = _this.tableData[i].price / 100
             }
           }).catch(err => {
             console.log(err)
           })
       }
-      //YUKI: roomstatus needs to be parsed into integer
-
     },
     handleEdit() {
       this.editOrNot = true
       this.tableCopyData = JSON.parse(JSON.stringify(this.tableData))
-      //YUKI：进入edit状态，可修改三项
+      //YUKI：进入edit状态
     },
     warn(idx, tableData) {
       this.$confirm('此操作将永久删除该房间, 是否继续?', '提示', {
@@ -256,25 +257,22 @@ export default {
     },
     addRoom() {
       const _this = this
-      console.log(this.form)
       var form = this.form
-      form.Floor = parseInt(form.Floor)
+      form.RoomType = parseInt(form.RoomType)
       form.RoomStatus = parseInt(form.RoomStatus)
       form.HotelInstanceID = parseInt(form.HotelInstanceID)
-      form.Price = parseInt(form.Price)
+      form.Price = parseFloat(form.Price) * 100
       form.Area = parseInt(form.Area)
       form.BedCount = parseInt(form.BedCount)
       form.WindowCount = parseInt(form.WindowCount)
       form.MineralWaterCount = parseInt(form.MineralWaterCount)
-      console.log(form)
-      this.$api.adminApi.adminAddRoom(form.Floor, form.Address, form.RoomStatus, 0, form.HotelInstanceID, form.Price, form.Title, form.Ichnography,
+      this.$api.adminApi.adminAddRoom(0, form.Address, form.RoomStatus, form.RoomType, form.HotelInstanceID, form.Price, form.Title, "",
         form.Area, form.BedCount, form.WindowCount, form.MineralWaterCount, form.CandomCount)
         .then(res => {
           _this.form = _this.copy
           _this.addOrNot = false
           _this.currentPage = 1
-          _this.pageSize = 2
-          _this.getHotelRoom(2, 1)
+          _this.getHotelRoom(_this.pageSize, 1)
         }).catch(err => {
           console.log(err)
           alert("mistakes happen!")
@@ -282,94 +280,66 @@ export default {
     },
     handleDelete(idx, table) {
       const _this = this
-      //YUKI: Delete
       var row = table[idx]
       var id = row.id
-      // console.log(id)
       this.$api.adminApi.adminDeleteRoom(id)
         .then(res => {
-          console.log(res)
-          // _this.total = res.data
           this.$message({
             type: 'success',
             message: '删除成功!'
 
           });
           this.currentPage = 1
-          this.pageSize = 2
-          this.getHotelRoom(2, 1)
+          this.getHotelRoom(this.pageSize, 1)
         }
-
         ).catch(err => {
           console.log(err)
         })
-
-
     },
     handleSave(idx, table) {
       const _this = this
       var row = table[idx]
+      // row.roomStatus 是文字 status是数字
       var status = row.roomStatus
-      if (status == 0) {
-        status = "Free"
-      } else if (status == 1) {
-        status = "Reserved"
-      } else if (status == 2) {
-        status = "CheckIn"
-      } else if (status == 3) {
-        status = "LeftNeedClean"
-      } else if (status == 4) {
-        status = "NotOpen"
-      } else if (status == 5) {
-        status = "OnCleaning"
-      } else if (status == 6) {
-        status = "WaitChecking"
-      }
-      table[idx].roomStatus = status
-      _this.tableData = table
-      const price = parseInt(row.price)
-      var status = row.roomStatus
-      if (status == "Free") {
-        status = 0
-      } else if (status == "Reserved") {
-        status = 1
-      } else if (status == "CheckIn") {
-        status = 2
-      } else if (status == "LeftNeedClean") {
-        status = 3
-      } else if (status == "NotOpen") {
-        status = 4
-      } else if (status == "OnCleaning") {
-        status = 5
-      } else if (status == "WaitChecking") {
-        status = 6
-      }
-      this.$api.adminApi.adminModifyRoom(row.id, status, price, row.ichnography)
+      if (status == "Free") status = 0
+      else if (status == "Reserved") status = 1
+      else if (status == "CheckIn") status = 2
+      else if (status == "LeftNeedClean") status = 3
+      else if (status == "NotOpen") status = 4
+      else if (status == "OnCleaning") status = 5
+      else if (status == "WaitChecking") status = 6
+
+      var type = row.roomType
+      if (type == "GuestRoom") type = 0
+      else if (type == "LaundryRoom") type = 1
+      else if (type == "GymRoom") type = 2
+      else if (type == "StaffRoom") type = 3
+      else if (type == "MeetingRoom") type = 4
+      // type
+      // parseInt(row.area)
+      // parseInt(row.bedCount)
+      // parseInt(row.windowCount)
+      // parseInt(row.mineralWaterCount)
+      this.$api.adminApi.adminModifyRoom(row.id, status, parseFloat(row.price) * 100, "")
         .then(res => {
           console.log(res)
-          // _this.total = res.data
         }).catch(err => {
           console.log(err)
         })
-      console.log(row.id, status, price, row.ichnography)
-      // console.log(row)
-
-      // this.handleCurrentChange();
-      _this.editOrNot = false;
+      _this.tableData = table
+      this.editOrNot = false;
     },
+
     handleCancel() {
       //刷新
       this.tableData = JSON.parse(JSON.stringify(this.tableCopyData))
-      // this.handleCurrentChange();
       this.editOrNot = false;
     },
     openForm() {
-      //YUKI: Add new room
-      this.addOrNot = true
+      this.addOrNot = true  //添加新房间
     },
     handleSizeChange(val) {
       // 更改每页多少条数据
-      console.log(`每页 ${val} 条`);
       this.pageSize = val;
       this.handleCurrentChange();//默认更改每页多少条后重新加载第一页
     },
@@ -379,28 +349,24 @@ export default {
       } else {
         this.conditionalQuery()
       }
-
     },
 
     getHotelRoom(size, current) {
       const _this = this
       this.$api.adminApi.adminGetCountConditional(this.companyGroupId, this.hotelName)
         .then(res => {
-          // console.log(res)
           _this.total = res.data
-
         }).catch(err => {
           console.log(err)
         })
-      console.log(size, current, this.companyGroupId, this.hotelName)
       this.$api.adminApi.adminGetRoomsByCondition(size, current, this.companyGroupId, this.hotelName)
         .then(res => {
           _this.tableData = res.data
           for (let i = 0; i < _this.tableData.length; i++) {
             _this.tableData[i].roomStatus = this.roomStatus[_this.tableData[i].roomStatus]
             _this.tableData[i].roomType = this.roomType[_this.tableData[i].roomType]
+            _this.tableData[i].price = _this.tableData[i].price / 100
           }
-
         }).catch(err => {
           console.log(err)
         })
@@ -411,14 +377,12 @@ export default {
     return {
       formLabelWidth: '120px',
       copy: {
-        Floor: 0,
         Address: this.$route.params.hotelAddress,
-        RoomStatus: 0,//需要转换成int传过去
-        RoomType: '',//不允许其他
+        RoomStatus: '0',//需要转换成int传过去
+        RoomType: '0',
         HotelInstanceID: this.$route.params.hotelId,
         Price: 100,
         Title: '',
-        Ichnography: '',
         Area: 10,
         BedCount: 2,
         WindowCount: 2,
@@ -426,14 +390,12 @@ export default {
         CandomCount: 3
       },
       form: {
-        Floor: 0,
         Address: this.$route.params.hotelAddress,
-        RoomStatus: 0,//需要转换成int传过去
-        RoomType: 'GuestRoom',//不允许其他
+        RoomStatus: '0',//需要转换成int传过去
+        RoomType: '0',
         HotelInstanceID: this.$route.params.hotelId,
         Price: 100,
         Title: '',
-        Ichnography: '',
         Area: 10,
         BedCount: 2,
         WindowCount: 2,
@@ -446,34 +408,6 @@ export default {
       },
       addOrNot: false,
       checkOrNot: false,
-      options: [{
-        value: 0,
-        label: 'Free'
-      },
-      {
-        value: 1,
-        label: 'Reserved'
-      },
-      {
-        value: 2,
-        label: 'CheckIn'
-      },
-      {
-        value: 3,
-        label: 'LeftNeedClean'
-      }, {
-        value: 4,
-        label: 'NotOpen'
-      }
-        , {
-        value: 5,
-        label: 'OnCleaning'
-      },
-      {
-        value: 6,
-        label: 'WaitChecking'
-      }]
-      ,
       editOrNot: false,
       roomStatus: ["Free", "Reserved", "CheckIn", "LeftNeedClean", "NotOpen", "OnCleaning", "WaitChecking"],
       roomType: ["GuestRoom", "LaundryRoom", "GymRoom", "StaffRoom", "MeetingRoom"],
@@ -493,10 +427,6 @@ export default {
   created() {
     // 初始时表格展示的数据
     this.getHotelRoom(2, 1)
-    console.log(this.$route.params)
-  },
-  //对于前端来说，钩子函数就是指再所有函数执行前，我先执行了的函数，即 钩住 我感兴趣的函数，只要它执行，我就先执行。
-  mounted() {
   }
 }
 </script>
@@ -510,6 +440,6 @@ export default {
 .roomTable {
   margin: auto;
   margin-top: 30px;
-  width: 70%;
+  width: 90%;
 }
 </style>

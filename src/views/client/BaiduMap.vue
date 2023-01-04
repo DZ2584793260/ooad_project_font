@@ -2,7 +2,7 @@
   <div>
     <div class="breadcrumb">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item v-for="(item, index) in $route.meta" key="index">
+        <el-breadcrumb-item v-for="item in $route.meta">
           {{ item }}
         </el-breadcrumb-item>
       </el-breadcrumb>
