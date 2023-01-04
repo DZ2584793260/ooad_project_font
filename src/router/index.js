@@ -155,7 +155,7 @@ const routes = [
       },
       {
         path: '/client/pointItemView',
-        name: 'lientPointItemView',
+        name: 'clientPointItemView',
         component: clientPointItemView
       },
       {
@@ -236,9 +236,10 @@ router.beforeEach((to, from, next) => {
   const token = localStorage.getItem("token")
   const paths = ['clientRoomReserve', 'clientMessageNotification',
     'clientFavorites', 'clientStore', 'clientPersonalOrder',
-    'clientReserveOrder', 'clientUncommentOrder', 'clientFinishOrder']
-  // if ((paths.includes(to.name) || to.path.includes("/admin")) && !token) next({ name: 'userLogin' })
+    'clientReserveOrder', 'clientUncommentOrder', 'clientFinishOrder',
+    'clientShippingAddress', 'clientPointItemView']
   if ((paths.includes(to.name)) && !token) next({ name: 'userLogin' })
+  else if (to.path.includes("/admin") && to.name != 'administratorLogin' && !token) next({ name: 'administratorLogin' })
   else next()
 })
 export default router

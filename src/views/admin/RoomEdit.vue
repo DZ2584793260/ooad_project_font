@@ -5,7 +5,7 @@
     <div class="selectBox">
       <el-form :model="priceStatusQuery" :inline="true">
         <el-form-item label="价格上限">
-          <el-input placeholder="请筛选价格上限" v-model="priceStatusQuery.price">
+          <el-input placeholder="请筛选价格上限" v-model="priceStatusQuery.price" clearable>
           </el-input>
         </el-form-item>
         <el-form-item label="房间状态">
@@ -38,15 +38,6 @@
         </el-table-column>
         <el-table-column prop="title" label="房间标题" v-if="!editOrNot"></el-table-column>
 
-        <el-table-column label="房间类型" v-if="editOrNot">
-          <template v-slot="scope">
-            <el-select size="mini" v-model="scope.row.roomType" placeholder="请选择房间类型" v-if="editOrNot">
-              <el-option v-for="item in roomType" :key="item" :label="item" :value="item">
-              </el-option>
-            </el-select>
-          </template>
-        </el-table-column>
-        <el-table-column prop="roomType" label="房间类型" v-if="!editOrNot"></el-table-column>
 
         <el-table-column label="房间状态" v-if="editOrNot">
           <template v-slot="scope">
@@ -56,6 +47,7 @@
             </el-select>
           </template>
         </el-table-column>
+
         <el-table-column prop="roomStatus" label="房间状态" v-if="!editOrNot"></el-table-column>
 
         <el-table-column label="价格" v-if="editOrNot">
@@ -121,15 +113,6 @@
           <el-form-item label="门店地址" :label-width="formLabelWidth">
             <el-input v-model="form.Address" autocomplete="off" :disabled="true"></el-input>
           </el-form-item>
-          <el-form-item label="房间类型" :label-width="formLabelWidth">
-            <el-select placeholder="请选择房间类型" v-model="form.RoomType" value="form.RoomType" clearable>
-              <el-option label="GuestRoom" value="0" />
-              <el-option label="LaundryRoom" value="1" />
-              <el-option label="GymRoom" value="2" />
-              <el-option label="StaffRoom" value="3" />
-              <el-option label="MeetingRoom" value="4" />
-            </el-select>
-          </el-form-item>
 
           <el-form-item label="房间状态" :label-width="formLabelWidth">
             <el-select v-model="form.RoomStatus" placeholder="请选择房间状态">
@@ -184,53 +167,41 @@ export default {
       this.$router.push({ name: "adminHotelInfo", params: { hotelName: this.hotelName, hotelId: this.companyGroupId, hotelAddress: this.hotelAddress } });
     },
     conditionalQuery() {
-      const _this = this
-      var page = _this.currentPage
-      if (_this.checkOrNot) {
+      var page = this.currentPage
+      if (this.checkOrNot) {
         page = 1
-        _this.checkOrNot = false
+        this.checkOrNot = false
       }
-      if (_this.priceStatusQuery.roomStatus != "" && _this.priceStatusQuery.roomStatus != "7") {
-        this.$api.adminApi.adminPriceStatusSelectCount(_this.companyGroupId, _this.hotelName,
-          parseInt(_this.priceStatusQuery.price), parseInt(_this.priceStatusQuery.roomStatus))
-          .then(res => {
-            _this.total = res.data
-          }).catch(err => {
-            console.log(err)
-          })
-        this.$api.adminApi.adminPriceStatusSelect(_this.companyGroupId, _this.hotelName,
-          parseInt(_this.priceStatusQuery.price), _this.pageSize, page, parseInt(_this.priceStatusQuery.roomStatus))
-          .then(res => {
-            _this.tableData = res.data
-            for (let i = 0; i < _this.tableData.length; i++) {
-              _this.tableData[i].roomStatus = this.roomStatus[_this.tableData[i].roomStatus]
-              _this.tableData[i].roomType = this.roomType[_this.tableData[i].roomType]
-              _this.tableData[i].price = _this.tableData[i].price / 100
-            }
-          }).catch(err => {
-            console.log(err)
-          })
+      if (this.priceStatusQuery.price == "" && this.priceStatusQuery.roomStatus == "") {
+        this.getHotelRoom(this.pageSize, 1)
+      } else if (this.priceStatusQuery.price == "" && this.priceStatusQuery.roomStatus != "") {
+        this.queryAPI(page, -1, this.priceStatusQuery.roomStatus)
+      } else if (this.priceStatusQuery.price != "" && this.priceStatusQuery.roomStatus == "") {
+        this.queryAPI(page, this.priceStatusQuery.price, -1)
       } else {
-        this.$api.adminApi.adminPriceSelectCount(_this.companyGroupId, _this.hotelName,
-          parseInt(_this.priceStatusQuery.price))
-          .then(res => {
-            _this.total = res.data
-          }).catch(err => {
-            console.log(err)
-          })
-        this.$api.adminApi.adminPriceSelect(_this.companyGroupId, _this.hotelName,
-          _this.pageSize, page, parseInt(_this.priceStatusQuery.price))
-          .then(res => {
-            _this.tableData = res.data
-            for (let i = 0; i < _this.tableData.length; i++) {
-              _this.tableData[i].roomStatus = this.roomStatus[_this.tableData[i].roomStatus]
-              _this.tableData[i].roomType = this.roomType[_this.tableData[i].roomType]
-              _this.tableData[i].price = _this.tableData[i].price / 100
-            }
-          }).catch(err => {
-            console.log(err)
-          })
+        this.queryAPI(page, this.priceStatusQuery.price, this.priceStatusQuery.roomStatus)
       }
+    },
+    queryAPI(page, price, roomStatus) {
+      const _this = this
+      this.$api.adminApi.adminPriceStatusSelectCount(_this.companyGroupId, _this.hotelName,
+        parseInt(price), parseInt(roomStatus))
+        .then(res => {
+          _this.total = res.data
+        }).catch(err => {
+          console.log(err)
+        })
+      this.$api.adminApi.adminPriceStatusSelect(_this.companyGroupId, _this.hotelName,
+        parseInt(price), _this.pageSize, page, parseInt(roomStatus))
+        .then(res => {
+          _this.tableData = res.data
+          for (let i = 0; i < _this.tableData.length; i++) {
+            _this.tableData[i].roomStatus = this.roomStatus[_this.tableData[i].roomStatus]
+            _this.tableData[i].price = _this.tableData[i].price / 100
+          }
+        }).catch(err => {
+          console.log(err)
+        })
     },
     handleEdit() {
       this.editOrNot = true
@@ -258,15 +229,14 @@ export default {
     addRoom() {
       const _this = this
       var form = this.form
-      form.RoomType = parseInt(form.RoomType)
       form.RoomStatus = parseInt(form.RoomStatus)
       form.HotelInstanceID = parseInt(form.HotelInstanceID)
-      form.Price = parseFloat(form.Price) * 100
+      form.Price = parseInt(form.Price) * 100
       form.Area = parseInt(form.Area)
       form.BedCount = parseInt(form.BedCount)
       form.WindowCount = parseInt(form.WindowCount)
       form.MineralWaterCount = parseInt(form.MineralWaterCount)
-      this.$api.adminApi.adminAddRoom(0, form.Address, form.RoomStatus, form.RoomType, form.HotelInstanceID, form.Price, form.Title, "",
+      this.$api.adminApi.adminAddRoom(0, form.Address, form.RoomStatus, 0, form.HotelInstanceID, form.Price, form.Title, "",
         form.Area, form.BedCount, form.WindowCount, form.MineralWaterCount, form.CandomCount)
         .then(res => {
           _this.form = _this.copy
@@ -309,18 +279,8 @@ export default {
       else if (status == "OnCleaning") status = 5
       else if (status == "WaitChecking") status = 6
 
-      var type = row.roomType
-      if (type == "GuestRoom") type = 0
-      else if (type == "LaundryRoom") type = 1
-      else if (type == "GymRoom") type = 2
-      else if (type == "StaffRoom") type = 3
-      else if (type == "MeetingRoom") type = 4
-      // type
-      // parseInt(row.area)
-      // parseInt(row.bedCount)
-      // parseInt(row.windowCount)
-      // parseInt(row.mineralWaterCount)
-      this.$api.adminApi.adminModifyRoom(row.id, status, parseFloat(row.price) * 100, "")
+      this.$api.adminApi.adminModifyRoom(row.id, status, parseInt(row.price) * 100, row.title,
+        parseInt(row.area), parseInt(row.bedCount), parseInt(row.windowCount), parseInt(row.mineralWaterCount))
         .then(res => {
           console.log(res)
         }).catch(err => {
@@ -364,14 +324,12 @@ export default {
           _this.tableData = res.data
           for (let i = 0; i < _this.tableData.length; i++) {
             _this.tableData[i].roomStatus = this.roomStatus[_this.tableData[i].roomStatus]
-            _this.tableData[i].roomType = this.roomType[_this.tableData[i].roomType]
             _this.tableData[i].price = _this.tableData[i].price / 100
           }
         }).catch(err => {
           console.log(err)
         })
-
-    }
+    },
   },
   data() {
     return {
@@ -379,7 +337,6 @@ export default {
       copy: {
         Address: this.$route.params.hotelAddress,
         RoomStatus: '0',//需要转换成int传过去
-        RoomType: '0',
         HotelInstanceID: this.$route.params.hotelId,
         Price: 100,
         Title: '',
@@ -392,7 +349,6 @@ export default {
       form: {
         Address: this.$route.params.hotelAddress,
         RoomStatus: '0',//需要转换成int传过去
-        RoomType: '0',
         HotelInstanceID: this.$route.params.hotelId,
         Price: 100,
         Title: '',
@@ -410,7 +366,6 @@ export default {
       checkOrNot: false,
       editOrNot: false,
       roomStatus: ["Free", "Reserved", "CheckIn", "LeftNeedClean", "NotOpen", "OnCleaning", "WaitChecking"],
-      roomType: ["GuestRoom", "LaundryRoom", "GymRoom", "StaffRoom", "MeetingRoom"],
       currentPage: 1,
       queryCurrentPage: 1,
       total: 10,//数据一共多少

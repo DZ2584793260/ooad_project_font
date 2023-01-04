@@ -95,7 +95,6 @@ export default {
         Form.maxCost, Form.startTime, Form.endTime)
         .then(res => {
           _this.total = res.data
-
           _this.$api.clientApi.queryRoomConditional(_this.companyGroupId, _this.hotelName,
             Form.maxCost, Form.startTime, Form.endTime, _this.pageSize, _this.currentPage)
             .then(resp => {
@@ -104,7 +103,6 @@ export default {
                 _this.tableData[i].guestRoomType = _this.roomType[_this.tableData[i].guestRoomType]
                 _this.tableData[i].price = _this.tableData[i].price / 100
               }
-              _this.pageSize = 2
               _this.currentPage = 1
             }).catch(err => {
               console.log(err)

@@ -1,6 +1,6 @@
 import axios from "axios";
-// import router from "../router";
-// import { Message } from "element-ui";
+import router from "../router";
+import { Message } from "element-ui";
 const request = axios.create({
     //zzy
     // baseURL: 'http://10.21.144.44:8080',
@@ -15,21 +15,27 @@ const request = axios.create({
 request.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('token')
-        if (token) config.headers.Authoriztion = `${token}`
+        if (token) config.headers.Authorization = `${token}`
         return config
     },
     (error) => Promise.reject(error)
 )
 
-// //响应拦截器，判断token是否正确
-// request.interceptors.response.use(
-//     (response) => response,
-//     ({ response }) => {
-//         const { data } = response
-//         const { message } = data
-//         Message.error(message)
-//         if (data.code == 502) router.push({ name: 'userLogin' })
-//         return Promise.reject(error)
-//     }
-// )
+request.interceptors.response.use(function (response) {
+    if (response.data.code == 100000 || response.data.code == 100000) {
+        Message.error(response.data.message)
+        router.push({ path: "/administratorLogin" });
+        return Promise.reject(new Error(response.data.message))
+    } else if (response.data.code == 99999) {
+        return Promise.reject(new Error(response.data.message))
+    } else if (response.data.code == 100001) {
+        Message.error(response.data.message)
+        router.push({ path: "/userLogin" });
+        return Promise.reject(new Error(response.data.message))
+    }
+    return response
+}, function (err) {
+    return Promise.reject(err)
+})
+
 export default request

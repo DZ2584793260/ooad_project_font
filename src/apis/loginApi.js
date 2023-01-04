@@ -43,7 +43,7 @@ export function forgetPassword(account, password, phoneNumber) {
         data: {
             account: account,
             password: password,
-            phoneNumber: phoneNumber  //待使用
+            phoneNumber: phoneNumber
         }
     })
 }

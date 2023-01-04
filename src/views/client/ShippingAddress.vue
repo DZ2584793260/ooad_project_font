@@ -36,6 +36,16 @@
 <script>
 export default {
     data() {
+        var validatePhone = (rule, value, callback) => {
+            if (value === "") {
+                callback(new Error("请输入收货电话"));
+            } else {
+                var reg = /^1[3456789]\d{9}$/;
+                if (!reg.test(value)) {
+                    callback(new Error("请输入正确的电话号"));
+                } else { callback(); }
+            }
+        }
         return {
             account: this.$store.getters.getUser.id,
             award_name: this.$route.params.award_name,
@@ -48,7 +58,7 @@ export default {
             },
             buyRules: {
                 receiveName: [{ required: true, message: '请输入收货人', trigger: "blur" }],
-                phoneNumber: [{ required: true, message: '请输入收货电话', trigger: "blur" }],
+                phoneNumber: [{ required: true, validator: validatePhone, trigger: "blur" }],
                 address: [{ required: true, message: '请输入收货地址', trigger: "blur" }],
             },
         }
@@ -85,10 +95,6 @@ export default {
             })
         },
     }
-    // mounted() {
-    //     console.log(this.award_name)
-    //     console.log(this.award_point)
-    // }
 }
 </script>
   

@@ -12,6 +12,7 @@
 import { videoPlayer } from 'vue-video-player';
 export default {
     data() {
+        var video = require("../assets/hotel/hotelVideo.mp4")
         return {
             playerOptions: {
                 playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
@@ -24,7 +25,8 @@ export default {
                 fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
                 sources: [{
                     type: "video/mp4",
-                    src: "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" //你的视频地址（必填）
+                    // src: "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" //你的视频地址（必填）
+                    src: video //你的视频地址（必填）
                 }],
                 poster: "", //你的封面地址
                 width: document.documentElement.clientWidth,

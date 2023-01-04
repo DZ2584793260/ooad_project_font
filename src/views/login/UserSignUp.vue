@@ -104,14 +104,6 @@ export default {
                 callback();
             }
         };
-        // 继续加内容！！！！！！！！！！
-        var validateCode = (rule, value, callback) => {
-            if (value === "") {
-                callback(new Error("请输入验证码"));
-            } else {
-                callback();
-            }
-        };
         var validateEmail = (rule, value, callback) => {
             if (value === "") {
                 callback(new Error("请输入邮箱"));
@@ -119,6 +111,16 @@ export default {
                 var reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
                 if (!reg.test(value)) {
                     callback(new Error("请输入正确的邮箱"));
+                } else { callback(); }
+            }
+        };
+        var validatePhone = (rule, value, callback) => {
+            if (value === "") {
+                callback(new Error("请输入电话号"));
+            } else {
+                var reg = /^1[3456789]\d{9}$/;
+                if (!reg.test(value)) {
+                    callback(new Error("请输入正确的电话号"));
                 } else { callback(); }
             }
         }
@@ -146,9 +148,9 @@ export default {
                 checkPass: [{ required: true, validator: validatePass2, trigger: "blur" }],
                 nickName: [{ required: true, message: '请输入昵称', trigger: 'blur' },
                 { min: 0, max: 10, message: '昵称长度须在 0 到 10 个字符', trigger: 'blur' }],
-                phone: [{ required: true, message: '请输入电话', trigger: "blur" }],
+                phone: [{ required: true, validator: validatePhone, trigger: "blur" }],
                 email: [{ required: true, validator: validateEmail, trigger: "blur" }],
-                verifyCode: [{ required: true, validator: validateCode, trigger: "blur" }],
+                verifyCode: [{ required: true, message: '请输入验证码', trigger: "blur" }],
             },
         };
 

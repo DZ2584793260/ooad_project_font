@@ -142,26 +142,13 @@ export default {
       const _this = this
       this.$api.clientApi.getHotelConditionCount(city, key)
         .then(res => {
+          console.log(res)
           _this.total = res.data
-
         }).catch(err => {
           console.log(err);
         });
       this.$api.clientApi.getHotelConditional(this.pageSize, current, city, key)
         .then(res => {
-          // token !!!!
-          // if (res.data.code == 502) {
-          //   this.$message({
-          //     message: res.data.message,
-          //     type: "error"
-          //   });
-          //   this.$router.push({ path: "/userLogin" });
-          // } else {
-          //   _this.tableData = res.data
-          //   for (let i = 0; i < _this.tableData.length; i++) {
-          //     _this.tableData[i].contactList = _this.tableData[i].contactList.join()
-          //   }
-          // }
           _this.tableData = res.data
           for (let i = 0; i < _this.tableData.length; i++) {
             _this.tableData[i].contactList = _this.tableData[i].contactList.join()

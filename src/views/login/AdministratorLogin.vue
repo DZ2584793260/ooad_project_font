@@ -97,8 +97,6 @@ export default {
           // })
           this.$api.loginApi.administratorLogin(this.loginForm.id, this.loginForm.password)
             .then(res => {
-              console.log(res)
-              console.log("success");
               let data = res.data;
               if (data.code == 8000) {
                 this.$message({

@@ -165,7 +165,7 @@ export function addAward(account, point, goods, consignee, contactNumber, delive
         url: '/api/award/addaward',
         data: {
             account: account,
-            point: point,
+            goodsPoints: point,
             consignee: consignee,
             goods: goods,
             contactNumber: contactNumber,

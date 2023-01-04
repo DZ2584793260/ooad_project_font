@@ -3,51 +3,44 @@
     <div class="table">
       <el-table :data="tableData" border style="width: 100%"
         :header-cell-style="{ background: '#00abbe', color: '#fff', 'text-align': 'center' }" highlight-current-row>
-
-        <el-table-column fixed align="center" prop="id" label="员工ID" v-if="!editOrNot">
-        </el-table-column>
-        <el-table-column key="1" fixed align="center" label="员工ID" v-if="editOrNot">
-          <template v-slot="scope">
-            <el-input :disabled="true" size="mini" v-model="scope.row.id"></el-input>
-          </template>
+        <el-table-column fixed align="center" prop="id" label="员工ID">
         </el-table-column>
 
-        <el-table-column fixed align="center" prop="employeeName" label="名字" v-if="!editOrNot">
+        <el-table-column key="1" align="center" prop="employeeName" label="名字" v-if="!editOrNot">
         </el-table-column>
-        <el-table-column fixed align="center" label="名字" v-if="editOrNot">
+        <el-table-column key="1" align="center" label="名字" v-if="editOrNot">
           <template v-slot="scope">
             <el-input size="mini" v-model="scope.row.employeeName"></el-input>
           </template>
         </el-table-column>
 
-        <el-table-column fixed align="center" prop="identityCardType" label="ID卡类型" v-if="!editOrNot">
+        <el-table-column align="center" prop="identityCardType" label="ID卡类型" v-if="!editOrNot">
         </el-table-column>
-        <el-table-column fixed align="center" label="ID卡类型" v-if="editOrNot">
+        <el-table-column align="center" label="ID卡类型" v-if="editOrNot">
           <template v-slot="scope">
             <el-input size="mini" v-model="scope.row.identityCardType"></el-input>
           </template>
         </el-table-column>
 
-        <el-table-column fixed align="center" prop="identityCardId" label="身份证号" v-if="!editOrNot">
+        <el-table-column align="center" prop="identityCardId" label="身份证号" v-if="!editOrNot">
         </el-table-column>
-        <el-table-column fixed align="center" label="身份证号" v-if="editOrNot">
+        <el-table-column align="center" label="身份证号" v-if="editOrNot">
           <template v-slot="scope">
             <el-input size="mini" v-model="scope.row.identityCardId"></el-input>
           </template>
         </el-table-column>
 
-
-        <el-table-column fixed align="center" prop="character" label="身份" v-if="!editOrNot">
+        <el-table-column align="center" prop="character" label="身份" v-if="!editOrNot">
         </el-table-column>
-        <el-table-column fixed align="center" label="身份" v-if="editOrNot">
+        <el-table-column align="center" label="身份" v-if="editOrNot">
           <template v-slot="scope">
-            <el-input size="mini" v-model="scope.row.character"></el-input>
+            <el-input size="mini" v-model="scope.row.character[0]"></el-input>
           </template>
         </el-table-column>
 
-        <el-table-column fixed align="center" prop="phoneNumber" label="联系电话" v-if="!editOrNot">
+        <el-table-column align="center" prop="phoneNumber" label="联系电话" v-if="!editOrNot">
         </el-table-column>
-        <el-table-column fixed align="center" label="联系电话" v-if="editOrNot">
+        <el-table-column align="center" label="联系电话" v-if="editOrNot">
           <template v-slot="scope">
             <el-input size="mini" v-model="scope.row.phoneNumber"></el-input>
           </template>
@@ -68,27 +61,27 @@
         @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[2, 4, 6, 8]"
         layout="prev, pager, next, sizes, total, jumper" :total="total" />
 
-      <el-button type="success" @click="openForm()">增加新员工</el-button>
+      <el-button type="primary" @click="openForm()">增加新员工</el-button>
     </div>
 
 
     <!-- 添加的时候出来的表格 -->
     <div class="form">
       <el-dialog title="添加新员工" :visible.sync="addOrNot">
-        <el-form :model="form">
-          <el-form-item label="员工名字">
+        <el-form :model="form" ref="form" :rules="employeeRules">
+          <el-form-item prop="EmployeeName" label="员工名字">
             <el-input v-model="form.EmployeeName" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="ID卡类型(0-身份证，1-护照)">
+          <el-form-item prop="IdentityCardType" label="ID卡类型(0-身份证，1-护照)">
             <el-input v-model="form.IdentityCardType"></el-input>
           </el-form-item>
-          <el-form-item label="身份证号/护照号">
+          <el-form-item prop="IdentityCardId" label="身份证号/护照号">
             <el-input v-model="form.IdentityCardId"></el-input>
           </el-form-item>
-          <el-form-item label="员工身份(1-普通员工)">
+          <el-form-item prop="Character" label="员工身份(1-普通员工)">
             <el-input v-model="form.Character"></el-input>
           </el-form-item>
-          <el-form-item label="联系电话">
+          <el-form-item prop="PhoneNumber" label="联系电话">
             <el-input v-model="form.PhoneNumber" autocomplete="off"></el-input>
           </el-form-item>
         </el-form>
@@ -156,8 +149,6 @@ export default {
     handleSave(row) {
       var array = new Array()
       array.push(parseInt(row.character))
-      console.log(parseInt(row.id), row.employeeName,
-        parseInt(row.identityCardType), row.identityCardId, array, row.phoneNumber)
       this.$api.adminApi.modifyEmployee(parseInt(row.id), row.employeeName,
         parseInt(row.identityCardType), row.identityCardId, array, row.phoneNumber)
         .then(res => {
@@ -209,22 +200,38 @@ export default {
     }
   },
   data() {
+    var validatePhone = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入收货电话"));
+      } else {
+        var reg = /^1[3456789]\d{9}$/;
+        if (!reg.test(value)) {
+          callback(new Error("请输入正确的电话号"));
+        } else { callback(); }
+      }
+    };
     return {
       editOrNot: false,
-      roles: ["店长", "经理", "前台", "保洁"],
+      addOrNot: false,
       tableData: [],
       tableDataCopy: [],
       pageSize: 2,
       currentPage: 1,
       total: 10,
-      addOrNot: false,
       form: {
         EmployeeName: "",
         IdentityCardType: 0,
         IdentityCardId: "",
         Character: 1,
         PhoneNumber: ""
-      }
+      },
+      employeeRules: {
+        EmployeeName: [{ required: true, message: '请输入员工姓名', trigger: "blur" }],
+        IdentityCardType: [{ required: true, message: '请输入ID卡类型', trigger: "blur" }],
+        IdentityCardId: [{ required: true, message: '请输入身份证号/护照号', trigger: "blur" }],
+        Character: [{ required: true, message: '请输入员工身份', trigger: "blur" }],
+        PhoneNumber: [{ required: true, validator: validatePhone, trigger: "blur" }],
+      },
     }
   },
   mounted() {

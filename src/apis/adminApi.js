@@ -56,7 +56,7 @@ export function adminDeleteRoom(id) {
 }
 
 //int-id,
-export function adminModifyRoom(id, roomStatus, price, ichnography) {
+export function adminModifyRoom(id, roomStatus, price, title, area, bedCount, windowCount, mineralWaterCount) {
     return request({
         method: 'PUT',
         url: '/api/room/modifyguestroom',
@@ -64,7 +64,11 @@ export function adminModifyRoom(id, roomStatus, price, ichnography) {
             id: id,
             roomStatus: roomStatus,
             price: price,
-            ichnography: ichnography
+            title: title,
+            area: area,
+            bedCount: bedCount,
+            windowCount: windowCount,
+            mineralWaterCount: mineralWaterCount
         }
     })
 }
@@ -120,32 +124,6 @@ export function adminPriceStatusSelectCount(companyGroupID, hotelName, Price, ro
     })
 }
 
-export function adminPriceSelect(companyGroupID, hotelName, PageSize, currentPage, Price) {
-    return request({
-        method: 'GET',
-        url: '/api/room/gethotelguestroomsconditionaladmin',
-        params: {
-            companyGroupID: companyGroupID,
-            hotelName: hotelName,
-            PageSize: PageSize,
-            currentPage: currentPage,
-            Price: Price
-        }
-    })
-}
-
-export function adminPriceSelectCount(companyGroupID, hotelName, Price) {
-    return request({
-        method: 'GET',
-        url: '/api/room/gethotelguestroomsconditionaladmincount',
-        params: {
-            companyGroupID: companyGroupID,
-            hotelName: hotelName,
-
-            Price: Price
-        }
-    })
-}
 ////////////积分兑换功能
 export function getAllAwardsCount() {
     return request({
@@ -269,7 +247,6 @@ export function getAllEmployeeCount() {
         method: 'GET',
         url: '/api/employeeinstance/getemployeescount',
         params: {
-
         }
     })
 }

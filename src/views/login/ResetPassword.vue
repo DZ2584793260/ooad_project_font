@@ -21,9 +21,9 @@
                                 placeholder="请输入账号">
                             </el-input>
                         </el-form-item>
-                        <el-form-item label="邮箱" prop="phone" label-width="100px">
+                        <el-form-item label="电话号" prop="phone" label-width="100px">
                             <el-input class="in" v-model="loginForm.phone" prefix-icon="iconfont icon-shouji"
-                                placeholder="请输入邮箱">
+                                placeholder="请输入电话号">
                             </el-input>
                         </el-form-item>
                         <!-- 密码 -->
@@ -77,6 +77,16 @@ export default {
                 callback();
             }
         };
+        var validatePhone = (rule, value, callback) => {
+            if (value === "") {
+                callback(new Error("请输入电话号"));
+            } else {
+                var reg = /^1[3456789]\d{9}$/;
+                if (!reg.test(value)) {
+                    callback(new Error("请输入正确的电话号"));
+                } else { callback(); }
+            }
+        };
         return {
             //表单数据
             loginForm: {
@@ -95,7 +105,7 @@ export default {
                 //校验密码
                 password: [{ required: true, validator: validatePass, trigger: "blur" }],
                 checkPass: [{ required: true, validator: validatePass2, trigger: "blur" }],
-                phone: [{ required: true, message: '请输入邮箱', trigger: "blur" }],
+                phone: [{ required: true, validator: validatePhone, trigger: "blur" }],
             },
         };
 

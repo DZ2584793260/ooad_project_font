@@ -94,6 +94,7 @@ export default {
 			this.nickname = ""
 			this.$router.push("/client/hotelInfo");
 			sessionStorage.removeItem('state')
+			localStorage.removeItem('token')
 			this.$message({
 				showClose: true,
 				message: "您已退出登录",
