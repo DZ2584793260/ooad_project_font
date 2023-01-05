@@ -13,8 +13,6 @@
           <el-form-item label="城市" prop="citySelected">
             <el-select class="selectCity" placeholder="请选择城市" v-model="queryForm.citySelected"
               value="queryForm.citySelected" clearable>
-              <!-- <el-option v-for="item in tableData" :key="item.hotelName" :label="item.city" :value="item.city">
-              </el-option> -->
               <el-option label="北京" value="北京" />
               <el-option label="上海" value="上海" />
               <el-option label="广州" value="广州" />
@@ -52,7 +50,6 @@
           </template>
         </el-table-column>
       </el-table>
-      <!--分页-->
       <el-pagination v-model:page-size="pageSize" background @size-change="handleSizeChange"
         @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[2, 4, 6, 8]"
         layout="prev, pager, next, sizes, total, jumper" :total="total" />
@@ -97,13 +94,10 @@ export default {
     handleClick(row) {
       console.log(row);
       // 去某个酒店,每个酒店地址不同
-      // console.log(row.hotelId, row.hotelName, row.hotelAddress)
       this.$router.push({ name: "clientTableSelect", params: { hotelName: row.hotelName, hotelId: row.hotelId, hotelAddress: row.hotelAddress } });
       // 另一个页面在methods中获得参数：var x=this.$route.query.hotelName;
     },
     handleSizeChange(val) {
-      // 更改每页多少条数据
-      console.log(`每页 ${val} 条`);
       this.pageSize = val;
       this.handleCurrentChange(1);//默认更改每页多少条后重新加载第一页
     },
@@ -125,7 +119,6 @@ export default {
     conditionQuery() {
       this.queryOrNot = true;
       if (this.queryForm.citySelected === "" && this.queryForm.keyword === "") {
-        // this.getAllAPI(2, 1) //相当于重新刷新了
         this.getAllAPI(this.pageSize, 1)
         this.queryOrNot = false
       } else if (this.queryForm.citySelected === "" && this.queryForm.keyword !== "") {
@@ -191,7 +184,6 @@ export default {
     }
   },
   mounted() {
-    // 初始时表格展示的数据
     this.getAllAPI(2, 1)
   },
 }

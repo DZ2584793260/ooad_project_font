@@ -38,6 +38,17 @@
         </el-table-column>
         <el-table-column prop="title" label="房间标题" v-if="!editOrNot"></el-table-column>
 
+        <el-table-column label="房间类型" v-if="editOrNot">
+          <template v-slot="scope">
+            <el-select size="mini" v-model="scope.row.guestRoomType" placeholder="请选择房间类型" v-if="editOrNot">
+              <el-option v-for="item in roomType" :key="item" :label="item" :value="item">
+              </el-option>
+            </el-select>
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="guestRoomType" label="房间类型" v-if="!editOrNot"></el-table-column>
+
 
         <el-table-column label="房间状态" v-if="editOrNot">
           <template v-slot="scope">
@@ -49,6 +60,8 @@
         </el-table-column>
 
         <el-table-column prop="roomStatus" label="房间状态" v-if="!editOrNot"></el-table-column>
+
+
 
         <el-table-column label="价格" v-if="editOrNot">
           <template v-slot="scope">
@@ -114,6 +127,17 @@
             <el-input v-model="form.Address" autocomplete="off" :disabled="true"></el-input>
           </el-form-item>
 
+          <el-form-item label="房间类型" :label-width="formLabelWidth">
+            <el-select v-model="form.GuestRoomType" placeholder="请选择房间类型">
+              <el-option label="BarrierFree无障碍" value="0" />
+              <el-option label="Single单人间" value="1" />
+              <el-option label="Double双人间" value="2" />
+              <el-option label="Triple三人间" value="3" />
+              <el-option label="Quadruple四人套房" value="4" />
+              <el-option label="Deluxe豪华套房" value="5" />
+            </el-select>
+          </el-form-item>
+
           <el-form-item label="房间状态" :label-width="formLabelWidth">
             <el-select v-model="form.RoomStatus" placeholder="请选择房间状态">
               <el-option label="Free" value="0" />
@@ -125,6 +149,7 @@
               <el-option label="WaitChecking" value="6" />
             </el-select>
           </el-form-item>
+
 
           <el-form-item label="门店ID" :label-width="formLabelWidth">
             <el-input v-model="form.HotelInstanceID" :disabled="true">
@@ -196,6 +221,7 @@ export default {
         .then(res => {
           _this.tableData = res.data
           for (let i = 0; i < _this.tableData.length; i++) {
+            _this.tableData[i].guestRoomType = _this.roomType[_this.tableData[i].guestRoomType]
             _this.tableData[i].roomStatus = this.roomStatus[_this.tableData[i].roomStatus]
             _this.tableData[i].price = _this.tableData[i].price / 100
           }
@@ -230,13 +256,14 @@ export default {
       const _this = this
       var form = this.form
       form.RoomStatus = parseInt(form.RoomStatus)
+      form.GuestRoomType = parseInt(form.GuestRoomType)
       form.HotelInstanceID = parseInt(form.HotelInstanceID)
-      form.Price = parseInt(form.Price) * 100
+      form.Price = parseInt(form.Price) * 100  //!!!!!!!!!!!!!!!!!!!!!!!!!!
       form.Area = parseInt(form.Area)
       form.BedCount = parseInt(form.BedCount)
       form.WindowCount = parseInt(form.WindowCount)
       form.MineralWaterCount = parseInt(form.MineralWaterCount)
-      this.$api.adminApi.adminAddRoom(0, form.Address, form.RoomStatus, 0, form.HotelInstanceID, form.Price, form.Title, "",
+      this.$api.adminApi.adminAddRoom(form.GuestRoomType, 0, form.Address, form.RoomStatus, 0, form.HotelInstanceID, form.Price, form.Title, "",
         form.Area, form.BedCount, form.WindowCount, form.MineralWaterCount, form.CandomCount)
         .then(res => {
           _this.form = _this.copy
@@ -279,7 +306,14 @@ export default {
       else if (status == "OnCleaning") status = 5
       else if (status == "WaitChecking") status = 6
 
-      this.$api.adminApi.adminModifyRoom(row.id, status, parseInt(row.price) * 100, row.title,
+      var roomType = row.guestRoomType
+      if (roomType == "BarrierFree无障碍") roomType = 0
+      else if (roomType == "Single单人间") roomType = 1
+      else if (roomType == "Double双人间") roomType = 2
+      else if (roomType == "Triple三人间") roomType = 3
+      else if (roomType == "Quadruple四人套房") roomType = 4
+      else if (roomType == "Deluxe豪华套房") roomType = 5
+      this.$api.adminApi.adminModifyRoom(row.id, status, roomType, parseInt(row.price) * 100, row.title,
         parseInt(row.area), parseInt(row.bedCount), parseInt(row.windowCount), parseInt(row.mineralWaterCount))
         .then(res => {
           console.log(res)
@@ -321,8 +355,10 @@ export default {
         })
       this.$api.adminApi.adminGetRoomsByCondition(size, current, this.companyGroupId, this.hotelName)
         .then(res => {
+          console.log(res)
           _this.tableData = res.data
           for (let i = 0; i < _this.tableData.length; i++) {
+            _this.tableData[i].guestRoomType = _this.roomType[_this.tableData[i].guestRoomType]
             _this.tableData[i].roomStatus = this.roomStatus[_this.tableData[i].roomStatus]
             _this.tableData[i].price = _this.tableData[i].price / 100
           }
@@ -337,6 +373,7 @@ export default {
       copy: {
         Address: this.$route.params.hotelAddress,
         RoomStatus: '0',//需要转换成int传过去
+        GuestRoomType: '0',
         HotelInstanceID: this.$route.params.hotelId,
         Price: 100,
         Title: '',
@@ -349,6 +386,7 @@ export default {
       form: {
         Address: this.$route.params.hotelAddress,
         RoomStatus: '0',//需要转换成int传过去
+        GuestRoomType: '0',
         HotelInstanceID: this.$route.params.hotelId,
         Price: 100,
         Title: '',
@@ -366,6 +404,7 @@ export default {
       checkOrNot: false,
       editOrNot: false,
       roomStatus: ["Free", "Reserved", "CheckIn", "LeftNeedClean", "NotOpen", "OnCleaning", "WaitChecking"],
+      roomType: ["BarrierFree无障碍", "Single单人间", "Double双人间", "Triple三人间", "Quadruple四人套房", "Deluxe豪华套房"],
       currentPage: 1,
       queryCurrentPage: 1,
       total: 10,//数据一共多少

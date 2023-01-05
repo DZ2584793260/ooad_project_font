@@ -56,13 +56,14 @@ export function adminDeleteRoom(id) {
 }
 
 //int-id,
-export function adminModifyRoom(id, roomStatus, price, title, area, bedCount, windowCount, mineralWaterCount) {
+export function adminModifyRoom(id, roomStatus, roomType, price, title, area, bedCount, windowCount, mineralWaterCount) {
     return request({
         method: 'PUT',
         url: '/api/room/modifyguestroom',
         data: {
             id: id,
             roomStatus: roomStatus,
+            guestRoomType: roomType,
             price: price,
             title: title,
             area: area,
@@ -73,11 +74,12 @@ export function adminModifyRoom(id, roomStatus, price, title, area, bedCount, wi
     })
 }
 
-export function adminAddRoom(Floor, Address, RoomStatus, RoomType, HotelInstanceID, Price, Title, Ichnography, Area, BedCount, WindowCount, MineralWaterCount, CandomCount) {
+export function adminAddRoom(GuestRoomType, Floor, Address, RoomStatus, RoomType, HotelInstanceID, Price, Title, Ichnography, Area, BedCount, WindowCount, MineralWaterCount, CandomCount) {
     return request({
         method: 'POST',
         url: '/api/room/addguestroom',
         data: {
+            GuestRoomType: GuestRoomType,
             Floor: Floor,
             Address: Address,
             RoomStatus: RoomStatus,

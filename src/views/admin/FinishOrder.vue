@@ -65,7 +65,7 @@
                             </el-col>
                         </el-row>
                     </el-timeline-item>
-            
+
                     <el-timeline-item timestamp="视频评价" placement="top" v-if="videoOrNot">
                         <video-player class="video-player vjs-custom-skin" ref="videoPlayer" :playsinline="true"
                             :options="playerOptions" @play="onPlayerPlay($event)" @pause="onPlayerPause($event)">
@@ -232,6 +232,7 @@ export default {
                                     _this.tableData[i].produceTime = dayjs(_this.tableData[i].produceTime).format("YYYY-MM-DD HH:mm:ss")
                                     _this.tableData[i].reserveCheckInTime = dayjs(_this.tableData[i].reserveCheckInTime).format("YYYY-MM-DD HH:mm:ss")
                                     _this.tableData[i].reserveCheckOutTime = dayjs(_this.tableData[i].reserveCheckOutTime).format("YYYY-MM-DD HH:mm:ss")
+                                    _this.tableData[i].price = _this.tableData[i].price / 100
                                 }
                             }).catch(err => {
                                 console.log(err);
@@ -257,6 +258,7 @@ export default {
                         _this.tableData[i].produceTime = dayjs(_this.tableData[i].produceTime).format("YYYY-MM-DD HH:mm:ss")
                         _this.tableData[i].reserveCheckInTime = dayjs(_this.tableData[i].reserveCheckInTime).format("YYYY-MM-DD HH:mm:ss")
                         _this.tableData[i].reserveCheckOutTime = dayjs(_this.tableData[i].reserveCheckOutTime).format("YYYY-MM-DD HH:mm:ss")
+                        _this.tableData[i].price = _this.tableData[i].price / 100
                     }
                 }).catch(err => {
                     console.log(err);

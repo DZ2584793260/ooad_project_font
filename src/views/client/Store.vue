@@ -54,7 +54,7 @@ export default {
     mounted() {
         const _this = this
         this.$api.clientApi.getPoint(this.$store.getters.getUser.id).then(res => {
-            _this.userPoint = res.data
+            _this.userPoint = res.data / 100
         }).catch(err => {
             console.log(err);
         });

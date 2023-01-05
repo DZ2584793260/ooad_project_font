@@ -97,11 +97,12 @@ export default {
       this.formTable.ReserveCheckOutTime = dayjs(this.formTable.ReserveCheckOutTime).format()
 
       const _this = this
+      console.log(this.formTable.price)
       this.$api.orderApi.addNewOrder(this.formTable.account, parseInt(this.formTable.roomId),
         this.formTable.ReserveCheckInTime, this.formTable.ReserveCheckOutTime,
-        parseInt(this.formTable.roomAmount), this.formTable.price)
+        parseInt(this.formTable.roomAmount), this.formTable.price * 100)
         .then(res => {
-          _this.$api.orderApi.orderpay(res.data.uuid, res.data.price).then(resp => {
+          _this.$api.orderApi.orderpay(res.data.uuid, res.data.price / 100).then(resp => {
             this.$router.push({
               path: '/client/pay',
               query: { html: resp.data.body }
@@ -109,7 +110,7 @@ export default {
           }).catch(err => {
             console.log(err);
           });
-          // this.$router.push({ name: "clientTableSelect", params: { hotelName: this.hotelName, hotelId: this.companyGroupId, hotelAddress: this.hotelAddress } });
+          this.$router.push({ name: "clientTableSelect", params: { hotelName: this.hotelName, hotelId: this.companyGroupId, hotelAddress: this.hotelAddress } });
         }).catch(err => {
           console.log(err)
         })

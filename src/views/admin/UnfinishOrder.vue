@@ -143,7 +143,7 @@ export default {
             this.orderId = this.tableData[row_index].uuid
             this.dialogForm.checkInTime = new Date(this.tableData[row_index].reserveCheckInTime)
             this.dialogForm.checkOutTime = new Date(this.tableData[row_index].reserveCheckOutTime)
-            this.dialogForm.price = this.tableData[row_index].price
+            this.dialogForm.price = this.tableData[row_index].price * 100
 
             this.dialogTitle = "订单：" + this.orderId;
             this.dialogVisible = true;
@@ -225,6 +225,7 @@ export default {
                                     _this.tableData[i].produceTime = dayjs(_this.tableData[i].produceTime).format("YYYY-MM-DD HH:mm:ss")
                                     _this.tableData[i].reserveCheckInTime = dayjs(_this.tableData[i].reserveCheckInTime).format("YYYY-MM-DD HH:mm:ss")
                                     _this.tableData[i].reserveCheckOutTime = dayjs(_this.tableData[i].reserveCheckOutTime).format("YYYY-MM-DD HH:mm:ss")
+                                    _this.tableData[i].price = _this.tableData[i].price / 100
                                 }
                             }).catch(err => {
                                 console.log(err);
@@ -250,6 +251,7 @@ export default {
                         _this.tableData[i].produceTime = dayjs(_this.tableData[i].produceTime).format("YYYY-MM-DD HH:mm:ss")
                         _this.tableData[i].reserveCheckInTime = dayjs(_this.tableData[i].reserveCheckInTime).format("YYYY-MM-DD HH:mm:ss")
                         _this.tableData[i].reserveCheckOutTime = dayjs(_this.tableData[i].reserveCheckOutTime).format("YYYY-MM-DD HH:mm:ss")
+                        _this.tableData[i].price = _this.tableData[i].price / 100
                     }
                 }).catch(err => {
                     console.log(err);

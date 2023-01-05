@@ -70,7 +70,6 @@ export default {
     mounted() {
         const _this = this
         this.$api.clientApi.getMessage(this.$store.getters.getUser.id).then(res => {
-            console.log(res)
             for (let i = 0; i < res.data[0].info.length; i++) {
                 if (res.data[0].info[i] === null) {
                     continue;

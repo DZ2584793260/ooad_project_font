@@ -56,12 +56,10 @@ export default {
     handleClick(row) {
       console.log(row);
       // YUKI：带着ID和名字进入门店里修改
-      console.log(row.hotelId, row.hotelName)
+      // console.log(row.hotelId, row.hotelName)
       this.$router.push({ name: "adminRoomEdit", params: { hotelName: row.hotelName, hotelId: row.hotelId, hotelAddress: row.hotelAddress } });
     },
     handleSizeChange(val) {
-      // 更改每页多少条数据
-      console.log(`每页 ${val} 条`);
       this.pageSize = val;
       this.handleCurrentChange(1);//默认更改每页多少条后重新加载第一页
     },
@@ -148,7 +146,6 @@ export default {
     }
   },
   mounted() {
-    // 初始时表格展示的数据
     this.getAllAPI(2, 1)
   },
 }
