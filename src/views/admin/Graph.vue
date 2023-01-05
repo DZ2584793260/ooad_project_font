@@ -286,9 +286,12 @@ export default {
                 .then(res => {
                     var copy = res.data
                     this.option1.xAxis[0].data = copy.date
-                    this.option1.series[0].data = copy.count
-                    console.log(this.option1.xAxis[0].data)
-                    console.log(this.option1.series[0].data)
+                    for (let i = 0; i < 7; i++) {
+                        this.option1.series[0].data[i] = (copy.count[i] / 100)
+                        }
+                    
+                    // console.log(this.option1.xAxis[0].data)
+                    // console.log(this.option1.series[0].data)
                     weeklySumByDate.setOption(this.option1);// 渲染页面
                 }).catch(err => {
                     console.log(err);
@@ -306,12 +309,30 @@ export default {
                     console.log(this.option2.series[0].data)
                     // var copy = res.data
                     this.option2.yAxis.data = res.data.date
-                    this.option2.series[0].data = res.data.count.BarrierFree
-                    this.option2.series[1].data = res.data.count.Deluxe
-                    this.option2.series[2].data = res.data.count.Double
-                    this.option2.series[3].data = res.data.count.Quadruple
-                    this.option2.series[4].data = res.data.count.Single
-                    this.option2.series[5].data = res.data.count.Triple
+                    for (let i = 0; i < 7; i++) {
+                        this.option2.series[0].data[i] = (res.data.count.BarrierFree[i] / 100)
+                        }
+                    for (let i = 0; i < 7; i++) {
+                        this.option2.series[1].data[i] = (res.data.count.Deluxe[i] / 100)
+                    }
+                    for (let i = 0; i < 7; i++) {
+                        this.option2.series[2].data[i] = (res.data.count.Double[i] / 100)
+                    }
+                    for (let i = 0; i < 7; i++) {
+                        this.option2.series[3].data[i] = (res.data.count.Quadruple[i] / 100)
+                    }
+                    for (let i = 0; i < 7; i++) {
+                        this.option2.series[4].data[i] = (res.data.count.Single[i] / 100)
+                    }
+                    for (let i = 0; i < 7; i++) {
+                        this.option2.series[5].data[i] = (res.data.count.Triple[i] / 100)
+                    }
+                    // this.option2.series[0].data = res.data.count.BarrierFree
+                    // this.option2.series[1].data = res.data.count.Deluxe
+                    // this.option2.series[2].data = res.data.count.Double
+                    // this.option2.series[3].data = res.data.count.Quadruple
+                    // this.option2.series[4].data = res.data.count.Single
+                    // this.option2.series[5].data = res.data.count.Triple
                     weeklySumByRoom.setOption(this.option2);// 渲染页面
                 }).catch(err => {
                     console.log(err);

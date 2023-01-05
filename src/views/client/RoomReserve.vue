@@ -64,9 +64,13 @@
               </el-button>
 
               <el-drawer title="我是标题" :visible.sync="drawer" :with-header="false">
-                <div class="coupon" v-for="item in coupons" v-if="item != 0">
-                  {{ item }}元抵用券
+                <div class="coupon" v-for="item in coupons" v-if="item != 0 & sum != 0" >
+                  {{ item }}元优惠券
                 </div>
+                <div class="blank"   style="font-size: large; text-align:center;" v-if="sum == 0">
+                  您目前没有可用的优惠券！
+                </div>
+  
               </el-drawer>
             </el-form-item>
           </el-form>
@@ -170,6 +174,7 @@ export default {
         price: this.$route.params.price,
         sum: this.$route.params.price,
       },
+      sum:0,
       coupons: null,
       RoomID: this.$route.params.roomID,
       companyGroupId: this.$route.params.companyGroupId,
@@ -181,6 +186,13 @@ export default {
     this.$api.orderApi.getCoupon(this.$store.getters.getUser.id)
       .then(res => {
         this.coupons = res.data
+        this.sum = 0
+        for (let i = 0; i < 10; i++) {
+            if (this.coupons[i] != 0) {
+              this.sum += 1
+            }
+          }
+        // console.log(this.sum)
       }).catch(err => {
         console.log(err)
       })

@@ -14,7 +14,7 @@
             value="queryForm.citySelected" clearable>
             <el-option label="北京" value="北京" />
             <el-option label="上海" value="上海" />
-            <el-option label="广州" value="广州" />
+
             <el-option label="深圳" value="深圳" />
           </el-select>
         </el-form-item>
@@ -23,12 +23,12 @@
     </div>
     <div id="container"></div>
     <div ref="infoData" class="custom-info input-card content-window-card">
-      <div class="info-top">
+      <div class="info-top" v-if="clickOrNot">
         <div><span>{{ devInfo.title }}</span>
           <span style="font-size:11px; margin-left:20px;color:#F00;">状态：{{ devInfo.state }}</span>
         </div><img @click="closeInfoWindow" src="https://webapi.amap.com/images/close2.gif">
       </div>
-      <div class="info-middle" style="background-color: white;">
+      <div class="info-middle" style="background-color: white;" v-if="clickOrNot">
         <img class="image" :src="img_list[devInfo.icon]" alt />
         <br>地址：{{ devInfo.address }}<br>
         <div class="info-div">集团：{{ devInfo.group }} </div>
@@ -37,8 +37,9 @@
             @click="route(devInfo.hotelName, devInfo.hotelId, devInfo.hotelAddress)">查看门店房间</el-button>
         </span>
       </div>
-      <div class="info-bottom" style="position: relative; top: 0px; margin: 0px auto;"><img
-          src="https://webapi.amap.com/images/sharp.png"></div>
+      <div class="info-bottom" style="position: relative; top: 0px; margin: 0px auto;" v-if="clickOrNot">
+        <img src="https://webapi.amap.com/images/sharp.png">
+      </div>
     </div>
   </div>
 </template>
@@ -46,9 +47,13 @@
 
 export default {
   data() {
-    var img1 = require("../../assets/dorm.jpg");
+    var nkd = require("../../assets/nkd.png");
+    var profDorm = require("../../assets/dorm.jpg");
+    var seasonHotel = require("../../assets/season.png");
+    var vienna = require("../../assets/vienna.jpg");
     return {
-      img_list: [img1],
+      clickOrNot: false,
+      img_list: [nkd, profDorm, seasonHotel, vienna],
       queryForm: {
         citySelected: ""
       },
@@ -63,23 +68,63 @@ export default {
       map: null,
       markerData: [
         {
-          title: '专家公寓',
+          title: '南科大酒店',
           icon: 0,
-          state: '正常使用',
+          state: '营业中',
+          address: '中国广东省深圳市南山区学苑大道1088号南方科技大学',
+          group: 'group1',
+          phone: '18200555222，18200555555',
+          position: [114.000746, 22.595193],
+          offset: new AMap.Pixel(-8, -30),
+          hotelName: "南科大酒店",
+          hotelId: 1,
+          hotelAddress: "深圳市南山区",
+        },
+        {
+          title: '专家公寓',
+          icon: 1,
+          state: '营业中',
           address: '中国广东省深圳市南山区学苑大道1088号南方科技大学专家公寓',
-          group: '南方科技大学',
-          phone: '123456789',
+          group: 'group2',
+          phone: '18200555333',
           position: [114.002656, 22.598692],
           offset: new AMap.Pixel(-8, -30),
           hotelName: "专家公寓",
-          hotelId: 1,
-          hotelAddress: "专家公寓",
+          hotelId: 2,
+          hotelAddress: "深圳市南山区",
+        },
+        {
+          title: '全季酒店',
+          icon: 2,
+          state: '营业中',
+          address: '中国北京市朝阳区亮马桥路48号全季酒店',
+          group: 'group3',
+          phone: '18200555444',
+          position: [116.467959, 39.950445],
+          offset: new AMap.Pixel(-8, -30),
+          hotelName: "全季酒店",
+          hotelId: 3,
+          hotelAddress: "北京市朝阳区",
+        },
+        {
+          title: '维也纳酒店',
+          icon: 3,
+          state: '营业中',
+          address: '中国上海市松江区中山中路83号维也纳酒店',
+          group: 'group3',
+          phone: '18200555544',
+          position: [121.235119, 31.006172],
+          offset: new AMap.Pixel(-8, -30),
+          hotelName: "维也纳酒店",
+          hotelId: 4,
+          hotelAddress: "上海市松江区",
         },
       ],
     }
   },
   mounted() {
     this.map = this.createMap()
+    // this.map.setZoomAndCenter(17, [113.999963, 22.5981])
     this.map.clearMap()
     this.addMarker()
   },
@@ -90,15 +135,17 @@ export default {
     },
     //可以通过城市定位来找到
     conditionQuery() {
-      console.log(this.queryForm.citySelected)
+      // console.log(this.queryForm.citySelected)
       if (this.queryForm.citySelected == "深圳" || this.queryForm.citySelected == "") {
         this.map.setZoomAndCenter(17, [113.999963, 22.5981]) //南科大接近山上的部分
-      } else if (this.queryForm.citySelected == "广州") {
-        this.map.setZoomAndCenter(17, [113.303382, 23.386376])//白云机场
-      } else if (this.queryForm.citySelected == "北京") {
-        this.map.setZoomAndCenter(17, [116.393136, 39.934217])//北海公园
+      }
+      //  else if (this.queryForm.citySelected == "广州") {
+      //   this.map.setZoomAndCenter(17, [113.303382, 23.386376])//白云机场
+      // } 
+      else if (this.queryForm.citySelected == "北京") {
+        this.map.setZoomAndCenter(17, [116.467959, 39.950445])//北海公园
       } else if (this.queryForm.citySelected == "上海") {
-        this.map.setZoomAndCenter(17, [121.319671, 31.194213])//上海虹桥站
+        this.map.setZoomAndCenter(17, [121.235119, 31.006172])//上海虹桥站
       }
     },
     //1.创建map对象
@@ -135,6 +182,7 @@ export default {
     },
     //3.点击标记 获取所点击标记的信息以及窗体要展示的数据，创建信息窗体
     markerClick(arr, marker) {
+      this.clickOrNot = true
       let arrNew = arr.filter((x) => x.mapId == marker._amap_id)
       this.devInfo = arrNew && arrNew[0]
       let infoWindow = this.createInfoWindow()
