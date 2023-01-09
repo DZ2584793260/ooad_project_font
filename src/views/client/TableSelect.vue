@@ -99,12 +99,13 @@ export default {
         var Form = _this.Form
         Form.maxCost = parseInt(Form.maxCost)
         this.$api.clientApi.queryRoomConditionalCount(_this.companyGroupId, _this.hotelName,
-          Form.maxCost, Form.startTime, Form.endTime)
+          Form.maxCost * 100, Form.startTime, Form.endTime)
           .then(res => {
             _this.total = res.data
             _this.$api.clientApi.queryRoomConditional(_this.companyGroupId, _this.hotelName,
-              Form.maxCost, Form.startTime, Form.endTime, _this.pageSize, _this.currentPage)
+              Form.maxCost * 100, Form.startTime, Form.endTime, _this.pageSize, _this.currentPage)
               .then(resp => {
+                console.log(resp)
                 _this.tableData = resp.data
                 for (let i = 0; i < _this.tableData.length; i++) {
                   _this.tableData[i].guestRoomType = _this.roomType[_this.tableData[i].guestRoomType]

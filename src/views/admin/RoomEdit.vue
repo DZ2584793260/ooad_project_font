@@ -210,14 +210,14 @@ export default {
     queryAPI(page, price, roomStatus) {
       const _this = this
       this.$api.adminApi.adminPriceStatusSelectCount(_this.companyGroupId, _this.hotelName,
-        parseInt(price), parseInt(roomStatus))
+        parseInt(price) * 100, parseInt(roomStatus))
         .then(res => {
           _this.total = res.data
         }).catch(err => {
           console.log(err)
         })
       this.$api.adminApi.adminPriceStatusSelect(_this.companyGroupId, _this.hotelName,
-        parseInt(price), _this.pageSize, page, parseInt(roomStatus))
+        parseInt(price) * 100, _this.pageSize, page, parseInt(roomStatus))
         .then(res => {
           _this.tableData = res.data
           for (let i = 0; i < _this.tableData.length; i++) {

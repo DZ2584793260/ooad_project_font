@@ -72,7 +72,7 @@ export default {
                 //1.验证失败则结束
                 if (!valid) { return; }
                 else {
-                    this.$api.clientApi.addAward(this.account, this.award_point, this.award_name, this.buyForm.receiveName, this.buyForm.phoneNumber, this.buyForm.address)
+                    this.$api.clientApi.addAward(this.account, this.award_point * 100, this.award_name, this.buyForm.receiveName, this.buyForm.phoneNumber, this.buyForm.address)
                         .then(res => {
                             if (res.data.code == 20000) {
                                 this.$message({

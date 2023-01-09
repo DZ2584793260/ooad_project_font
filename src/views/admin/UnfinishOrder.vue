@@ -121,7 +121,7 @@ export default {
         },
         dialogSave() {
             const _this = this
-            this.$api.orderApi.ModifyOrderByAdmin(this.orderId, dayjs(this.dialogForm.checkInTime).format(), dayjs(this.dialogForm.checkOutTime).format(), this.dialogForm.price).then(res => {
+            this.$api.orderApi.ModifyOrderByAdmin(this.orderId, dayjs(this.dialogForm.checkInTime).format(), dayjs(this.dialogForm.checkOutTime).format(), this.dialogForm.price * 100).then(res => {
                 if (res.data.code === 3003) {
                     this.$message({
                         message: res.data.message,
@@ -143,8 +143,7 @@ export default {
             this.orderId = this.tableData[row_index].uuid
             this.dialogForm.checkInTime = new Date(this.tableData[row_index].reserveCheckInTime)
             this.dialogForm.checkOutTime = new Date(this.tableData[row_index].reserveCheckOutTime)
-            this.dialogForm.price = this.tableData[row_index].price * 100
-
+            this.dialogForm.price = this.tableData[row_index].price
             this.dialogTitle = "订单：" + this.orderId;
             this.dialogVisible = true;
         },
